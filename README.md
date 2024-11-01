@@ -1875,6 +1875,182 @@ To update a previously created label  to 'Backup January':
 $status:=$google.mail.updateLabel($labelId; {name:"Backup January"})
 
 ```
+
+### Google.user.getCurrent()
+
+**Google.user.getCurrent**( { *select* : Text, Collection } ) : Object
+
+#### Parameters
+
+|Parameter|Type||Description|
+|---------|--- |:---:|------|
+|select|Text, Collection|->|A list of specific fields (passed as a collection or as text seperated by commas) you want to retrieve from each person (e.g., names, emails). Only selected fields are returned to avoid unnecessary data.|
+|Result|Object|<-|Represents a user's details, like names, emails, and phone numbers, organized into specific fields.
+based on fields you selected.|
+
+#### Description
+
+`Google.user.getCurrent()` Provides information about the authenticated use.
+
+> .
+
+#### Returned object
+
+#### Permissions
+
+No authorization required to access public data. For private data, one of the following OAuth scopes is required:
+
+https://www.googleapis.com/auth/contacts
+https://www.googleapis.com/auth/contacts.readonly
+https://www.googleapis.com/auth/contacts.other.readonly
+https://www.googleapis.com/auth/directory.readonly
+https://www.googleapis.com/auth/profile.agerange.read
+https://www.googleapis.com/auth/profile.emails.read
+https://www.googleapis.com/auth/profile.language.read
+https://www.googleapis.com/auth/user.addresses.read
+https://www.googleapis.com/auth/user.birthday.read
+https://www.googleapis.com/auth/user.emails.read
+https://www.googleapis.com/auth/user.gender.read
+https://www.googleapis.com/auth/user.organization.read
+https://www.googleapis.com/auth/user.phonenumbers.read
+https://www.googleapis.com/auth/userinfo.email
+https://www.googleapis.com/auth/userinfo.profile
+https://www.googleapis.com/auth/profile.language.read
+
+#### Example
+
+To retrieve information from the current user:
+
+```4d
+var $userInfo; $params : Object
+var $oAuth2 : cs.NetKit.OAuth2Provider
+var $Office365 : cs.NetKit.Office365
+
+// Set up parameters:
+$params:=New object
+$params.name:="Microsoft"
+$params.permission:="signedIn"
+$params.clientId:="your-client-id" // Replace with your Microsoft identity platform client ID
+$params.redirectURI:="http://127.0.0.1:50993/authorize/"
+$param.scope:="https://graph.microsoft.com/.default"
+
+$oAuth2:=New Oauth2 provider($params) //Creates an OAuth2Provider Object
+
+$Office365:=New Office365 provider($oAuth2) // Creates an Office365 object
+
+// Return the properties specified in the parameter.
+$userInfo:=$Office365.user.getCurrent("id,userPrincipalName,\
+principalName,displayName,givenName,mail")
+```
+
+### Google.user.get()
+
+**Google.user.get**( { *select* : Text, Collection } ) : Object
+
+#### Parameters
+
+|Parameter|Type||Description|
+|---------|--- |:---:|------|
+|select|Text, Collection|->|A list of specific fields (passed as a collection or as text seperated by commas) you want to retrieve from each person (e.g., names, emails). Only selected fields are returned to avoid unnecessary data.|
+|Result|Object|<-|Represents a user's details, like names, emails, and phone numbers, organized into specific fields.
+based on fields you selected.|
+
+#### Description
+
+`Google.user.get()` Provides information about a person by specifying a resource name.
+
+#### Returned object
+
+#### Permissions
+
+No authorization required to access public data. For private data, one of the following OAuth scopes is required:
+
+https://www.googleapis.com/auth/contacts
+https://www.googleapis.com/auth/contacts.readonly
+https://www.googleapis.com/auth/contacts.other.readonly
+https://www.googleapis.com/auth/directory.readonly
+https://www.googleapis.com/auth/profile.agerange.read
+https://www.googleapis.com/auth/profile.emails.read
+https://www.googleapis.com/auth/profile.language.read
+https://www.googleapis.com/auth/user.addresses.read
+https://www.googleapis.com/auth/user.birthday.read
+https://www.googleapis.com/auth/user.emails.read
+https://www.googleapis.com/auth/user.gender.read
+https://www.googleapis.com/auth/user.organization.read
+https://www.googleapis.com/auth/user.phonenumbers.read
+https://www.googleapis.com/auth/userinfo.email
+https://www.googleapis.com/auth/userinfo.profile
+https://www.googleapis.com/auth/profile.language.read
+
+#### Example
+
+### Google.user.list()
+
+**Google.user.list**( { *parameter* : Object } ) : Object
+
+#### Parameters
+
+|Parameter|Type||Description|
+|---------|--- |:---:|------|
+|parameter|Object|->||
+|Result|Object|<-||
+
+#### Description
+
+`Google.user.list()` Provides a list of domain profiles or domain contacts in the authenticated user's domain directory. 
+
+> If the contact sharing or the External Directory sharing is not allowed in the Google admin, the returned users collection is empty.
+
+
+#### Returned object
+
+#### Permissions
+
+Requires the following OAuth scope:
+
+https://www.googleapis.com/auth/directory.readonly
+
+#### Example
+
+```4d
+var $oAuth2 : cs.NetKit.OAuth2Provider
+var $Office365 : cs.NetKit.Office365
+var $userInfo; $params; $userList; $userList2; $userList3; $userList4 : Object
+var $col : Collection
+
+// Set up parameters:
+$params:=New object
+$params.name:="Microsoft"
+$params.permission:="signedIn"
+$params.clientId:="your-client-id" // Replace with your Microsoft identity platform client ID
+$params.redirectURI:="http://127.0.0.1:50993/authorize/"
+$params.scope:="https://graph.microsoft.com/.default"
+
+// Create an OAuth2Provider Object
+$oAuth2:=New OAuth2 provider($params)
+
+// Create an Office365 object
+$Office365:=New Office365 provider($oAuth2)
+
+// Return a list with the first 100 users
+$informationList1:=$Office365.user.list()
+
+// Return a list of users whose displayName is Jean
+$userList2:=$Office365.user.list(New object("filter"; "startswith(displayName,'Jean')"))
+
+// return a list of users whose display names contain "F" and arrange it in descending order.
+$userList3:=$Office365.user.list(New object("search"; "\"displayName:F\""; "orderBy"; "displayName desc"; "select"; "displayName"))
+
+// Create a list filled with all the userPrincipalName
+
+$userList4:=$Office365.user.list(New object("select"; "userPrincipalName"))
+$col:=New collection
+Repeat
+    $col.combine($userList4.users)
+Until (Not($userList4.next()))
+```
+
+
 ### labelInfo object
 
 Several Google.mail label management methods use a `labelInfo` object, containing the following properties:
