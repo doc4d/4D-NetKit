@@ -1894,7 +1894,7 @@ $status:=$google.mail.updateLabel($labelId; {name:"Backup January"})
 
 #### Description
 
-`Google.user.get()` provides information about a person based of fields specified in `select and a resource name provided in `id`.
+`Google.user.get()` provides information about a person based on fields specified in `select` and a resource name provided in `id`.
 
 #### Returned object
 
@@ -1938,7 +1938,7 @@ https://www.googleapis.com/auth/profile.language.read
 
 #### Description
 
-`Google.user.getCurrent()` provides information about the authenticated user based of fields specified in `select`.
+`Google.user.getCurrent()` provides information about the authenticated user based on fields specified in `select`.
 
 #### Returned object
 
