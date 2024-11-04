@@ -1876,6 +1876,50 @@ $status:=$google.mail.updateLabel($labelId; {name:"Backup January"})
 
 ```
 
+
+### Google.user.get()
+
+**Google.user.get**( *id* : Text {; *select* : Text, Collection } ) : Object
+
+#### Parameters
+
+|Parameter|Type||Description|
+|---------|--- |:---:|------|
+|id|Text|->|The resource name of the person to provide information about. Use the resource name returned by Google.user.list() to specify the contact.|
+|select|Text, Collection|->|A list of specific fields (passed as a collection or as text seperated by commas) you want to retrieve from each person (e.g., names, emails). Only selected fields are returned to avoid unnecessary data.|
+|Result|Object|<-|Represents a user's details, like names, emails, and phone numbers, organized into specific fields, based on fields you selected.|
+
+#### Description
+
+`Google.user.get()` Provides information about a person by specifying a resource name.
+
+#### Returned object
+
+The returned `person` object contains user details identified by the `id` and based on the specific fields selected in `select`. By default returns emailAddresses, names
+
+These fields include: addresses, ageRanges, biographies, birthdays, calendarUrls, clientData, coverPhotos, emailAddresses, events, externalIds, genders, imClients, interests, locales, locations, memberships, metadata, miscKeywords, names, nicknames, occupations, organizations, phoneNumbers, photos, relations, sipAddresses, skills, urls, userDefined.
+
+#### Permissions
+
+No authorization required to access public data. For private data, one of the following OAuth scopes is required:
+
+https://www.googleapis.com/auth/contacts
+https://www.googleapis.com/auth/contacts.readonly
+https://www.googleapis.com/auth/contacts.other.readonly
+https://www.googleapis.com/auth/directory.readonly
+https://www.googleapis.com/auth/profile.agerange.read
+https://www.googleapis.com/auth/profile.emails.read
+https://www.googleapis.com/auth/profile.language.read
+https://www.googleapis.com/auth/user.addresses.read
+https://www.googleapis.com/auth/user.birthday.read
+https://www.googleapis.com/auth/user.emails.read
+https://www.googleapis.com/auth/user.gender.read
+https://www.googleapis.com/auth/user.organization.read
+https://www.googleapis.com/auth/user.phonenumbers.read
+https://www.googleapis.com/auth/userinfo.email
+https://www.googleapis.com/auth/userinfo.profile
+https://www.googleapis.com/auth/profile.language.read
+
 ### Google.user.getCurrent()
 
 **Google.user.getCurrent**( { *select* : Text, Collection } ) : Object
@@ -1961,50 +2005,6 @@ $result2:=$google.user.getCurrent("genders")
 //returns the field "genders" 
 ```
 
-
-### Google.user.get()
-
-**Google.user.get**( *id* : Text {; *select* : Text, Collection } ) : Object
-
-#### Parameters
-
-|Parameter|Type||Description|
-|---------|--- |:---:|------|
-|id|Text|->|The resource name of the person to provide information about. Use the resource name returned by Google.user.list() to specify the contact.|
-|select|Text, Collection|->|A list of specific fields (passed as a collection or as text seperated by commas) you want to retrieve from each person (e.g., names, emails). Only selected fields are returned to avoid unnecessary data.|
-|Result|Object|<-|Represents a user's details, like names, emails, and phone numbers, organized into specific fields, based on fields you selected.|
-
-#### Description
-
-`Google.user.get()` Provides information about a person by specifying a resource name.
-
-#### Returned object
-
-The returned `person` object contains user details identified by the `id` and based on the specific fields selected in `select`. By default returns emailAddresses, names
-
-These fields include: addresses, ageRanges, biographies, birthdays, calendarUrls, clientData, coverPhotos, emailAddresses, events, externalIds, genders, imClients, interests, locales, locations, memberships, metadata, miscKeywords, names, nicknames, occupations, organizations, phoneNumbers, photos, relations, sipAddresses, skills, urls, userDefined.
-
-#### Permissions
-
-No authorization required to access public data. For private data, one of the following OAuth scopes is required:
-
-https://www.googleapis.com/auth/contacts
-https://www.googleapis.com/auth/contacts.readonly
-https://www.googleapis.com/auth/contacts.other.readonly
-https://www.googleapis.com/auth/directory.readonly
-https://www.googleapis.com/auth/profile.agerange.read
-https://www.googleapis.com/auth/profile.emails.read
-https://www.googleapis.com/auth/profile.language.read
-https://www.googleapis.com/auth/user.addresses.read
-https://www.googleapis.com/auth/user.birthday.read
-https://www.googleapis.com/auth/user.emails.read
-https://www.googleapis.com/auth/user.gender.read
-https://www.googleapis.com/auth/user.organization.read
-https://www.googleapis.com/auth/user.phonenumbers.read
-https://www.googleapis.com/auth/userinfo.email
-https://www.googleapis.com/auth/userinfo.profile
-https://www.googleapis.com/auth/profile.language.read
-
 ### Google.user.list()
 
 **Google.user.list**( { *parameter* : Object } ) : Object
@@ -2055,7 +2055,7 @@ https://www.googleapis.com/auth/directory.readonly
 
 #### Example
 
-Building on the example mentionned in [Google.user.getCurrent()](#google.user.getcurrent()), the following line retrieves user data in a structured collection organized into pages with a maximum of `top` users: 
+Building on the example mentionned in [Google.user.getCurrent()](#example-21), the following line retrieves user data in a structured collection organized into pages with a maximum of `top` users: 
 
 ```4d
 $result:=$google.user.list({top:10})
