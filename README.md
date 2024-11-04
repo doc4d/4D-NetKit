@@ -46,6 +46,9 @@
 	- [Google.mail.untrash()](#googlemailuntrash)
 	- [Google.mail.update()](#googlemailupdate)
 	- [Google.mail.updateLabel()](#googlemailupdatelabel)
+	- [Google.user.get()](#googleuserget)
+	- [Google.user.getCurrent()](#googleusergetcurrent)
+	- [Google.user.list()](#googleuserlist)
 	- [labelInfo object](#labelinfo-object)
 	- [Status object (Google Class)](#status-object-google-class)
 
