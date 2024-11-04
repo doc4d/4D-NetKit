@@ -1889,18 +1889,20 @@ $status:=$google.mail.updateLabel($labelId; {name:"Backup January"})
 |Parameter|Type||Description|
 |---------|--- |:---:|------|
 |id|Text|->|The resource name of the person to provide information about. Use the resource name returned by Google.user.list() to specify the contact.|
-|select|Text, Collection|->|A list of specific fields (passed as a collection or as text seperated by commas) you want to retrieve from each person (e.g., names, emails). Only selected fields are returned to avoid unnecessary data.|
-|Result|Object|<-|Represents a user's details, like names, emails, and phone numbers, organized into specific fields, based on fields you selected.|
+|select|Text, Collection|->|A list of specific fields (passed as a collection or as text seperated by commas) you want to retrieve from each person (e.g., names, emails).|
+|Result|Object|<-|Represents user's details, like names, emails, and phone numbers based on selected the fields.|
 
 #### Description
 
-`Google.user.get()` Provides information about a person by specifying a resource name.
+`Google.user.get()` provides information about a person based of fields specified in `select and a resource name provided in `id`.
 
 #### Returned object
 
-The returned `person` object contains user details identified by the `id` and based on the specific fields selected in `select`. By default returns emailAddresses, names
+The returned `person` object contains user details identified by the `id` and based on the specific fields selected in `select`. 
 
-These fields include: addresses, ageRanges, biographies, birthdays, calendarUrls, clientData, coverPhotos, emailAddresses, events, externalIds, genders, imClients, interests, locales, locations, memberships, metadata, miscKeywords, names, nicknames, occupations, organizations, phoneNumbers, photos, relations, sipAddresses, skills, urls, userDefined.
+These fields include: *addresses*, *ageRanges*, *biographies*, *birthdays*, *calendarUrls*, *clientData*, *coverPhotos*, *emailAddresses*, *events*, *externalIds*, *genders*, *imClients*, *interests*, *locales*, locations, *memberships*, *metadata*, *miscKeywords*, *names*, *nicknames*, occupations, *organizations*, *phoneNumbers*, *photos*, *relations*, *sipAddresses*, *skills*, *urls*, *userDefined*.
+
+If no fields have been specified, it returns by default: *emailAddresses* and *names*.
 
 #### Permissions
 
@@ -1931,18 +1933,20 @@ https://www.googleapis.com/auth/profile.language.read
 
 |Parameter|Type||Description|
 |---------|--- |:---:|------|
-|select|Text, Collection|->|A list of specific fields (passed as a collection or as text seperated by commas) you want to retrieve from each person (e.g., names, emails). Only selected fields are returned to avoid unnecessary data.|
-|Result|Object|<-|Represents a user's details, like names, emails, and phone numbers, organized into specific fields, based on fields you selected.|
+|select|Text, Collection|->|A list of specific fields (passed as a collection or as text seperated by commas) you want to retrieve from each person (e.g., names, emails).|
+|Result|Object|<-|Represents user's details, like names, emails, and phone numbers based on selected the fields.|
 
 #### Description
 
-`Google.user.getCurrent()` Provides information about the authenticated use.
+`Google.user.getCurrent()` provides information about the authenticated user based of fields specified in `select`.
 
 #### Returned object
 
-The returned `person` object contains user details based on the specific fields selected in `select`. By default returns emailAddresses, names. 
+The returned `person` object contains user details based on the specific fields selected in `select`. 
 
-These fields include: addresses, ageRanges, biographies, birthdays, calendarUrls, clientData, coverPhotos, emailAddresses, events, externalIds, genders, imClients, interests, locales, locations, memberships, metadata, miscKeywords, names, nicknames, occupations, organizations, phoneNumbers, photos, relations, sipAddresses, skills, urls, userDefined.
+These fields include: *addresses*, *ageRanges*, *biographies*, *birthdays*, *calendarUrls*, *clientData*, *coverPhotos*, *emailAddresses*, *events*, *externalIds*, *genders*, *imClients*, *interests*, *locales*, locations, *memberships*, *metadata*, *miscKeywords*, *names*, *nicknames*, occupations, *organizations*, *phoneNumbers*, *photos*, *relations*, *sipAddresses*, *skills*, *urls*, *userDefined*.
+
+If no fields have been specified, it returns by default: *emailAddresses* and *names*.
 
 #### Permissions
 
@@ -2030,14 +2034,13 @@ In *options*, you can pass several properties:
 |Property|Type|Description|
 |---------|--- |------|
 |select|Text, Collection|Specifies fields to retrieve for each person, separated by commas. Valid fields include *addresses*, *names*, *emailAddresses*, and more. Defaults to *emailAddresses*, *names*.|
-|sources|Text, Collection|Specifies the directory source, with options like: <br/>- DOMAIN_CONTACT (Google Workspace shared contact),
-<br/>- DOMAIN_PROFILE (default, Workspace profile).|
+|sources|Text, Collection|Specifies the directory source, with options like: <br/>- DOMAIN_CONTACT (Google Workspace shared contact), <br/>- DOMAIN_PROFILE (default, Workspace profile).|
 |mergeSources|Text, Collection|Adds related data if linked by email or phone, with options like: CONTACT (user contacts).|
 |top|Integer|Sets the maximum number of people to retrieve, between 1 and 1000 (default is 100).|
 
 #### Returned object
 
-The returned `people` object reprsents users details in a structured collection of data organized into pages, along with the [**status object**](status-object-google-class) and the following properties:
+The returned `people` object reprsents users details in a structured collection of data organized into pages, along with the properties of the [**status object**](status-object-google-class)  and other additional properties:
 
 |Property|Type|Description|
 |---------|--- |------|
