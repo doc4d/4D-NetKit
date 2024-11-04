@@ -1885,16 +1885,17 @@ $status:=$google.mail.updateLabel($labelId; {name:"Backup January"})
 |Parameter|Type||Description|
 |---------|--- |:---:|------|
 |select|Text, Collection|->|A list of specific fields (passed as a collection or as text seperated by commas) you want to retrieve from each person (e.g., names, emails). Only selected fields are returned to avoid unnecessary data.|
-|Result|Object|<-|Represents a user's details, like names, emails, and phone numbers, organized into specific fields.
-based on fields you selected.|
+|Result|Object|<-|Represents a user's details, like names, emails, and phone numbers, organized into specific fields, based on fields you selected.|
 
 #### Description
 
 `Google.user.getCurrent()` Provides information about the authenticated use.
 
-> .
-
 #### Returned object
+
+The returned `person` object contains user details based on the specific fields selected in `select`.
+
+These fields include: addresses, ageRanges, biographies, birthdays, calendarUrls, clientData, coverPhotos, emailAddresses, events, externalIds, genders, imClients, interests, locales, locations, memberships, metadata, miscKeywords, names, nicknames, occupations, organizations, phoneNumbers, photos, relations, sipAddresses, skills, urls, userDefined.
 
 #### Permissions
 
@@ -1945,21 +1946,25 @@ principalName,displayName,givenName,mail")
 
 ### Google.user.get()
 
-**Google.user.get**( { *select* : Text, Collection } ) : Object
+**Google.user.get**( *id* : Text {; *select* : Text, Collection } ) : Object
 
 #### Parameters
 
 |Parameter|Type||Description|
 |---------|--- |:---:|------|
+|id|Text|->|The resource name of the person to provide information about. Use the resource name returned by Google.user.list() to specify the contact.|
 |select|Text, Collection|->|A list of specific fields (passed as a collection or as text seperated by commas) you want to retrieve from each person (e.g., names, emails). Only selected fields are returned to avoid unnecessary data.|
-|Result|Object|<-|Represents a user's details, like names, emails, and phone numbers, organized into specific fields.
-based on fields you selected.|
+|Result|Object|<-|Represents a user's details, like names, emails, and phone numbers, organized into specific fields, based on fields you selected.|
 
 #### Description
 
 `Google.user.get()` Provides information about a person by specifying a resource name.
 
 #### Returned object
+
+The returned `person` object contains user details identified by the `id` and based on the specific fields selected in `select`.
+
+These fields include: addresses, ageRanges, biographies, birthdays, calendarUrls, clientData, coverPhotos, emailAddresses, events, externalIds, genders, imClients, interests, locales, locations, memberships, metadata, miscKeywords, names, nicknames, occupations, organizations, phoneNumbers, photos, relations, sipAddresses, skills, urls, userDefined.
 
 #### Permissions
 
@@ -1982,8 +1987,6 @@ https://www.googleapis.com/auth/userinfo.email
 https://www.googleapis.com/auth/userinfo.profile
 https://www.googleapis.com/auth/profile.language.read
 
-#### Example
-
 ### Google.user.list()
 
 **Google.user.list**( { *parameter* : Object } ) : Object
@@ -1992,8 +1995,8 @@ https://www.googleapis.com/auth/profile.language.read
 
 |Parameter|Type||Description|
 |---------|--- |:---:|------|
-|parameter|Object|->||
-|Result|Object|<-||
+|options|Object|->|A set of options defining how to retrieve and filter user data|
+|Result|Object|<-|An object containing a structured collection of user data organized into pages|
 
 #### Description
 
@@ -2001,8 +2004,30 @@ https://www.googleapis.com/auth/profile.language.read
 
 > If the contact sharing or the External Directory sharing is not allowed in the Google admin, the returned users collection is empty.
 
+In *options*, you can pass several properties:
+
+|Property|Type|Description|
+|---------|--- |------|
+|select|Text, Collection|Specifies fields to retrieve for each person, separated by commas. Valid fields include *addresses*, *names*, *emailAddresses*, and more. Defaults to *emailAddresses*, *names*.|
+|sources|Text, Collection|Specifies the directory source, with options like: <br/>- DOMAIN_CONTACT (Google Workspace shared contact),
+<br/>- DOMAIN_PROFILE (default, Workspace profile).|
+|mergeSources|Text, Collection|Adds related data if linked by email or phone, with options like: CONTACT (user contacts).|
+|top|Integer|Sets the maximum number of people to retrieve, between 1 and 1000 (default is 100).|
 
 #### Returned object
+
+The returned `people` object reprsents users details in a structured collection of data organized into pages, along with the [**status object**](status-object-google-class) and the following properties:
+
+|Property|Type|Description|
+|---------|--- |------|
+|users|Collection|A collection of person objects, each containing detailed information about individual users|
+|isLastPage|Boolean|Indicates whether the current page is the last one in the collection of user data.|
+|page|Integer|Represents the current page number of user information, starting from 1. By default, each page contains 100 results, but the page size limit can be adjusted using the *top* option.|
+|next()|Function|A function that retrieves the next page of user information. Returns True if successful; otherwise, returns False if there is no next page.|
+|previous()|Function|A function that retrieves the previous page of user information. Returns True if successful; otherwise, returns False if there is no previous page.|
+|success|Boolean| [see Status object](#status-object-google-class)|
+|statusText|Text| [see Status object](#status-object-google-class)|
+|errors|Collection| [see Status object](#status-object-google-class)|
 
 #### Permissions
 
