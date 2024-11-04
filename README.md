@@ -1898,7 +1898,7 @@ $status:=$google.mail.updateLabel($labelId; {name:"Backup January"})
 
 #### Returned object
 
-The returned `person` object contains user details identified by the `id` and based on the specific fields selected in `select`. 
+The returned `person` object contains user details identified by the provided `id` and based on the specific fields passed in `select`. 
 
 These fields include: *addresses*, *ageRanges*, *biographies*, *birthdays*, *calendarUrls*, *clientData*, *coverPhotos*, *emailAddresses*, *events*, *externalIds*, *genders*, *imClients*, *interests*, *locales*, locations, *memberships*, *metadata*, *miscKeywords*, *names*, *nicknames*, occupations, *organizations*, *phoneNumbers*, *photos*, *relations*, *sipAddresses*, *skills*, *urls*, *userDefined*.
 
@@ -1942,7 +1942,7 @@ https://www.googleapis.com/auth/profile.language.read
 
 #### Returned object
 
-The returned `person` object contains user details based on the specific fields selected in `select`. 
+The returned `person` object contains user details based on the specific fields passed in `select`. 
 
 These fields include: *addresses*, *ageRanges*, *biographies*, *birthdays*, *calendarUrls*, *clientData*, *coverPhotos*, *emailAddresses*, *events*, *externalIds*, *genders*, *imClients*, *interests*, *locales*, locations, *memberships*, *metadata*, *miscKeywords*, *names*, *nicknames*, occupations, *organizations*, *phoneNumbers*, *photos*, *relations*, *sipAddresses*, *skills*, *urls*, *userDefined*.
 
