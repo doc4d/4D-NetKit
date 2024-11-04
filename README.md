@@ -1890,8 +1890,7 @@ $status:=$google.mail.updateLabel($labelId; {name:"Backup January"})
 |Parameter|Type||Description|
 |---------|--- |:---:|------|
 |id|Text|->|The resource name of the person to provide information about. Use the resource name returned by Google.user.list() to specify the contact.|
-|select|Text \| Collection|->|Text: A comma-separated list of specific fields that you want to retrieve from each person (e.g., names, emails).
-Collection: Collection of the specific fields.|
+|select|Text \| Collection|->|Text: A comma-separated list of specific fields that you want to retrieve from each person (e.g., names, emails).  <br/>Collection: Collection of the specific fields.|
 |Result|Object|<-|Represents user's details, like names, emails, and phone numbers based on the selected fields.|
 
 #### Description
@@ -1936,7 +1935,7 @@ https://www.googleapis.com/auth/profile.language.read
 
 |Parameter|Type||Description|
 |---------|--- |:---:|------|
-|select|Text \| Collection|->|A list of specific fields (passed as a collection or as text seperated by commas) you want to retrieve from each person (e.g., names, emails).|
+|select|Text \| Collection|->|Text: A comma-separated list of specific fields that you want to retrieve from each person (e.g., names, emails). <br/>Collection: Collection of the specific fields.|
 |Result|Object|<-|Represents user's details, like names, emails, and phone numbers based on the selected fields.|
 
 #### Description
