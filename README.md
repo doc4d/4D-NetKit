@@ -1893,7 +1893,7 @@ $status:=$google.mail.updateLabel($labelId; {name:"Backup January"})
 
 #### Returned object
 
-The returned `person` object contains user details based on the specific fields selected in `select`.
+The returned `person` object contains user details based on the specific fields selected in `select`. By default returns emailAddresses, names. 
 
 These fields include: addresses, ageRanges, biographies, birthdays, calendarUrls, clientData, coverPhotos, emailAddresses, events, externalIds, genders, imClients, interests, locales, locations, memberships, metadata, miscKeywords, names, nicknames, occupations, organizations, phoneNumbers, photos, relations, sipAddresses, skills, urls, userDefined.
 
@@ -1922,27 +1922,45 @@ https://www.googleapis.com/auth/profile.language.read
 
 To retrieve information from the current user:
 
+
 ```4d
-var $userInfo; $params : Object
-var $oAuth2 : cs.NetKit.OAuth2Provider
-var $Office365 : cs.NetKit.Office365
+var $google : cs.NetKit.Google
+var $oauth2 : cs.NetKit.OAuth2Provider
+var $param : Object
 
 // Set up parameters:
-$params:=New object
-$params.name:="Microsoft"
-$params.permission:="signedIn"
-$params.clientId:="your-client-id" // Replace with your Microsoft identity platform client ID
-$params.redirectURI:="http://127.0.0.1:50993/authorize/"
-$param.scope:="https://graph.microsoft.com/.default"
+$param:={}
+$param.name:="google"
+$param.permission:="signedIn"
+$param.clientId:="your-client-id" // Replace with your Google identity platform client ID
+$param.clientSecret:="GOCSPX-xxxxxxxxxx_fxFT"
+$param.redirectURI:="http://127.0.0.1:50993/authorize/"
+$param.scope:=[]
+$param.scope.push("https://mail.google.com/")
 
-$oAuth2:=New Oauth2 provider($params) //Creates an OAuth2Provider Object
+$param.scope.push("https://www.googleapis.com/auth/contacts")
+$param.scope.push("https://www.googleapis.com/auth/contacts.other.readonly")
+$param.scope.push("https://www.googleapis.com/auth/contacts.readonly")
+$param.scope.push("https://www.googleapis.com/auth/directory.readonly")
+$param.scope.push("https://www.googleapis.com/auth/user.addresses.read")
+$param.scope.push("https://www.googleapis.com/auth/user.birthday.read")
+$param.scope.push("https://www.googleapis.com/auth/user.emails.read")
+$param.scope.push("https://www.googleapis.com/auth/user.gender.read")
+$param.scope.push("https://www.googleapis.com/auth/user.organization.read")
+$param.scope.push("https://www.googleapis.com/auth/user.phonenumbers.read")
+$param.scope.push("https://www.googleapis.com/auth/userinfo.email")
+$param.scope.push("https://www.googleapis.com/auth/userinfo.profile")
 
-$Office365:=New Office365 provider($oAuth2) // Creates an Office365 object
 
-// Return the properties specified in the parameter.
-$userInfo:=$Office365.user.getCurrent("id,userPrincipalName,\
-principalName,displayName,givenName,mail")
+$oauth2:=New OAuth2 provider($param)
+
+$google:=cs.NetKit.Google.new($oauth2)
+$result1:=$google.user.getCurrent()
+//with empty collection parameter, returns by default "emailAddresses" and "names" 
+$result2:=$google.user.getCurrent("genders")
+//returns the field "genders" 
 ```
+
 
 ### Google.user.get()
 
@@ -1962,7 +1980,7 @@ principalName,displayName,givenName,mail")
 
 #### Returned object
 
-The returned `person` object contains user details identified by the `id` and based on the specific fields selected in `select`.
+The returned `person` object contains user details identified by the `id` and based on the specific fields selected in `select`. By default returns emailAddresses, names
 
 These fields include: addresses, ageRanges, biographies, birthdays, calendarUrls, clientData, coverPhotos, emailAddresses, events, externalIds, genders, imClients, interests, locales, locations, memberships, metadata, miscKeywords, names, nicknames, occupations, organizations, phoneNumbers, photos, relations, sipAddresses, skills, urls, userDefined.
 
@@ -2037,42 +2055,10 @@ https://www.googleapis.com/auth/directory.readonly
 
 #### Example
 
+Building on the example mentionned in [Google.user.getCurrent()](#google.user.getcurrent()), the following line retrieves user data in a structured collection organized into pages with a maximum of `top` users: 
+
 ```4d
-var $oAuth2 : cs.NetKit.OAuth2Provider
-var $Office365 : cs.NetKit.Office365
-var $userInfo; $params; $userList; $userList2; $userList3; $userList4 : Object
-var $col : Collection
-
-// Set up parameters:
-$params:=New object
-$params.name:="Microsoft"
-$params.permission:="signedIn"
-$params.clientId:="your-client-id" // Replace with your Microsoft identity platform client ID
-$params.redirectURI:="http://127.0.0.1:50993/authorize/"
-$params.scope:="https://graph.microsoft.com/.default"
-
-// Create an OAuth2Provider Object
-$oAuth2:=New OAuth2 provider($params)
-
-// Create an Office365 object
-$Office365:=New Office365 provider($oAuth2)
-
-// Return a list with the first 100 users
-$informationList1:=$Office365.user.list()
-
-// Return a list of users whose displayName is Jean
-$userList2:=$Office365.user.list(New object("filter"; "startswith(displayName,'Jean')"))
-
-// return a list of users whose display names contain "F" and arrange it in descending order.
-$userList3:=$Office365.user.list(New object("search"; "\"displayName:F\""; "orderBy"; "displayName desc"; "select"; "displayName"))
-
-// Create a list filled with all the userPrincipalName
-
-$userList4:=$Office365.user.list(New object("select"; "userPrincipalName"))
-$col:=New collection
-Repeat
-    $col.combine($userList4.users)
-Until (Not($userList4.next()))
+$result:=$google.user.list({top:10})
 ```
 
 
