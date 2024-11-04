@@ -2061,7 +2061,7 @@ https://www.googleapis.com/auth/directory.readonly
 
 #### Example
 
-Building on the example mentionned in [Google.user.getCurrent()](#example-21), the following line retrieves user data in a structured collection organized into pages with a maximum of `top` users: 
+Building on the example mentionned in [Google.user.getCurrent()](#example-24), the following line retrieves user data in a structured collection organized into pages with a maximum of `top` users: 
 
 ```4d
 $result:=$google.user.list({top:10})
