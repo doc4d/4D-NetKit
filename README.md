@@ -1882,28 +1882,30 @@ $status:=$google.mail.updateLabel($labelId; {name:"Backup January"})
 
 ### Google.user.get()
 
-**Google.user.get**( *id* : Text {; *select* : Text } ) : Object
+**Google.user.get**( *id* : Text {; *select* : Text } ) : Object<br/>
 **Google.user.get**( *id* : Text {; *select* : Collection } ) : Object
 
 #### Parameters
 
 |Parameter|Type||Description|
 |---------|--- |:---:|------|
-|id|Text|->|The resource name of the person to provide information about. Use the resource name returned by Google.user.list() to specify the contact.|
-|select|Text \| Collection|->|Text: A comma-separated list of specific fields that you want to retrieve from each person (e.g., names, emails).  <br/>Collection: Collection of the specific fields.|
-|Result|Object|<-|Represents user's details, like names, emails, and phone numbers based on the selected fields.|
+|id|Text|->|The *resourceName* of the person to provide information about. Use the *resourceName* field returned by [Google.user.list()](#googleuserlist) to specify the person.|
+|select|Text \| Collection|->|Text: A comma-separated list of specific fields that you want to retrieve from each person (e.g., "names, phoneNumbers").  <br/>Collection: Collection of the specific fields.|
+|Result|Object|<-|Represents [user](https://developers.google.com/people/api/rest/v1/people#Person)'s details, like names, emails, and phone numbers based on the selected fields.|
 
 #### Description
 
-`Google.user.get()` provides information about a person based on fields specified in `select` and a resource name provided in `id`.
+`Google.user.get()` provides information about a user based on the *resourceName* provided in `id` and fields optionally specified in `select`.
+
+Here is a list of currently supported fields: 
+*addresses*, *ageRanges*, *biographies*, *birthdays*, *calendarUrls*, *clientData*, *coverPhotos*, *emailAddresses*, *events*, *externalIds*, *genders*, *imClients*, *interests*, *locales*, *locations*, *memberships*, *metadata*, *miscKeywords*, *names*, *nicknames*, *occupations*, *organizations*, *phoneNumbers*, *photos*, *relations*, *sipAddresses*, *skills*, *urls*, *userDefined*.
+
 
 #### Returned object
 
-The returned `person` object contains user details identified by the provided `id` and based on the specific fields passed in `select`. 
+The returned [`user`](https://developers.google.com/people/api/rest/v1/people#Person) object contains values for the specified field(s). 
 
-These fields include: *addresses*, *ageRanges*, *biographies*, *birthdays*, *calendarUrls*, *clientData*, *coverPhotos*, *emailAddresses*, *events*, *externalIds*, *genders*, *imClients*, *interests*, *locales*, locations, *memberships*, *metadata*, *miscKeywords*, *names*, *nicknames*, occupations, *organizations*, *phoneNumbers*, *photos*, *relations*, *sipAddresses*, *skills*, *urls*, *userDefined*.
-
-If no fields have been specified, it returns by default: *emailAddresses* and *names*.
+If no fields have been specified in `select`, `Google.user.get()` returns *emailAddresses* and *names*. Otherwise, it returns only the specified field(s).
 
 #### Permissions
 
@@ -1928,27 +1930,28 @@ https://www.googleapis.com/auth/profile.language.read
 
 ### Google.user.getCurrent()
 
-**Google.user.getCurrent**( { *select* : Text } ) : Object
+**Google.user.getCurrent**( { *select* : Text } ) : Object<br/>
 **Google.user.getCurrent**( { *select* : Collection } ) : Object
 
 #### Parameters
 
 |Parameter|Type||Description|
 |---------|--- |:---:|------|
-|select|Text \| Collection|->|Text: A comma-separated list of specific fields that you want to retrieve from each person (e.g., names, emails). <br/>Collection: Collection of the specific fields.|
-|Result|Object|<-|Represents user's details, like names, emails, and phone numbers based on the selected fields.|
+|select|Text \| Collection|->|Text: A comma-separated list of specific fields that you want to retrieve from each person (e.g., "names, phoneNumbers"). <br/>Collection: Collection of the specific fields.|
+|Result|Object|<-|Represents [user](https://developers.google.com/people/api/rest/v1/people#Person)'s details, like names, emails, and phone numbers based on the selected fields.|
 
 #### Description
 
 `Google.user.getCurrent()` provides information about the authenticated user based on fields specified in `select`.
 
+Here is a list of currently supported fields: 
+*addresses*, *ageRanges*, *biographies*, *birthdays*, *calendarUrls*, *clientData*, *coverPhotos*, *emailAddresses*, *events*, *externalIds*, *genders*, *imClients*, *interests*, *locales*, *locations*, *memberships*, *metadata*, *miscKeywords*, *names*, *nicknames*, *occupations*, *organizations*, *phoneNumbers*, *photos*, *relations*, *sipAddresses*, *skills*, *urls*, *userDefined*.
+
 #### Returned object
 
-The returned `person` object contains user details based on the specific fields passed in `select`. 
+The returned [`user`](https://developers.google.com/people/api/rest/v1/people#Person) object contains values for the specific field(s). 
 
-These fields include: *addresses*, *ageRanges*, *biographies*, *birthdays*, *calendarUrls*, *clientData*, *coverPhotos*, *emailAddresses*, *events*, *externalIds*, *genders*, *imClients*, *interests*, *locales*, locations, *memberships*, *metadata*, *miscKeywords*, *names*, *nicknames*, occupations, *organizations*, *phoneNumbers*, *photos*, *relations*, *sipAddresses*, *skills*, *urls*, *userDefined*.
-
-If no fields have been specified, it returns by default: *emailAddresses* and *names*.
+If no fields have been specified in `select`, `Google.user.getCurrent()` returns *emailAddresses* and *names*. Otherwise, it returns only the specified field(s).
 
 #### Permissions
 
@@ -1975,7 +1978,6 @@ https://www.googleapis.com/auth/profile.language.read
 
 To retrieve information from the current user:
 
-
 ```4d
 var $google : cs.NetKit.Google
 var $oauth2 : cs.NetKit.OAuth2Provider
@@ -1986,7 +1988,7 @@ $param:={}
 $param.name:="google"
 $param.permission:="signedIn"
 $param.clientId:="your-client-id" // Replace with your Google identity platform client ID
-$param.clientSecret:="GOCSPX-xxxxxxxxxx_fxFT"
+$param.clientSecret:="xxxxxxxxx"
 $param.redirectURI:="http://127.0.0.1:50993/authorize/"
 $param.scope:=[]
 $param.scope.push("https://mail.google.com/")
@@ -2008,49 +2010,51 @@ $param.scope.push("https://www.googleapis.com/auth/userinfo.profile")
 $oauth2:=New OAuth2 provider($param)
 
 $google:=cs.NetKit.Google.new($oauth2)
+
 $result1:=$google.user.getCurrent()
-//with empty collection parameter, returns by default "emailAddresses" and "names" 
+//without parameters, returns by default "emailAddresses" and "names" 
+
 $result2:=$google.user.getCurrent("genders")
 //returns the field "genders" 
 ```
 
 ### Google.user.list()
 
-**Google.user.list**( { *parameter* : Object } ) : Object
+**Google.user.list**( { *options* : Object } ) : Object
 
 #### Parameters
 
 |Parameter|Type||Description|
 |---------|--- |:---:|------|
 |options|Object|->|A set of options defining how to retrieve and filter user data|
-|Result|Object|<-|An object containing a structured collection of user data organized into pages|
+|Result|Object|<-|An object containing a structured collection of [user](https://developers.google.com/people/api/rest/v1/people#Person) data organized into pages|
 
 #### Description
 
-`Google.user.list()` Provides a list of domain profiles or domain contacts in the authenticated user's domain directory. 
+`Google.user.list()` provides a list of domain profiles or domain contacts in the authenticated user's domain directory. 
 
-> If the contact sharing or the External Directory sharing is not allowed in the Google admin, the returned users collection is empty.
+> If the contact sharing or the External Directory sharing is not allowed in the Google admin, the returned `users` collection is empty.
 
-In *options*, you can pass several properties:
+In *options*, you can pass the following properties:
 
 |Property|Type|Description|
 |---------|--- |------|
 |select|Text, Collection|Specifies fields to retrieve for each person, separated by commas. Valid fields include *addresses*, *names*, *emailAddresses*, and more. Defaults to *emailAddresses*, *names*.|
-|sources|Text, Collection|Specifies the directory source, with options like: <br/>- DOMAIN_CONTACT (Google Workspace shared contact), <br/>- DOMAIN_PROFILE (default, Workspace profile).|
-|mergeSources|Text, Collection|Adds related data if linked by email or phone, with options like: CONTACT (user contacts).|
-|top|Integer|Sets the maximum number of people to retrieve, between 1 and 1000 (default is 100).|
+|sources|Text, Collection|(Optional) Specifies the directory source to return. Values: <br/>-  DIRECTORY_SOURCE_TYPE_UNSPECIFIED (Unspecified), <br/>- DIRECTORY_SOURCE_TYPE_DOMAIN_CONTACT (Google Workspace domain  shared contact), <br/>-  DIRECTORY_SOURCE_TYPE_DOMAIN_PROFILE (default, Workspace domain  profile).|
+|mergeSources|Text, Collection|Adds related data if linked by verified join keys such as email addresses or phone numbers. <br/>-  DIRECTORY_SOURCE_TYPE_UNSPECIFIED (Unspecified), <br/>- DIRECTORY_SOURCE_TYPE_DOMAIN_CONTACT (User owned contact).|
+|top|Integer|(Optional) Sets the maximum number of people to retrieve, between 1 and 1000 (default is 100).|
 
 #### Returned object
 
-The returned `people` object reprsents users details in a structured collection of data organized into pages, along with the properties of the [**status object**](status-object-google-class)  and other additional properties:
+The returned object holds a collection of [users](https://developers.google.com/people/api/rest/v1/people#Person) as well as [**status object**](status-object-google-class) properties and functions that allow you to navigate between different pages of results.
 
 |Property|Type|Description|
 |---------|--- |------|
-|users|Collection|A collection of person objects, each containing detailed information about individual users|
+|users|Collection|A collection of [`user`](https://developers.google.com/people/api/rest/v1/people#Person) objects, each containing detailed information about individual users|
 |isLastPage|Boolean|Indicates whether the current page is the last one in the collection of user data.|
 |page|Integer|Represents the current page number of user information, starting from 1. By default, each page contains 100 results, but the page size limit can be adjusted using the *top* option.|
-|next()|Function|A function that retrieves the next page of user information. Returns True if successful; otherwise, returns False if there is no next page.|
-|previous()|Function|A function that retrieves the previous page of user information. Returns True if successful; otherwise, returns False if there is no previous page.|
+|next()|Function|A function that retrieves the next page of user information. Returns True if successful; otherwise, returns False if there is no next page and the users collection is not updated.|
+|previous()|Function|A function that retrieves the previous page of user information. Returns True if successful; otherwise, returns False if there is no previous page and the users collection is not updated.|
 |success|Boolean| [see Status object](#status-object-google-class)|
 |statusText|Text| [see Status object](#status-object-google-class)|
 |errors|Collection| [see Status object](#status-object-google-class)|
@@ -2066,6 +2070,38 @@ https://www.googleapis.com/auth/directory.readonly
 Building on the example mentionned in [Google.user.getCurrent()](#example-24), the following line retrieves user data in a structured collection organized into pages with a maximum of `top` users: 
 
 ```4d
+var $google : cs.NetKit.Google
+var $oauth2 : cs.NetKit.OAuth2Provider
+var $param : Object
+
+$param:={}
+$param.name:="google"
+$param.permission:="signedIn"
+$param.clientId:="your-client-id" // Replace with your Google identity platform client ID
+$param.clientSecret:="xxxxxxxxx"
+$param.redirectURI:="http://127.0.0.1:50993/authorize/"
+$param.scope:=[]
+$param.scope.push("https://mail.google.com/")
+
+$param.scope.push("https://www.googleapis.com/auth/contacts")
+$param.scope.push("https://www.googleapis.com/auth/contacts.other.readonly")
+$param.scope.push("https://www.googleapis.com/auth/contacts.readonly")
+$param.scope.push("https://www.googleapis.com/auth/directory.readonly")
+$param.scope.push("https://www.googleapis.com/auth/user.addresses.read")
+$param.scope.push("https://www.googleapis.com/auth/user.birthday.read")
+$param.scope.push("https://www.googleapis.com/auth/user.emails.read")
+$param.scope.push("https://www.googleapis.com/auth/user.gender.read")
+$param.scope.push("https://www.googleapis.com/auth/user.organization.read")
+$param.scope.push("https://www.googleapis.com/auth/user.phonenumbers.read")
+$param.scope.push("https://www.googleapis.com/auth/userinfo.email")
+$param.scope.push("https://www.googleapis.com/auth/userinfo.profile")
+
+
+$oauth2:=New OAuth2 provider($param)
+
+$google:=cs.NetKit.Google.new($oauth2)
+
+var $result:={}
 $result:=$google.user.list({top:10})
 ```
 
