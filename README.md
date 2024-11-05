@@ -1897,8 +1897,7 @@ $status:=$google.mail.updateLabel($labelId; {name:"Backup January"})
 
 `Google.user.get()` provides information about a [user](https://developers.google.com/people/api/rest/v1/people#Person) based on the *resourceName* provided in `id` and fields optionally specified in `select`.
 
-Here is a list of currently supported fields: 
-*addresses*, *ageRanges*, *biographies*, *birthdays*, *calendarUrls*, *clientData*, *coverPhotos*, *emailAddresses*, *events*, *externalIds*, *genders*, *imClients*, *interests*, *locales*, *locations*, *memberships*, *metadata*, *miscKeywords*, *names*, *nicknames*, *occupations*, *organizations*, *phoneNumbers*, *photos*, *relations*, *sipAddresses*, *skills*, *urls*, *userDefined*.
+Supported fields include *addresses*, *ageRanges*, *biographies*, *birthdays*, *calendarUrls*, *clientData*, *coverPhotos*, *emailAddresses*, *events*, *externalIds*, *genders*, *imClients*, *interests*, *locales*, *locations*, *memberships*, *metadata*, *miscKeywords*, *names*, *nicknames*, *occupations*, *organizations*, *phoneNumbers*, *photos*, *relations*, *sipAddresses*, *skills*, *urls*, *userDefined*.
 
 
 #### Returned object
@@ -1944,8 +1943,7 @@ https://www.googleapis.com/auth/profile.language.read
 
 `Google.user.getCurrent()` provides information about the authenticated [user](https://developers.google.com/people/api/rest/v1/people#Person) based on fields specified in `select`.
 
-Here is a list of currently supported fields: 
-*addresses*, *ageRanges*, *biographies*, *birthdays*, *calendarUrls*, *clientData*, *coverPhotos*, *emailAddresses*, *events*, *externalIds*, *genders*, *imClients*, *interests*, *locales*, *locations*, *memberships*, *metadata*, *miscKeywords*, *names*, *nicknames*, *occupations*, *organizations*, *phoneNumbers*, *photos*, *relations*, *sipAddresses*, *skills*, *urls*, *userDefined*.
+Supported fields include *addresses*, *ageRanges*, *biographies*, *birthdays*, *calendarUrls*, *clientData*, *coverPhotos*, *emailAddresses*, *events*, *externalIds*, *genders*, *imClients*, *interests*, *locales*, *locations*, *memberships*, *metadata*, *miscKeywords*, *names*, *nicknames*, *occupations*, *organizations*, *phoneNumbers*, *photos*, *relations*, *sipAddresses*, *skills*, *urls*, *userDefined*.
 
 #### Returned object
 
