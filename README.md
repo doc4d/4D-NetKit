@@ -2020,7 +2020,7 @@ In *options*, you can pass the following properties:
 
 |Property|Type|Description|
 |---------|--- |------|
-|select|Text \| Collection|Text: A comma-separated list of specific fields that you want to retrieve from each person (e.g., "names, phoneNumbers"). <br/>Collection: Collection of the specific fields. <br/>If ommitted, returns by default: emailAddresses, names|
+|select|Text \| Collection|Text: A comma-separated list of specific fields that you want to retrieve from each person (e.g., "names, phoneNumbers"). <br/>Collection: Collection of the specific fields. <br/>If omitted, defaults to returning emailAddresses and names.|
 |sources|Text \| Collection|Specifies the directory source to return. Values: <br/>-  DIRECTORY_SOURCE_TYPE_UNSPECIFIED (Unspecified), <br/>- DIRECTORY_SOURCE_TYPE_DOMAIN_CONTACT (Google Workspace domain  shared contact), <br/>-  DIRECTORY_SOURCE_TYPE_DOMAIN_PROFILE (default, Workspace domain  profile).|
 |mergeSources|Text \| Collection|Adds related data if linked by verified join keys such as email addresses or phone numbers. <br/>-  DIRECTORY_MERGE_SOURCE_TYPE_UNSPECIFIED (Unspecified), <br/>- DIRECTORY_MERGE_SOURCE_TYPE_CONTACT (User owned contact).|
 |top|Integer|Sets the maximum number of people to retrieve per page, between 1 and 1000 (default is 100).|
