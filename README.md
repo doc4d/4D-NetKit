@@ -1910,21 +1910,21 @@ If no fields have been specified in `select`, `Google.user.get()` returns *email
 
 No authorization required to access public data. For private data, one of the following OAuth scopes is required:
 
-https://www.googleapis.com/auth/contacts
-https://www.googleapis.com/auth/contacts.readonly
-https://www.googleapis.com/auth/contacts.other.readonly
-https://www.googleapis.com/auth/directory.readonly
-https://www.googleapis.com/auth/profile.agerange.read
-https://www.googleapis.com/auth/profile.emails.read
-https://www.googleapis.com/auth/profile.language.read
-https://www.googleapis.com/auth/user.addresses.read
-https://www.googleapis.com/auth/user.birthday.read
-https://www.googleapis.com/auth/user.emails.read
-https://www.googleapis.com/auth/user.gender.read
-https://www.googleapis.com/auth/user.organization.read
-https://www.googleapis.com/auth/user.phonenumbers.read
-https://www.googleapis.com/auth/userinfo.email
-https://www.googleapis.com/auth/userinfo.profile
+https://www.googleapis.com/auth/contacts <br/>
+https://www.googleapis.com/auth/contacts.readonly <br/>
+https://www.googleapis.com/auth/contacts.other.readonly <br/>
+https://www.googleapis.com/auth/directory.readonly <br/>
+https://www.googleapis.com/auth/profile.agerange.read <br/>
+https://www.googleapis.com/auth/profile.emails.read <br/>
+https://www.googleapis.com/auth/profile.language.read <br/>
+https://www.googleapis.com/auth/user.addresses.read <br/>
+https://www.googleapis.com/auth/user.birthday.read <br/>
+https://www.googleapis.com/auth/user.emails.read <br/>
+https://www.googleapis.com/auth/user.gender.read <br/>
+https://www.googleapis.com/auth/user.organization.read <br/>
+https://www.googleapis.com/auth/user.phonenumbers.read <br/>
+https://www.googleapis.com/auth/userinfo.email <br/>
+https://www.googleapis.com/auth/userinfo.profile <br/>
 https://www.googleapis.com/auth/profile.language.read
 
 ### Google.user.getCurrent()
@@ -1995,8 +1995,8 @@ $google:=cs.NetKit.Google.new($oauth2)
 var $currentUser1:=$google.user.getCurrent()
 //without parameters, returns by default "emailAddresses" and "names" 
 
-var $currentUser2:=$google.user.getCurrent("genders")
-//returns the field "genders" 
+var $currentUser2:=$google.user.getCurrent("phoneNumbers")
+//returns the field "phoneNumbers" 
 ```
 
 ### Google.user.list()
@@ -2020,9 +2020,9 @@ In *options*, you can pass the following properties:
 
 |Property|Type|Description|
 |---------|--- |------|
-|select|Text \| Collection|Text: A comma-separated list of specific fields that you want to retrieve from each person (e.g., "names, phoneNumbers"). <br/>Collection: Collection of the specific fields.|
+|select|Text \| Collection|Text: A comma-separated list of specific fields that you want to retrieve from each person (e.g., "names, phoneNumbers"). <br/>Collection: Collection of the specific fields. <br/>If ommitted, returns by default: emailAddresses, names|
 |sources|Text \| Collection|Specifies the directory source to return. Values: <br/>-  DIRECTORY_SOURCE_TYPE_UNSPECIFIED (Unspecified), <br/>- DIRECTORY_SOURCE_TYPE_DOMAIN_CONTACT (Google Workspace domain  shared contact), <br/>-  DIRECTORY_SOURCE_TYPE_DOMAIN_PROFILE (default, Workspace domain  profile).|
-|mergeSources|Text \| Collection|Adds related data if linked by verified join keys such as email addresses or phone numbers. <br/>-  DIRECTORY_SOURCE_TYPE_UNSPECIFIED (Unspecified), <br/>- DIRECTORY_SOURCE_TYPE_DOMAIN_CONTACT (User owned contact).|
+|mergeSources|Text \| Collection|Adds related data if linked by verified join keys such as email addresses or phone numbers. <br/>-  DIRECTORY_MERGE_SOURCE_TYPE_UNSPECIFIED (Unspecified), <br/>- DIRECTORY_MERGE_SOURCE_TYPE_CONTACT (User owned contact).|
 |top|Integer|Sets the maximum number of people to retrieve per page, between 1 and 1000 (default is 100).|
 
 #### Returned object
