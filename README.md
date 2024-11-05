@@ -2011,10 +2011,10 @@ $oauth2:=New OAuth2 provider($param)
 
 $google:=cs.NetKit.Google.new($oauth2)
 
-$result1:=$google.user.getCurrent()
+var $currentUser1 : Object:=$google.user.getCurrent()
 //without parameters, returns by default "emailAddresses" and "names" 
 
-$result2:=$google.user.getCurrent("genders")
+var $currentUser2 : Object:=$google.user.getCurrent("genders")
 //returns the field "genders" 
 ```
 
@@ -2039,10 +2039,10 @@ In *options*, you can pass the following properties:
 
 |Property|Type|Description|
 |---------|--- |------|
-|select|Text \| Collection|Specifies fields to retrieve for each person, separated by commas. Valid fields include *addresses*, *names*, *emailAddresses*, and more. Defaults to *emailAddresses*, *names*.|
+|select|Text \| Collection|Text: A comma-separated list of specific fields that you want to retrieve from each person (e.g., "names, phoneNumbers"). <br/>Collection: Collection of the specific fields.|
 |sources|Text \| Collection|Specifies the directory source to return. Values: <br/>-  DIRECTORY_SOURCE_TYPE_UNSPECIFIED (Unspecified), <br/>- DIRECTORY_SOURCE_TYPE_DOMAIN_CONTACT (Google Workspace domain  shared contact), <br/>-  DIRECTORY_SOURCE_TYPE_DOMAIN_PROFILE (default, Workspace domain  profile).|
 |mergeSources|Text \| Collection|(Optional) Adds related data if linked by verified join keys such as email addresses or phone numbers. <br/>-  DIRECTORY_SOURCE_TYPE_UNSPECIFIED (Unspecified), <br/>- DIRECTORY_SOURCE_TYPE_DOMAIN_CONTACT (User owned contact).|
-|top|Integer|(Optional) Sets the maximum number of people to retrieve, between 1 and 1000 (default is 100).|
+|top|Integer|(Optional) Sets the maximum number of people to retrieve per page, between 1 and 1000 (default is 100).|
 
 #### Returned object
 
@@ -2101,8 +2101,7 @@ $oauth2:=New OAuth2 provider($param)
 
 $google:=cs.NetKit.Google.new($oauth2)
 
-var $result:={}
-$result:=$google.user.list({top:10})
+var $userList : Object:=$google.user.list({top:10})
 ```
 
 
