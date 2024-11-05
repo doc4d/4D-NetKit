@@ -1992,10 +1992,10 @@ $oauth2:=New OAuth2 provider($param)
 
 $google:=cs.NetKit.Google.new($oauth2)
 
-var $currentUser1 : Object:=$google.user.getCurrent()
+var $currentUser1:=$google.user.getCurrent()
 //without parameters, returns by default "emailAddresses" and "names" 
 
-var $currentUser2 : Object:=$google.user.getCurrent("genders")
+var $currentUser2:=$google.user.getCurrent("genders")
 //returns the field "genders" 
 ```
 
@@ -2080,7 +2080,7 @@ $oauth2:=New OAuth2 provider($param)
 
 $google:=cs.NetKit.Google.new($oauth2)
 
-var $userList : Object:=$google.user.list({top:10})
+var $userList:=$google.user.list({top:10})
 ```
 
 
