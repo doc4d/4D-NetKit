@@ -1953,24 +1953,7 @@ If no fields have been specified in `select`, `Google.user.getCurrent()` returns
 
 #### Permissions
 
-No authorization required to access public data. For private data, one of the following OAuth scopes is required:
-
-https://www.googleapis.com/auth/contacts
-https://www.googleapis.com/auth/contacts.readonly
-https://www.googleapis.com/auth/contacts.other.readonly
-https://www.googleapis.com/auth/directory.readonly
-https://www.googleapis.com/auth/profile.agerange.read
-https://www.googleapis.com/auth/profile.emails.read
-https://www.googleapis.com/auth/profile.language.read
-https://www.googleapis.com/auth/user.addresses.read
-https://www.googleapis.com/auth/user.birthday.read
-https://www.googleapis.com/auth/user.emails.read
-https://www.googleapis.com/auth/user.gender.read
-https://www.googleapis.com/auth/user.organization.read
-https://www.googleapis.com/auth/user.phonenumbers.read
-https://www.googleapis.com/auth/userinfo.email
-https://www.googleapis.com/auth/userinfo.profile
-https://www.googleapis.com/auth/profile.language.read
+Requires the same OAuth scope package as [Google.user.get()](#googleuserget).
 
 #### Example
 
@@ -2039,8 +2022,8 @@ In *options*, you can pass the following properties:
 |---------|--- |------|
 |select|Text \| Collection|Text: A comma-separated list of specific fields that you want to retrieve from each person (e.g., "names, phoneNumbers"). <br/>Collection: Collection of the specific fields.|
 |sources|Text \| Collection|Specifies the directory source to return. Values: <br/>-  DIRECTORY_SOURCE_TYPE_UNSPECIFIED (Unspecified), <br/>- DIRECTORY_SOURCE_TYPE_DOMAIN_CONTACT (Google Workspace domain  shared contact), <br/>-  DIRECTORY_SOURCE_TYPE_DOMAIN_PROFILE (default, Workspace domain  profile).|
-|mergeSources|Text \| Collection|(Optional) Adds related data if linked by verified join keys such as email addresses or phone numbers. <br/>-  DIRECTORY_SOURCE_TYPE_UNSPECIFIED (Unspecified), <br/>- DIRECTORY_SOURCE_TYPE_DOMAIN_CONTACT (User owned contact).|
-|top|Integer|(Optional) Sets the maximum number of people to retrieve per page, between 1 and 1000 (default is 100).|
+|mergeSources|Text \| Collection|Adds related data if linked by verified join keys such as email addresses or phone numbers. <br/>-  DIRECTORY_SOURCE_TYPE_UNSPECIFIED (Unspecified), <br/>- DIRECTORY_SOURCE_TYPE_DOMAIN_CONTACT (User owned contact).|
+|top|Integer|Sets the maximum number of people to retrieve per page, between 1 and 1000 (default is 100).|
 
 #### Returned object
 
@@ -2059,9 +2042,7 @@ The returned object holds a collection of [users objects](https://developers.goo
 
 #### Permissions
 
-Requires the following OAuth scope:
-
-https://www.googleapis.com/auth/directory.readonly
+Requires the same OAuth scope package as [Google.user.get()](#googleuserget).
 
 #### Example
 
