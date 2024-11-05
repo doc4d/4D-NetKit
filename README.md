@@ -1953,7 +1953,7 @@ If no fields have been specified in `select`, `Google.user.getCurrent()` returns
 
 #### Permissions
 
-Requires the same OAuth scope package as [Google.user.get()](#googleuserget).
+Requires the same OAuth scope package as [Google.user.get()](#permissions-15).
 
 #### Example
 
@@ -2042,7 +2042,7 @@ The returned object holds a collection of [users objects](https://developers.goo
 
 #### Permissions
 
-Requires the same OAuth scope package as [Google.user.get()](#googleuserget).
+Requires the same OAuth scope package as [Google.user.get()](#permissions-15).
 
 #### Example
 
