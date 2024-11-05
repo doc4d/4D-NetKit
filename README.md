@@ -1895,7 +1895,7 @@ $status:=$google.mail.updateLabel($labelId; {name:"Backup January"})
 
 #### Description
 
-`Google.user.get()` provides information about a user based on the *resourceName* provided in `id` and fields optionally specified in `select`.
+`Google.user.get()` provides information about a [user](https://developers.google.com/people/api/rest/v1/people#Person) based on the *resourceName* provided in `id` and fields optionally specified in `select`.
 
 Here is a list of currently supported fields: 
 *addresses*, *ageRanges*, *biographies*, *birthdays*, *calendarUrls*, *clientData*, *coverPhotos*, *emailAddresses*, *events*, *externalIds*, *genders*, *imClients*, *interests*, *locales*, *locations*, *memberships*, *metadata*, *miscKeywords*, *names*, *nicknames*, *occupations*, *organizations*, *phoneNumbers*, *photos*, *relations*, *sipAddresses*, *skills*, *urls*, *userDefined*.
@@ -1942,7 +1942,7 @@ https://www.googleapis.com/auth/profile.language.read
 
 #### Description
 
-`Google.user.getCurrent()` provides information about the authenticated user based on fields specified in `select`.
+`Google.user.getCurrent()` provides information about the authenticated [user](https://developers.google.com/people/api/rest/v1/people#Person) based on fields specified in `select`.
 
 Here is a list of currently supported fields: 
 *addresses*, *ageRanges*, *biographies*, *birthdays*, *calendarUrls*, *clientData*, *coverPhotos*, *emailAddresses*, *events*, *externalIds*, *genders*, *imClients*, *interests*, *locales*, *locations*, *memberships*, *metadata*, *miscKeywords*, *names*, *nicknames*, *occupations*, *organizations*, *phoneNumbers*, *photos*, *relations*, *sipAddresses*, *skills*, *urls*, *userDefined*.
@@ -2039,9 +2039,9 @@ In *options*, you can pass the following properties:
 
 |Property|Type|Description|
 |---------|--- |------|
-|select|Text, Collection|Specifies fields to retrieve for each person, separated by commas. Valid fields include *addresses*, *names*, *emailAddresses*, and more. Defaults to *emailAddresses*, *names*.|
-|sources|Text, Collection|(Optional) Specifies the directory source to return. Values: <br/>-  DIRECTORY_SOURCE_TYPE_UNSPECIFIED (Unspecified), <br/>- DIRECTORY_SOURCE_TYPE_DOMAIN_CONTACT (Google Workspace domain  shared contact), <br/>-  DIRECTORY_SOURCE_TYPE_DOMAIN_PROFILE (default, Workspace domain  profile).|
-|mergeSources|Text, Collection|Adds related data if linked by verified join keys such as email addresses or phone numbers. <br/>-  DIRECTORY_SOURCE_TYPE_UNSPECIFIED (Unspecified), <br/>- DIRECTORY_SOURCE_TYPE_DOMAIN_CONTACT (User owned contact).|
+|select|Text \| Collection|Specifies fields to retrieve for each person, separated by commas. Valid fields include *addresses*, *names*, *emailAddresses*, and more. Defaults to *emailAddresses*, *names*.|
+|sources|Text \| Collection|Specifies the directory source to return. Values: <br/>-  DIRECTORY_SOURCE_TYPE_UNSPECIFIED (Unspecified), <br/>- DIRECTORY_SOURCE_TYPE_DOMAIN_CONTACT (Google Workspace domain  shared contact), <br/>-  DIRECTORY_SOURCE_TYPE_DOMAIN_PROFILE (default, Workspace domain  profile).|
+|mergeSources|Text \| Collection|(Optional) Adds related data if linked by verified join keys such as email addresses or phone numbers. <br/>-  DIRECTORY_SOURCE_TYPE_UNSPECIFIED (Unspecified), <br/>- DIRECTORY_SOURCE_TYPE_DOMAIN_CONTACT (User owned contact).|
 |top|Integer|(Optional) Sets the maximum number of people to retrieve, between 1 and 1000 (default is 100).|
 
 #### Returned object
@@ -2067,7 +2067,7 @@ https://www.googleapis.com/auth/directory.readonly
 
 #### Example
 
-Building on the example mentionned in [Google.user.getCurrent()](#example-24), the following line retrieves user data in a structured collection organized into pages with a maximum of `top` users: 
+To retrieve user data in a structured collection organized into pages with a maximum of `top` users per page: 
 
 ```4d
 var $google : cs.NetKit.Google
