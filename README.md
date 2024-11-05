@@ -2044,11 +2044,11 @@ In *options*, you can pass the following properties:
 
 #### Returned object
 
-The returned object holds a collection of [users](https://developers.google.com/people/api/rest/v1/people#Person) as well as [**status object**](status-object-google-class) properties and functions that allow you to navigate between different pages of results.
+The returned object holds a collection of [users objects](https://developers.google.com/people/api/rest/v1/people#Person) as well as [**status object**](status-object-google-class) properties and functions that allow you to navigate between different pages of results.
 
 |Property|Type|Description|
 |---------|--- |------|
-|users|Collection|A collection of [`user`](https://developers.google.com/people/api/rest/v1/people#Person) objects, each containing detailed information about individual users|
+|users|Collection|A collection of [user objects](https://developers.google.com/people/api/rest/v1/people#Person) objects, each containing detailed information about individual users|
 |isLastPage|Boolean|Indicates whether the current page is the last one in the collection of user data.|
 |page|Integer|Represents the current page number of user information, starting from 1. By default, each page contains 100 results, but the page size limit can be adjusted using the *top* option.|
 |next()|Function|A function that retrieves the next page of user information. Returns True if successful; otherwise, returns False if there is no next page and the users collection is not updated.|
