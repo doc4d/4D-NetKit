@@ -1891,7 +1891,7 @@ $status:=$google.mail.updateLabel($labelId; {name:"Backup January"})
 |---------|--- |:---:|------|
 |id|Text|->|The *resourceName* of the person to provide information about. Use the *resourceName* field returned by [Google.user.list()](#googleuserlist) to specify the person.|
 |select|Text \| Collection|->|Text: A comma-separated list of specific fields that you want to retrieve from each person (e.g., "names, phoneNumbers").  <br/>Collection: Collection of the specific fields.|
-|Result|Object|<-|Represents [user](https://developers.google.com/people/api/rest/v1/people#Person)'s details, like names, emails, and phone numbers based on the selected fields.|
+|Result|Object|<-|Represents user's details, like names, emails, and phone numbers based on the selected fields.|
 
 #### Description
 
@@ -1903,7 +1903,7 @@ Here is a list of currently supported fields:
 
 #### Returned object
 
-The returned [`user`](https://developers.google.com/people/api/rest/v1/people#Person) object contains values for the specified field(s). 
+The returned [user object](https://developers.google.com/people/api/rest/v1/people#Person) contains values for the specified field(s). 
 
 If no fields have been specified in `select`, `Google.user.get()` returns *emailAddresses* and *names*. Otherwise, it returns only the specified field(s).
 
@@ -1938,7 +1938,7 @@ https://www.googleapis.com/auth/profile.language.read
 |Parameter|Type||Description|
 |---------|--- |:---:|------|
 |select|Text \| Collection|->|Text: A comma-separated list of specific fields that you want to retrieve from each person (e.g., "names, phoneNumbers"). <br/>Collection: Collection of the specific fields.|
-|Result|Object|<-|Represents [user](https://developers.google.com/people/api/rest/v1/people#Person)'s details, like names, emails, and phone numbers based on the selected fields.|
+|Result|Object|<-|Represents user's details, like names, emails, and phone numbers based on the selected fields.|
 
 #### Description
 
@@ -1949,7 +1949,7 @@ Here is a list of currently supported fields:
 
 #### Returned object
 
-The returned [`user`](https://developers.google.com/people/api/rest/v1/people#Person) object contains values for the specific field(s). 
+The returned [user object](https://developers.google.com/people/api/rest/v1/people#Person) contains values for the specific field(s). 
 
 If no fields have been specified in `select`, `Google.user.getCurrent()` returns *emailAddresses* and *names*. Otherwise, it returns only the specified field(s).
 
