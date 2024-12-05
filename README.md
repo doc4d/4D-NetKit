@@ -2199,7 +2199,7 @@ var $userList:=$google.user.list({top:10})
 
 ### Google.Calendar.getCalendarList()
 
-**Google.Calendar.getCalendar**( *param* : Object } ) : Object
+**Google.Calendar.getCalendar**( { *param* : Object } ) : Object
 
 #### Parameters
 
