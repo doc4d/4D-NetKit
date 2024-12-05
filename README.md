@@ -2232,9 +2232,6 @@ The function returns a Collection of details about the user's calendar list in t
 | **Property**         | **Type**          | **Description**                                                                                                                                                             |
 |----------------------|-------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `calendars`          | Collection        | Collection of calendar objects present in the user's calendar list. Each calendar object contains details such as `id`, `summary`, and `accessRole`.                                                             |
-|                      |                   | - `.errcode`: 4D error code number.                                                                                                                                         |
-|                      |                   | - `.message`: Error description.                                                                                                                                           |
-|                      |                   | - `.componentSignature`: Signature of the component that returned the error.                                                                                              |
 | `isLastPage`         | Boolean           | `True` if the last page of results has been reached.                                                                                                                       |
 | `page`               | Integer           | Current page number of results. Starts at `1`. By default, each page holds 100 results.                                                                                   |
 | `next()`             | Function          | Loads the next page of calendar entries and increments the `page` property by 1. Returns:                                                                                  |
@@ -2246,6 +2243,9 @@ The function returns a Collection of details about the user's calendar list in t
 | `statusText`         | Text              | Status message returned by the Google server or the last error message from the 4D error stack.                                                                            |
 | `success`            | Boolean           | `True` if the operation is successful, `False` otherwise.                                                                                                                 |
 | `errors`             | Collection        | Collection of 4D error items (if any):                                                                                                                                     |
+|                      |                   | - `.errcode`: 4D error code number.                                                                                                                                         |
+|                      |                   | - `.message`: Error description.                                                                                                                                           |
+|                      |                   | - `.componentSignature`: Signature of the component that returned the error.                                                                                              |
 
 
 #### Example 
