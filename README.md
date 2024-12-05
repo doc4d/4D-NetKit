@@ -1339,7 +1339,7 @@ Until (Not($userList4.next()))
 |Parameter|Type||Description|
 |---------|--- |:---:|------|
 |param|Object|->|Set of options to filter, order, or select specific calendar properties.|
-|result|Object|<-| Object containing the retrieved calendars and related data|
+|result|Object|<-| Object containing the retrieved calendars and related data.|
 
 #### Description
 
@@ -2205,8 +2205,8 @@ var $userList:=$google.user.list({top:10})
 
 |Parameter|Type||Description|
 |---------|--- |:---:|------|
-|param|Object|->|Set of options to filter or refine the calendar list request|
-|Result|Object|<-|Object containing the calendar list with the related data|
+|param|Object|->|Set of options to filter or refine the calendar list request.|
+|Result|Object|<-|Object containing the calendar list with the related data.|
 
 #### Description
 
