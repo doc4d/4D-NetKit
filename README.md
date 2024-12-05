@@ -1388,7 +1388,7 @@ $oAuth2:=New OAuth2 provider($params)
 // Create an Office365 object
 $Office365:=New Office365 provider($oAuth2)
 
-// Retrieve the list of all calendars
+// Retrieve the entire list of calendars
 $calendarList:=$Office365.calendar.getCalendarList()
 
 ```
@@ -1432,7 +1432,7 @@ $oAuth2:=New OAuth2 provider($params)
 $Office365:=New Office365 provider($oAuth2)
 
 
-// Retrieve the list of all calendars
+// Retrieve the entire list of calendars
 $calendarList:=$Office365.calendar.getCalendarList()
 
 // Retrieve the first calendar in the list using its ID
@@ -2270,7 +2270,7 @@ $oauth2:=New OAuth2 provider($param)
 
 $google:=cs.NetKit.Google.new($oauth2)
 
-// Retrieve the list of all calendars
+// Retrieve the entire list of calendars
 
 $Calendars:=$google.calendar.getCalendarList()
 
@@ -2315,7 +2315,7 @@ $oauth2:=New OAuth2 provider($param)
 
 $google:=cs.NetKit.Google.new($oauth2)
 
-// Retrieve the list of all calendars
+// Retrieve the entire list of calendars
 $Calendars:=$google.calendar.getCalendarList()
 
 // Retrieve the first calendar in the list using its ID
