@@ -1330,6 +1330,112 @@ Repeat
 Until (Not($userList4.next()))
 ```
 
+### Office365.calendar.getCalendarList()
+
+**Office365.calendar.getCalendarList**({*param*: Object}) : Object
+
+#### Parameters
+
+|Parameter|Type||Description|
+|---------|--- |:---:|------|
+|param|Object|->|Set of options to filter, order, or select specific calendar properties.|
+|result|Object|<-| Object containing the retrieved calendars and related data|
+
+#### Description
+
+`Office365.calendar.getCalendarList()` retrieves a collection of the user's calendars. 
+
+In *param*, you can pass the following optional properties:
+
+| Property | Type | Description |
+|---|---|---|
+|select| Text | Specifies which calendar properties (columns) to retrieve. Comma-separated values.|
+|orderby | Text | Specifies the order of the returned results. Syntax is property name followed by `asc` (ascending) or `desc` (descending).|
+|filter| Text  | OData filter expression to filter the results. For example: `"name eq 'Work'"` retrieves calendars with the name "Work". |
+
+#### Returned object
+
+The returned object holds a collection of users as well as status properties and functions that allow you to navigate between different pages of results.
+
+| Property | Type | Description |
+|---|---|---|
+|calendars| Collection  | Collection of calendar objects retrieved from the user's account. Each calendar object contains properties such as `id`, `name`, and `owner`.                               |
+|errors | Collection | Collection of 4D error items (if any):|                                                                                                                                  
+|   | | - `.errcode`: 4D error code number.|                                                                                                                                         
+|  | | - `.message`: Error description.|                                                                                                                                           
+| |  | - `.componentSignature`: Signature of the component that returned the error.|                                                                                              
+|statusText| Text | Status message returned by the Microsoft server or the last error message from the 4D error stack.|                                                                          
+|success| Boolean | `True` if the operation is successful, `False` otherwise.|                                                                                                                 
+
+#### Example
+
+```4d
+var $oAuth2 : cs.NetKit.OAuth2Provider
+var $Office365 : cs.NetKit.Office365
+var $params; $calendarList; $calendarA : Object
+
+// Set up parameters:
+$params:=New object
+$params.name:="Microsoft"
+$params.permission:="signedIn"
+$params.clientId:="your-client-id" // Replace with your Microsoft identity platform client ID
+$params.redirectURI:="http://127.0.0.1:50993/authorize/"
+$params.scope:="https://graph.microsoft.com/.default"
+
+// Create an OAuth2Provider Object
+$oAuth2:=New OAuth2 provider($params)
+
+// Create an Office365 object
+$Office365:=New Office365 provider($oAuth2)
+
+$calendarList:=$Office365.calendar.getCalendarList()
+
+
+```
+
+### Office365.calendar.getCalendar()
+
+**Office365.calendar.getCalendar**({*id*: Text}) : Object
+
+#### Parameters
+
+|Parameter|Type||Description|
+|---------|--- |:---:|------|
+|id|Text|->|ID of the calender to retrieve.|
+|calendar|Object|<-|[Object](https://learn.microsoft.com/en-us/graph/api/resources/calendar?view=graph-rest-1.0#properties) containing the properties and relationships of the specified calendar.  |
+
+> To retrieve calendar IDs call the getCalendarList() function. If id is null, empty or missing, returns the primary calendar of the currently logged in user.
+
+#### Description
+
+`Office365.calendar.getCalendarList()` retrieves the properties and relationships of a specific calendar associated with the passed `id` and returns a `calendar` object containing the requested calendar's details.
+
+#### Example
+
+```4d
+var $oAuth2 : cs.NetKit.OAuth2Provider
+var $Office365 : cs.NetKit.Office365
+var $params; $calendarList; $calendarA : Object
+
+// Set up parameters:
+$params:=New object
+$params.name:="Microsoft"
+$params.permission:="signedIn"
+$params.clientId:="your-client-id" // Replace with your Microsoft identity platform client ID
+$params.redirectURI:="http://127.0.0.1:50993/authorize/"
+$params.scope:="https://graph.microsoft.com/.default"
+
+// Create an OAuth2Provider Object
+$oAuth2:=New OAuth2 provider($params)
+
+// Create an Office365 object
+$Office365:=New Office365 provider($oAuth2)
+
+$calendarList:=$Office365.calendar.getCalendarList()
+$calendarA:=$Office365.calendar.getCalendar($calendarList.calendars[0].id)
+
+```
+
 ## Google
 
 The `Google` class allows you to send emails through the [Google REST API](https://developers.google.com/gmail/api/reference/rest/v1/users.messages).
@@ -2085,6 +2191,127 @@ $oauth2:=New OAuth2 provider($param)
 $google:=cs.NetKit.Google.new($oauth2)
 
 var $userList:=$google.user.list({top:10})
+```
+
+### Google.Calendar.getCalendarList()
+
+**Google.Calendar.getCalendar**( *param* : Object } ) : Object
+
+#### Parameters
+
+|Parameter|Type||Description|
+|---------|--- |:---:|------|
+|param|Object|->|Set of options to filter or refine the calendar list request|
+|Result|Object|<-|Object containing the calendar list with the related data|
+
+#### Description
+
+`Google.Calendar.getCalendarList()` retrieves a list of calendars that the authenticated user can access. The passed filtering and paging options in `param` are returned in the `result` object.
+
+In *param*, you can pass the following properties:
+
+|Property|Type|Description|
+|---------|--- |------|
+| maxResults | Integer | (Optional) Maximum number of calendar entries returned per page. Default is 100. Maximum is 250.|
+| minAccessRole | String  | (Optional) Minimum access role for the user in the returned calendars. Default is no restriction. Acceptable values:|
+|* "freeBusyReader": User can read free/busy information.             |         |                                                                                                                                                           |
+|* "owner":  User can read, modify events, and control access. |         |                                                                                                                                                           |
+|* "reader": User can read non-private events.  |         |                                                                                                                                                           |
+|* "writer": User can read and modify events.                         |         |                                                                                                                                                           |
+| showDeleted | Boolean | Whether to include deleted calendar list entries in the result. Optional. The default is False.|
+| showHidden | Boolean | Whether to show hidden entries. Optional. The default is False.|
+
+#### Returned object
+
+The function returns a Collection of details about the user's calendar list in the following properties:
+
+| **Property**         | **Type**          | **Description**                                                                                                                                                             |
+|----------------------|-------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `calendars`          | Collection        | Collection of calendar objects present in the user's calendar list. Each calendar object contains details such as `id`, `summary`, and `accessRole`.                                                             |
+| `errors`             | Collection        | Collection of 4D error items (if any):                                                                                                                                     |
+|                      |                   | - `.errcode`: 4D error code number.                                                                                                                                         |
+|                      |                   | - `.message`: Error description.                                                                                                                                           |
+|                      |                   | - `.componentSignature`: Signature of the component that returned the error.                                                                                              |
+| `isLastPage`         | Boolean           | `True` if the last page of results has been reached.                                                                                                                       |
+| `page`               | Integer           | Current page number of results. Starts at `1`. By default, each page holds 100 results.                                                                                   |
+| `next()`             | Function          | Loads the next page of calendar entries and increments the `page` property by 1. Returns:                                                                                  |
+|                      |                   | - `True` if the next page is loaded successfully.                                                                                                                         |
+|                      |                   | - `False` if no additional pages are available (the collection is not updated).                                                                                           |
+| `previous()`         | Function          | Loads the previous page of calendar entries and decrements the `page` property by 1. Returns:                                                                              |
+|                      |                   | - `True` if the previous page is loaded successfully.                                                                                                                     |
+|                      |                   | - `False` if no previous pages are available (the collection is not updated).                                                                                             |
+| `statusText`         | Text              | Status message returned by the Google server or the last error message from the 4D error stack.                                                                            |
+| `success`            | Boolean           | `True` if the operation is successful, `False` otherwise.                                                                                                                 |
+
+
+#### Example 
+
+```4d
+
+var $google : cs.NetKit.Google
+var $oauth2 : cs.NetKit.OAuth2Provider
+var $param; $Calendars; $myCalendar : Object
+
+$param:={}
+$param.name:="google"
+$param.permission:="signedIn"
+$param.clientId:="your-client-id" // Replace with your Google identity platform client ID
+$param.clientSecret:="xxxxxxxxx"
+$param.redirectURI:="http://127.0.0.1:50993/authorize/"
+$param.scope:=[]
+$param.scope.push("https://mail.google.com/")
+$param.scope.push("https://www.googleapis.com/auth/calendar")
+
+$oauth2:=New OAuth2 provider($param)
+
+$google:=cs.NetKit.Google.new($oauth2)
+
+$Calendars:=$google.calendar.getCalendarList()
+
+```
+
+### Google.Calendar.getCalendar()
+
+**Google.Calendar.getCalendar**( { *id* : Text } ) : Object
+
+#### Parameters
+
+|Parameter|Type||Description|
+|---------|--- |:---:|------|
+|id|Text|->|ID of the calender to retrieve. |
+|calendar|Object|<-| Object containing the details of the specified calendar. For more details, see the [Google Calendar API resource](https://developers.google.com/calendar/api/v3/reference/calendarList#resource).|
+
+> To retrieve calendar IDs call the getCalendarList() function. If id is null, empty or missing, returns the primary calendar of the currently logged in user.
+
+#### Description
+
+`Google.Calendar.getCalendar()` retrieves a specific calendar from the authenticated user's calendar list; using an `id` to identify the calendar and returns a `calendar` object containing details about the requested calendar.
+
+#### Example 
+
+```4d
+
+var $google : cs.NetKit.Google
+var $oauth2 : cs.NetKit.OAuth2Provider
+var $param; $Calendars; $myCalendar : Object
+
+$param:={}
+$param.name:="google"
+$param.permission:="signedIn"
+$param.clientId:="your-client-id" // Replace with your Google identity platform client ID
+$param.clientSecret:="xxxxxxxxx"
+$param.redirectURI:="http://127.0.0.1:50993/authorize/"
+$param.scope:=[]
+$param.scope.push("https://mail.google.com/")
+$param.scope.push("https://www.googleapis.com/auth/calendar")
+
+$oauth2:=New OAuth2 provider($param)
+
+$google:=cs.NetKit.Google.new($oauth2)
+
+$Calendars:=$google.calendar.getCalendarList()
+$myCalendar:=$google.calendar.getCalendar($Calendars.calendars[0].id)
+
 ```
 
 
