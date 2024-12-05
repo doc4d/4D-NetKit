@@ -2212,12 +2212,12 @@ var $userList:=$google.user.list({top:10})
 
 `Google.Calendar.getCalendarList()` retrieves a list of calendars that the authenticated user can access. The passed filtering and paging options in `param` are returned in the `result` object.
 
-In *param*, you can pass the following properties:
+In *param*, you can pass the following optional properties:
 
 |Property|Type|Description|
 |---------|--- |------|
-| maxResults | Integer | (Optional) Maximum number of calendar entries returned per page. Default is 100. Maximum is 250.|
-| minAccessRole | String  | (Optional) Minimum access role for the user in the returned calendars. Default is no restriction. Acceptable values:|
+| maxResults | Integer | Maximum number of calendar entries returned per page. Default is 100. Maximum is 250.|
+| minAccessRole | String  | Minimum access role for the user in the returned calendars. Default is no restriction. Acceptable values:|
 | | |- "freeBusyReader": User can read free/busy information.             |                                                                                                                                                                    
 | | |- "owner":  User can read, modify events, and control access. |
 | | |- "reader": User can read non-private events.  |
