@@ -1355,7 +1355,7 @@ In *param*, you can pass the following optional properties:
 
 #### Returned object
 
-The returned object holds a collection of users as well as status properties and functions that allow you to navigate between different pages of results.
+The function returns an object containing the following properties:
 
 | Property | Type | Description |
 |---|---|---|
