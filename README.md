@@ -2214,10 +2214,10 @@ In *param*, you can pass the following properties:
 |---------|--- |------|
 | maxResults | Integer | (Optional) Maximum number of calendar entries returned per page. Default is 100. Maximum is 250.|
 | minAccessRole | String  | (Optional) Minimum access role for the user in the returned calendars. Default is no restriction. Acceptable values:|
-|* "freeBusyReader": User can read free/busy information.             |         |                                                                                                                                                           |
-|* "owner":  User can read, modify events, and control access. |         |                                                                                                                                                           |
-|* "reader": User can read non-private events.  |         |                                                                                                                                                           |
-|* "writer": User can read and modify events.                         |         |                                                                                                                                                           |
+| | |* "freeBusyReader": User can read free/busy information.             |                                                                                                                                                                    
+| | |* "owner":  User can read, modify events, and control access. |
+| | |* "reader": User can read non-private events.  |
+| | |* "writer": User can read and modify events.                         |         
 | showDeleted | Boolean | Whether to include deleted calendar list entries in the result. Optional. The default is False.|
 | showHidden | Boolean | Whether to show hidden entries. Optional. The default is False.|
 
