@@ -520,8 +520,8 @@ In *param*, you can pass the following optional properties:
 
 The method returns a status object containing the following properties:
 
-| Property ||  Type | Description |
-|---|---| ---|---|
+| Property | Type | Description |
+|---|---|---|
 | errors | Collection | Collection of 4D error items (not returned if a Google server response is received): [].errcode (4D error code number), [].message (description of the error), [].componentSignature (signature of the component that returned the error). |
 | statusText | Text | Status message returned by the Google server, or last error returned in the 4D error stack. |
 | success | Boolean | True if the operation is successful, False otherwise. |
@@ -1787,8 +1787,8 @@ In *param*, you can pass the following optional properties:
 
 The method returns a status object containing the following properties:
 
-| Property ||  Type | Description |
-|---|---| ---|---|
+| Property |  Type | Description |
+|---| ---|---|
 | [].errcode | Integer | 4D error code number. |
 | [].message | Text | Description of the 4D error. |
 | [].componentSignature | Text | Signature of the internal component that returned the error. |
