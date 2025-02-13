@@ -478,9 +478,9 @@ In *param*, you can pass the following optional properties:
 
 | Property | Type | Description |
 |---|---|---|
-| calendarId | String | Calendar identifier. To retrieve calendar IDs call the calendarList.list method. If not present or null, access the primary calendar of the currently logged-in user. |
-| eventId | String | (mandatory) Event identifier. |
-| timeZone | String | Time zone used in the response. Optional. UTC by default. |
+| calendarId | String | Calendar identifier. To retrieve calendar IDs call the calendarList.list method. If not present or null, access the primary calendar of the currently logged-in user |
+| eventId | String | (mandatory) Event identifier |
+| timeZone | String | (Optional) Time zone used in the response. UTC by default |
 
 
 #### Returned object
@@ -1737,10 +1737,10 @@ In *param*, you can pass the following optional properties:
 
 |Property|Type|Description|
 |---------|--- |------|
-| calendarId | String | Calendar identifier. To retrieve calendar IDs, call the calendarList.list method. If not provided, accesses the primary calendar of the logged-in user. |
-| eventId | String | (Mandatory) Event identifier. |
-| maxAttendees | Integer | Maximum number of attendees to include in the response. If exceeded, only the participant is returned. Optional. |
-| timeZone | String | Time zone used in the response (formatted as an IANA Time Zone Database name, e.g., "Europe/Zurich"). Defaults to UTC. Optional. |
+| calendarId | String | Calendar identifier. To retrieve calendar IDs, call the calendarList.list method. If not provided, accesses the primary calendar of the logged-in user |
+| eventId | String | (Mandatory) Event identifier |
+| maxAttendees | Integer | (Optional) Maximum number of attendees to include in the response. If exceeded, only the participant is returned |
+| timeZone | String | (Optional) Time zone used in the response (formatted as an IANA Time Zone Database name, e.g., "Europe/Zurich"). Defaults to UTC |
 
 #### Returned object 
 
