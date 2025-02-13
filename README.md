@@ -11,6 +11,10 @@
 	- [OAuth2ProviderObject.getToken()](#oauth2providerobjectgettoken)
 * [Office365 class](#office365)
 	- [New Office365 provider](#new-office365-provider)
+	- [Office365.calendar.getCalendar()](#office365calendargetcalendar)
+	- [Office365.calendar.getCalendarList()](#office365calendargetcalendarlist)
+	- [Office365.calendar.getEvent()](#office365calendargetevent)
+	- [Office365.calendar.getEvents()](#office365calendargetevents)
 	- [Office365.mail.append()](#office365mailappend)
 	- [Office365.mail.copy()](#office365mailcopy)
 	- [Office365.mail.createFolder()](#office365mailcreatefolder)
@@ -25,14 +29,18 @@
 	- [Office365.mail.reply()](#office365mailreply)
 	- [Office365.mail.send()](#office365mailsend)
 	- [Office365.mail.update()](#office365mailupdate)
-	- [Well-known folder names](well-known-folder-names)
-	- ["Microsoft" mail object properties](#microsoft-mail-object-properties)
-	- [Status object (Office365 Class)](#status-object)
 	- [Office365.user.get()](#office365userget)
 	- [Office365.user.getCurrent()](#office365usergetcurrent)
 	- [Office365.user.list()](#office365userlist)
+	- [Well-known folder names](well-known-folder-names)
+	- ["Microsoft" mail object properties](#microsoft-mail-object-properties)
+	- [Status object (Office365 Class)](#status-object)
 * [Google class](#google)
 	- [cs.NetKit.Google.new()](#csnetkitgooglenew)
+	- [Google.Calendar.getCalendar()](#googlecalendargetcalendar)
+	- [Google.Calendar.getCalendarList()](#googlecalendargetcalendarlist)
+	- [Google.Calendar.getEvent()](#googlecalendargetevent)
+	- [Google.Calendar.getEvents()](#googlecalendargetevents)
 	- [Google.mail.append()](#googlemailappend)
 	- [Google.mail.createLabel()](#googlemailcreatelabel)
 	- [Google.mail.delete()](#googlemaildelete)
@@ -340,6 +348,201 @@ $office365:=New Office365 provider($oAuth2;New object("mailType"; "Microsoft"))
 #### Example 2
 
 Refer to [this tutorial](#authenticate-to-the-microsoft-graph-api-in-service-mode) for an example of connection in Service mode.
+
+### Office365.calendar.getCalendarList()
+
+**Office365.calendar.getCalendarList**({*param*: Object}) : Object
+
+#### Parameters
+
+|Parameter|Type||Description|
+|---------|--- |:---:|------|
+|param|Object|->|Set of options to filter, order, or select specific calendar properties.|
+|result|Object|<-| Object containing the retrieved calendars and related data.|
+
+#### Description
+
+`Office365.calendar.getCalendarList()` retrieves a collection of the user's calendars. 
+
+In *param*, you can pass the following optional properties:
+
+| Property | Type | Description |
+|---|---|---|
+|select| Text | Specifies which calendar properties (columns) to retrieve. Comma-separated values.|
+|orderby | Text | Specifies the order of the returned results. Syntax is property name followed by `asc` (ascending) or `desc` (descending).|
+|filter| Text  | OData filter expression to filter the results. For example: `"name eq 'Work'"` retrieves calendars with the name "Work". |
+
+#### Returned object
+
+The function returns an object containing the following properties:
+
+| Property | Type | Description |
+|---|---|---|
+|calendars| Collection  | Collection of calendar objects retrieved from the user's account. Each calendar object contains properties such as `id`, `name`, and `owner`.                               |
+|statusText| Text | Status message returned by the Microsoft server or the last error message from the 4D error stack.|                                                                          
+|success| Boolean | `True` if the operation is successful, `False` otherwise.|
+|errors | Collection | Collection of 4D error items (if any):|                                                                                                                                  
+|   | | - `.errcode`: 4D error code number.|                                                                                                                                         
+|  | | - `.message`: Error description.|                                                                                                                                           
+| |  | - `.componentSignature`: Signature of the component that returned the error.|                                                                                                                                                                                                              
+
+#### Example
+
+```4d
+var $oAuth2 : cs.NetKit.OAuth2Provider
+var $Office365 : cs.NetKit.Office365
+var $params; $calendarList : Object
+
+// Set up parameters:
+$params:=New object
+$params.name:="Microsoft"
+$params.permission:="signedIn"
+$params.clientId:="your-client-id" // Replace with your Microsoft identity platform client ID
+$params.redirectURI:="http://127.0.0.1:50993/authorize/"
+$params.scope:="https://graph.microsoft.com/.default"
+
+// Create an OAuth2Provider Object
+$oAuth2:=New OAuth2 provider($params)
+
+// Create an Office365 object
+$Office365:=New Office365 provider($oAuth2)
+
+// Retrieve the entire list of calendars
+$calendarList:=$Office365.calendar.getCalendarList()
+
+```
+
+### Office365.calendar.getCalendar()
+
+**Office365.calendar.getCalendar**({*id*: Text}) : Object
+
+#### Parameters
+
+|Parameter|Type||Description|
+|---------|--- |:---:|------|
+|id|Text|->|ID of the calender to retrieve.|
+|calendar|Object|<-|[Object](https://learn.microsoft.com/en-us/graph/api/resources/calendar?view=graph-rest-1.0#properties) containing the properties and relationships of the specified calendar.  |
+
+> To retrieve calendar IDs call the getCalendarList() function. If id is null, empty or missing, returns the primary calendar of the currently logged in user.
+
+#### Description
+
+`Office365.calendar.getCalendar()` retrieves the properties and relationships of a specific calendar associated with the passed `id` and returns a `calendar` object containing the requested calendar's details.
+
+#### Example
+
+```4d
+var $oAuth2 : cs.NetKit.OAuth2Provider
+var $Office365 : cs.NetKit.Office365
+var $params; $calendarList; $calendarA : Object
+
+// Set up parameters:
+$params:=New object
+$params.name:="Microsoft"
+$params.permission:="signedIn"
+$params.clientId:="your-client-id" // Replace with your Microsoft identity platform client ID
+$params.redirectURI:="http://127.0.0.1:50993/authorize/"
+$params.scope:="https://graph.microsoft.com/.default"
+
+// Create an OAuth2Provider Object
+$oAuth2:=New OAuth2 provider($params)
+
+// Create an Office365 object
+$Office365:=New Office365 provider($oAuth2)
+
+
+// Retrieve the entire list of calendars
+$calendarList:=$Office365.calendar.getCalendarList()
+
+// Retrieve the first calendar in the list using its ID
+$calendarA:=$Office365.calendar.getCalendar($calendarList.calendars[0].id)
+
+```
+
+### Office365.calendar.getEvent()
+
+**Office365.calendar.getEvent**(*param*: Object) : Object
+
+#### Parameters
+
+|Parameter|Type||Description|
+|---------|--- |:---:|------|
+|param|Object|->|Set of filters like calendar ID, date range, and sorting options|
+|result|Object|<-| Object containing the retrieved  events, pagination, and status details|
+
+#### Description
+
+`Office365.calendar.getEvent()` gets the properties and relationships of the specified event object.
+
+In *param*, you can pass the following optional properties:
+
+| Property | Type | Description |
+|---|---|---|
+| calendarId | string | Calendar identifier. To retrieve calendar IDs call the calendarList.list method. If not present or null, access the primary calendar of the currently logged-in user. |
+| eventId | string | (mandatory) Event identifier. |
+| timeZone | string | Time zone used in the response. Optional. UTC by default. |
+
+
+#### Returned object
+
+The function returns a Microsoft [`event`](https://learn.microsoft.com/en-us/graph/api/resources/event?view=graph-rest-1.0) object. If the event has attachments, an [`attachments`](#attachment-object) attribute is included, which holds a collection of attachment objects.
+
+### Office365.calendar.getEvents()
+
+**Office365.calendar.getEvents**({*param*: Object}) : Object
+
+#### Parameters
+
+|Parameter|Type||Description|
+|---------|--- |:---:|------|
+|param|Object|->|Set of filters like calendar ID, date range, and sorting options|
+|result|Object|<-| Object containing the retrieved  events, pagination, and status details|
+
+#### Description
+
+`Office365.calendar.getEvents()` retrieves calendar events based on the specified parameters. If no `startDateTime` or `endDateTime` is provided, it returns single-instance meetings and series masters. When a `startDateTime` and `endDateTime` are specified, it retrieves occurrences, exceptions, and single-instance events within the defined time range from the user's default calendar or another specified calendar.
+
+In *param*, you can pass the following optional properties:
+
+| Property | Type | Description |
+|---|---|---|
+| calendarId | string | Calendar identifier. To retrieve calendar IDs call the Google.Calendar.getCalendarList function. If not present or null, access the primary calendar of the currently logged-in user. |
+| startDateTime | text/object | If startDateTime is set, endDateTime is mandatory and must be greater than startDateTime. Text: Timestamp (ISO 8601 UTC) Upper bound (exclusive) for an event's start time to filter by. Optional. The default is not to filter by start time. Object: The datetime object must be expressed according to the system settings and must have two attributes: date (date type) and time (time type). |
+| endDateTime | text/object | If endDateTime is set, startDateTime is mandatory and must be smaller than endDateTime. Text: Timestamp (ISO 8601 UTC) Lower bound (exclusive) for an event's end time to filter by. Optional. The default is not to filter by end time. Object: The datetime object must be expressed according to the system settings and must have two attributes: date (date type) and time (time type). |
+| timeZone | string | Time zone used in the response. Optional. Defaults to UTC. |
+| select | text | Filters properties (columns). |
+| orderby | text | Orders results. |
+| filter | text | Filters results. |
+| top | int | Defines the page size for a request. Maximum value is 999. If top is not defined, the default value is applied (10). When a result set spans multiple pages, you can use the .next() function to ask for the next page. See Microsoft’s documentation on paging for more information. |
+
+
+#### Returned object
+
+The method returns a status object containing the following properties:
+
+| Property ||  Type | Description |
+|---|---| ---|---|
+| errors | Collection | Collection of 4D error items (not returned if a Google server response is received): [].errcode (4D error code number), [].message (description of the error), [].componentSignature (signature of the component that returned the error). |
+| statusText | Text | Status message returned by the Google server, or last error returned in the 4D error stack. |
+| success | Boolean | True if the operation is successful, False otherwise. |
+| isLastPage | Boolean | True if the last page is reached. |
+| page | Integer | User information page number. Starts at 1. Default page size is 100; can be adjusted with the top option. |
+| next() | Function | Updates the users collection with the next page and increments page by 1. Returns True if successful, False otherwise. |
+| previous() | Function | Updates the users collection with the previous page and decrements page by 1. Returns True if successful, False otherwise. |
+| calendarId | string | Calendar identifier, same as the calendarId in the parameters if present. |
+| events | collection | Collection of event objects. If some events have attachments, an attachments attribute is added, containing a collection of attachments. |
+
+#### Example
+
+```4d
+// Gets all the calendars 
+var $calendars:=$office365.calendar.getCalendars()
+// For the rest of the example, we'll use the first calendar in the list
+var $myCaldendar:=$calendars.calendars[0]
+
+// Gets all the event of the selected calendars
+var $events:=$office365.calendar.getEvents({calendarId: $myCalendar.id; top: 10})
+```
 
 ### Office365.mail.append()
 
@@ -1004,161 +1207,6 @@ In *updatedFields*, you can pass several properties:
 
 The method returns a [status object](#status-object).
 
-### Well-known folder names
-
-
-Outlook creates certain folders for users by default. Instead of using the corresponding `folder id` value, for convenience, you can use the well-known folder name when accessing these folders. Well-known names work regardless of the locale of the user's mailbox. For example, you can get the Drafts folder using its well-known name "draft". For more information, please refer to the [Microsoft Office documentation](https://docs.microsoft.com/en-us/graph/api/resources/mailfolder?view=graph-rest-1.0).
-
-
-### "Microsoft" mail object properties
-
-When you send an email with the "Microsoft" mail type, you must pass an object to `Office365.mail.send()`. For a comprehensive list of properties supported by Microsoft mail objects, please refer to the [Microsoft Office documentation](https://learn.microsoft.com/en-us/graph/api/resources/message?view=graph-rest-1.0#properties). Most common properties are listed below:
-
-| Property | Type | Description |
-|---|---|---|
-| attachments |[attachment](#attachment-object) collection | The attachments for the email. |
-| bccRecipients |[recipient](#recipient-object) collection | The Bcc: recipients for the message. |
-| body |itemBody object| The body of the message. It can be in HTML or text format.|
-| ccRecipients |[recipient](#recipient-object) collection | The Cc: recipients for the message. |  
-| flag |[followup flag](#followup-flag-object) object| The flag value that indicates the status, start date, due date, or completion date for the message. |
-| from |[recipient](#recipient-object) object | The owner of the mailbox from which the message is sent. In most cases, this value is the same as the sender property, except for sharing or delegation scenarios. The value must correspond to the actual mailbox used.|
-| id |Text|Unique identifier for the message (note that this value may change if a message is moved or altered).|
-| importance|Text| The importance of the message. The possible values are: `low`, `normal`, and `high`.|
-| internetMessageHeaders |[internetMessageHeader](#internetmessageheader-object) collection | A collection of message headers defined by [RFC5322](https://www.ietf.org/rfc/rfc5322.txt). The set includes message headers indicating the network path taken by a message from the sender to the recipient.|
-| isDeliveryReceiptRequested  |Boolean| Indicates whether a delivery receipt is requested for the message. |
-| isReadReceiptRequested |Boolean| Indicates whether a read receipt is requested for the message. |
-| replyTo |[recipient](#recipient-object) collection | The email addresses to use when replying. |
-| sender |[recipient](#recipient-object) object | The account that is actually used to generate the message. In most cases, this value is the same as the from property. You can set this property to a different value when sending a message from a shared mailbox, for a shared calendar, or as a delegate. In any case, the value must correspond to the actual mailbox used. Find out more about setting the [from and sender properties](https://docs.microsoft.com/en-us/graph/outlook-create-send-messages#setting-the-from-and-sender-properties) of a message. |
-| subject |Text| The subject of the message.|
-| toRecipients |[recipient](#recipient-object) collection | The To: recipients for the message. |
-
-#### Attachment object
-
-| Property |  Type | Description |
-|---|---|---|
-|@odata.type|Text|always "#microsoft.graph.fileAttachment" (note that the property name requires that you use the `[""]` syntax)|
-|contentBytes|Text| The base64-encoded contents of the file (only to send mails) |
-|contentId|	Text|	The ID of the attachment in the Exchange store.|
-|contentType |Text|	The content type of the attachment.|
-|id |Text|The attachment ID. (cid)|
-|isInline 	|Boolean |Set to true if this is an inline attachment.|
-|name| 	Text|	The name representing the text that is displayed below the icon representing the embedded attachment.This does not need to be the actual file name.|
-|size|Number|The size in bytes of the attachment.|
-|getContent()|Function|Returns the contents of the attachment object in a `4D.Blob` object.|
-
-#### itemBody object
-
-| Property |  Type | Description | Can be null of undefined |
-|---|---|---|---|
-|content|Text|The content of the item.|No|
-|contentType|Text| The type of the content. Possible values are `"text"` and `"html"` |No|
-
-#### recipient object
-
-| Property ||  Type | Description | Can be null of undefined |
-|---|---|---|---|---|
-|emailAddress||Object||Yes|
-||address|Text|The email address of the person or entity.|No|
-||name|Text| The display name of the person or entity.|Yes|
-
-#### internetMessageHeader object
-
-| Property |  Type | Description | Can be null of undefined |
-|---|---|---|---|
-|name |	Text|Represents the key in a key-value pair.|No|
-|value|Text|The value in a key-value pair.|No|
-
-#### followup flag object
-
-| Property |  Type | Description |
-|---|---|---|
-|dueDateTime|[dateTime &#124; TimeZone](#datetime-and-timezone)|	The date and time that the follow up is to be finished. Note: To set the due date, you must also specify the `startDateTime`; otherwise, you will get a `400 Bad Request` response.|
-|flagStatus|Text|The status for follow-up for an item. Possible values are `"notFlagged"`, `"complete"`, and `"flagged"`.|
-|startDateTime|[dateTime &#124; TimeZone](#datetime-and-timezone)| The date and time that the follow-up is to begin.|
-
-#### dateTime and TimeZone
-
-|Property|Type|Description|
-|---|---|---|
-|dateTime|Text|A single point of time in a combined date and time representation ({date}T{time}; for example, 2017-08-29T04:00:00.0000000).|
-|timeZone|Text|Represents a time zone, for example, "Pacific Standard Time". See below for more possible values.|
-
-In general, the timeZone property can be set to any of the time zones currently supported by Windows, as well as the additional time zones supported by the calendar API:
-* [Default time zones](https://docs.microsoft.com/en-us/windows-hardware/manufacture/desktop/default-time-zones?view=windows-11)
-* [Additional time zones](https://docs.microsoft.com/en-us/graph/api/resources/datetimetimezone?view=graph-rest-1.0#additional-time-zones)
-
-
-
-#### Example: Create an email with a file attachment and send it
-
-Send an email with an attachment, on behalf of a Microsoft 365 user:
-
-```4d
-var $oAuth2 : cs.NetKit.OAuth2Provider
-var $token; $param; $email; $status : Object
-
-// Set up authentication
-$param:=New object()
-$param.name:="Microsoft"
-$param.permission:="signedIn"
-$param.clientId:="your-client-id" // Replace with your client ID
-$param.redirectURI:="http://127.0.0.1:50993/authorize/"
-// Ask permission to send emails on behalf of the Microsoft user
-$param.scope:="https://graph.microsoft.com/Mail.Send"  
-
-$oAuth2:=New OAuth2 provider($param)
-
-$token:=$oAuth2.getToken()
-
-// Create the email, specify the sender and the recipient
-$email:=New object()
-$email.from:=New object("emailAddress"; New object("address"; "senderAddress@hotmail.fr")) // Replace with sender's email
-$email.toRecipients:=New collection(New object("emailAddress"; New object("address"; "recipientAddress@hotmail.fr")))
-$email.body:=New object()
-$email.body.content:="Hello, World!"
-$email.body.contentType:="html"
-$email.subject:="Hello, World!"
-
-// Create a text file and attach it to the email
-var $attachment : Object
-var $attachmentText : Text
-
-$attachmentText:="Simple text file"
-BASE64 ENCODE($attachmentText)
-$attachment:=New object
-$attachment["@odata.type"]:="#microsoft.graph.fileAttachment"
-$attachment.name:="attachment.txt"
-$attachment.contentBytes:=$attachmentText
-$email.attachments:=New collection($attachment)
-
-// Send the email
-$Office365:=New Office365 provider($token; New object("mailType"; "Microsoft"))
-$status:=$Office365.mail.send($email)
-```
-
-### Status object
-
-Several Office365.mail functions return a standard `**status object**`, containing the following properties:
-
-|Property|Type|Description|
-|---------|--- |------|
-|success|Boolean| True if the operation was successful|
-|statusText|Text| Status message returned by the server or last error returned by the 4D error stack|
-|errors|Collection| Collection of errors. Not returned if the server returns a `statusText`|
-|id|Text|<br/>- [`copy()`](#office365-mail-copy) and [`move()`](#office365-mail-move): returned id of the mail.<br/>- [`createFolder()`](#office365-mail-createFolder) and [`renameFolder()`](#office365-mail-renameFolder): returned id of the folder|
-
-
-Basically, you can test the `success` and `statusText` properties of this object to know if the function was correctly executed.
-
-### Error handling
-
-When an error occurs during the execution of an Office365.mail function:
-
-- if the function returns a [`**status object**`](#status-object), the error is handled by the status object and no error is thrown,
-- if the function does not return a **status object**, an error is thrown that you can intercept with a project method installed with `ON ERR CALL`.
-
-
-
 ### Office365.user.get()
 
 **Office365.user.get**( *id* : Text { ; *select* : Text }) : Object<br/>**Office365.user.get**( *userPrincipalName* : Text { ; *select* : Text }) : Object
@@ -1330,115 +1378,163 @@ Repeat
 Until (Not($userList4.next()))
 ```
 
-### Office365.calendar.getCalendarList()
 
-**Office365.calendar.getCalendarList**({*param*: Object}) : Object
+### Well-known folder names
 
-#### Parameters
 
-|Parameter|Type||Description|
-|---------|--- |:---:|------|
-|param|Object|->|Set of options to filter, order, or select specific calendar properties.|
-|result|Object|<-| Object containing the retrieved calendars and related data.|
+Outlook creates certain folders for users by default. Instead of using the corresponding `folder id` value, for convenience, you can use the well-known folder name when accessing these folders. Well-known names work regardless of the locale of the user's mailbox. For example, you can get the Drafts folder using its well-known name "draft". For more information, please refer to the [Microsoft Office documentation](https://docs.microsoft.com/en-us/graph/api/resources/mailfolder?view=graph-rest-1.0).
 
-#### Description
 
-`Office365.calendar.getCalendarList()` retrieves a collection of the user's calendars. 
+### "Microsoft" mail object properties
 
-In *param*, you can pass the following optional properties:
+When you send an email with the "Microsoft" mail type, you must pass an object to `Office365.mail.send()`. For a comprehensive list of properties supported by Microsoft mail objects, please refer to the [Microsoft Office documentation](https://learn.microsoft.com/en-us/graph/api/resources/message?view=graph-rest-1.0#properties). Most common properties are listed below:
 
 | Property | Type | Description |
 |---|---|---|
-|select| Text | Specifies which calendar properties (columns) to retrieve. Comma-separated values.|
-|orderby | Text | Specifies the order of the returned results. Syntax is property name followed by `asc` (ascending) or `desc` (descending).|
-|filter| Text  | OData filter expression to filter the results. For example: `"name eq 'Work'"` retrieves calendars with the name "Work". |
+| attachments |[attachment](#attachment-object) collection | The attachments for the email. |
+| bccRecipients |[recipient](#recipient-object) collection | The Bcc: recipients for the message. |
+| body |itemBody object| The body of the message. It can be in HTML or text format.|
+| ccRecipients |[recipient](#recipient-object) collection | The Cc: recipients for the message. |  
+| flag |[followup flag](#followup-flag-object) object| The flag value that indicates the status, start date, due date, or completion date for the message. |
+| from |[recipient](#recipient-object) object | The owner of the mailbox from which the message is sent. In most cases, this value is the same as the sender property, except for sharing or delegation scenarios. The value must correspond to the actual mailbox used.|
+| id |Text|Unique identifier for the message (note that this value may change if a message is moved or altered).|
+| importance|Text| The importance of the message. The possible values are: `low`, `normal`, and `high`.|
+| internetMessageHeaders |[internetMessageHeader](#internetmessageheader-object) collection | A collection of message headers defined by [RFC5322](https://www.ietf.org/rfc/rfc5322.txt). The set includes message headers indicating the network path taken by a message from the sender to the recipient.|
+| isDeliveryReceiptRequested  |Boolean| Indicates whether a delivery receipt is requested for the message. |
+| isReadReceiptRequested |Boolean| Indicates whether a read receipt is requested for the message. |
+| replyTo |[recipient](#recipient-object) collection | The email addresses to use when replying. |
+| sender |[recipient](#recipient-object) object | The account that is actually used to generate the message. In most cases, this value is the same as the from property. You can set this property to a different value when sending a message from a shared mailbox, for a shared calendar, or as a delegate. In any case, the value must correspond to the actual mailbox used. Find out more about setting the [from and sender properties](https://docs.microsoft.com/en-us/graph/outlook-create-send-messages#setting-the-from-and-sender-properties) of a message. |
+| subject |Text| The subject of the message.|
+| toRecipients |[recipient](#recipient-object) collection | The To: recipients for the message. |
 
-#### Returned object
+#### Attachment object
 
-The function returns an object containing the following properties:
-
-| Property | Type | Description |
+| Property |  Type | Description |
 |---|---|---|
-|calendars| Collection  | Collection of calendar objects retrieved from the user's account. Each calendar object contains properties such as `id`, `name`, and `owner`.                               |
-|statusText| Text | Status message returned by the Microsoft server or the last error message from the 4D error stack.|                                                                          
-|success| Boolean | `True` if the operation is successful, `False` otherwise.|
-|errors | Collection | Collection of 4D error items (if any):|                                                                                                                                  
-|   | | - `.errcode`: 4D error code number.|                                                                                                                                         
-|  | | - `.message`: Error description.|                                                                                                                                           
-| |  | - `.componentSignature`: Signature of the component that returned the error.|                                                                                                                                                                                                              
+|@odata.type|Text|always "#microsoft.graph.fileAttachment" (note that the property name requires that you use the `[""]` syntax)|
+|contentBytes|Text| The base64-encoded contents of the file (only to send mails) |
+|contentId|	Text|	The ID of the attachment in the Exchange store.|
+|contentType |Text|	The content type of the attachment.|
+|id |Text|The attachment ID. (cid)|
+|isInline 	|Boolean |Set to true if this is an inline attachment.|
+|name| 	Text|	The name representing the text that is displayed below the icon representing the embedded attachment.This does not need to be the actual file name.|
+|size|Number|The size in bytes of the attachment.|
+|getContent()|Function|Returns the contents of the attachment object in a `4D.Blob` object.|
 
-#### Example
+#### itemBody object
+
+| Property |  Type | Description | Can be null of undefined |
+|---|---|---|---|
+|content|Text|The content of the item.|No|
+|contentType|Text| The type of the content. Possible values are `"text"` and `"html"` |No|
+
+#### recipient object
+
+| Property ||  Type | Description | Can be null of undefined |
+|---|---|---|---|---|
+|emailAddress||Object||Yes|
+||address|Text|The email address of the person or entity.|No|
+||name|Text| The display name of the person or entity.|Yes|
+
+#### internetMessageHeader object
+
+| Property |  Type | Description | Can be null of undefined |
+|---|---|---|---|
+|name |	Text|Represents the key in a key-value pair.|No|
+|value|Text|The value in a key-value pair.|No|
+
+#### followup flag object
+
+| Property |  Type | Description |
+|---|---|---|
+|dueDateTime|[dateTime &#124; TimeZone](#datetime-and-timezone)|	The date and time that the follow up is to be finished. Note: To set the due date, you must also specify the `startDateTime`; otherwise, you will get a `400 Bad Request` response.|
+|flagStatus|Text|The status for follow-up for an item. Possible values are `"notFlagged"`, `"complete"`, and `"flagged"`.|
+|startDateTime|[dateTime &#124; TimeZone](#datetime-and-timezone)| The date and time that the follow-up is to begin.|
+
+#### dateTime and TimeZone
+
+|Property|Type|Description|
+|---|---|---|
+|dateTime|Text|A single point of time in a combined date and time representation ({date}T{time}; for example, 2017-08-29T04:00:00.0000000).|
+|timeZone|Text|Represents a time zone, for example, "Pacific Standard Time". See below for more possible values.|
+
+In general, the timeZone property can be set to any of the time zones currently supported by Windows, as well as the additional time zones supported by the calendar API:
+* [Default time zones](https://docs.microsoft.com/en-us/windows-hardware/manufacture/desktop/default-time-zones?view=windows-11)
+* [Additional time zones](https://docs.microsoft.com/en-us/graph/api/resources/datetimetimezone?view=graph-rest-1.0#additional-time-zones)
+
+
+
+#### Example: Create an email with a file attachment and send it
+
+Send an email with an attachment, on behalf of a Microsoft 365 user:
 
 ```4d
 var $oAuth2 : cs.NetKit.OAuth2Provider
-var $Office365 : cs.NetKit.Office365
-var $params; $calendarList : Object
+var $token; $param; $email; $status : Object
 
-// Set up parameters:
-$params:=New object
-$params.name:="Microsoft"
-$params.permission:="signedIn"
-$params.clientId:="your-client-id" // Replace with your Microsoft identity platform client ID
-$params.redirectURI:="http://127.0.0.1:50993/authorize/"
-$params.scope:="https://graph.microsoft.com/.default"
+// Set up authentication
+$param:=New object()
+$param.name:="Microsoft"
+$param.permission:="signedIn"
+$param.clientId:="your-client-id" // Replace with your client ID
+$param.redirectURI:="http://127.0.0.1:50993/authorize/"
+// Ask permission to send emails on behalf of the Microsoft user
+$param.scope:="https://graph.microsoft.com/Mail.Send"  
 
-// Create an OAuth2Provider Object
-$oAuth2:=New OAuth2 provider($params)
+$oAuth2:=New OAuth2 provider($param)
 
-// Create an Office365 object
-$Office365:=New Office365 provider($oAuth2)
+$token:=$oAuth2.getToken()
 
-// Retrieve the entire list of calendars
-$calendarList:=$Office365.calendar.getCalendarList()
+// Create the email, specify the sender and the recipient
+$email:=New object()
+$email.from:=New object("emailAddress"; New object("address"; "senderAddress@hotmail.fr")) // Replace with sender's email
+$email.toRecipients:=New collection(New object("emailAddress"; New object("address"; "recipientAddress@hotmail.fr")))
+$email.body:=New object()
+$email.body.content:="Hello, World!"
+$email.body.contentType:="html"
+$email.subject:="Hello, World!"
 
+// Create a text file and attach it to the email
+var $attachment : Object
+var $attachmentText : Text
+
+$attachmentText:="Simple text file"
+BASE64 ENCODE($attachmentText)
+$attachment:=New object
+$attachment["@odata.type"]:="#microsoft.graph.fileAttachment"
+$attachment.name:="attachment.txt"
+$attachment.contentBytes:=$attachmentText
+$email.attachments:=New collection($attachment)
+
+// Send the email
+$Office365:=New Office365 provider($token; New object("mailType"; "Microsoft"))
+$status:=$Office365.mail.send($email)
 ```
 
-### Office365.calendar.getCalendar()
+### Status object
 
-**Office365.calendar.getCalendar**({*id*: Text}) : Object
+Several Office365.mail functions return a standard `**status object**`, containing the following properties:
 
-#### Parameters
-
-|Parameter|Type||Description|
-|---------|--- |:---:|------|
-|id|Text|->|ID of the calender to retrieve.|
-|calendar|Object|<-|[Object](https://learn.microsoft.com/en-us/graph/api/resources/calendar?view=graph-rest-1.0#properties) containing the properties and relationships of the specified calendar.  |
-
-> To retrieve calendar IDs call the getCalendarList() function. If id is null, empty or missing, returns the primary calendar of the currently logged in user.
-
-#### Description
-
-`Office365.calendar.getCalendar()` retrieves the properties and relationships of a specific calendar associated with the passed `id` and returns a `calendar` object containing the requested calendar's details.
-
-#### Example
-
-```4d
-var $oAuth2 : cs.NetKit.OAuth2Provider
-var $Office365 : cs.NetKit.Office365
-var $params; $calendarList; $calendarA : Object
-
-// Set up parameters:
-$params:=New object
-$params.name:="Microsoft"
-$params.permission:="signedIn"
-$params.clientId:="your-client-id" // Replace with your Microsoft identity platform client ID
-$params.redirectURI:="http://127.0.0.1:50993/authorize/"
-$params.scope:="https://graph.microsoft.com/.default"
-
-// Create an OAuth2Provider Object
-$oAuth2:=New OAuth2 provider($params)
-
-// Create an Office365 object
-$Office365:=New Office365 provider($oAuth2)
+|Property|Type|Description|
+|---------|--- |------|
+|success|Boolean| True if the operation was successful|
+|statusText|Text| Status message returned by the server or last error returned by the 4D error stack|
+|errors|Collection| Collection of errors. Not returned if the server returns a `statusText`|
+|id|Text|<br/>- [`copy()`](#office365-mail-copy) and [`move()`](#office365-mail-move): returned id of the mail.<br/>- [`createFolder()`](#office365-mail-createFolder) and [`renameFolder()`](#office365-mail-renameFolder): returned id of the folder|
 
 
-// Retrieve the entire list of calendars
-$calendarList:=$Office365.calendar.getCalendarList()
+Basically, you can test the `success` and `statusText` properties of this object to know if the function was correctly executed.
 
-// Retrieve the first calendar in the list using its ID
-$calendarA:=$Office365.calendar.getCalendar($calendarList.calendars[0].id)
+### Error handling
 
-```
+When an error occurs during the execution of an Office365.mail function:
+
+- if the function returns a [`**status object**`](#status-object), the error is handled by the status object and no error is thrown,
+- if the function does not return a **status object**, an error is thrown that you can intercept with a project method installed with `ON ERR CALL`.
+
+
+
+
 
 ## Google
 
@@ -1495,6 +1591,241 @@ var $google : cs.NetKit.Google
 $oAuth2:=New OAuth2 provider($param)
 $google:=cs.NetKit.Google.new($oAuth2;New object("mailType"; "MIME"))
 ```
+
+### Google.Calendar.getCalendarList()
+
+**Google.Calendar.getCalendar**( { *param* : Object } ) : Object
+
+#### Parameters
+
+|Parameter|Type||Description|
+|---------|--- |:---:|------|
+|param|Object|->|Set of options to filter or refine the calendar list request.|
+|Result|Object|<-|Object containing the calendar list with the related data.|
+
+#### Description
+
+`Google.Calendar.getCalendarList()` retrieves a list of calendars that the authenticated user can access. The passed filtering and paging options in `param` are returned in the `result` object.
+
+In *param*, you can pass the following optional properties:
+
+|Property|Type|Description|
+|---------|--- |------|
+| maxResults | Integer | Maximum number of calendar entries returned per page. Default is 100. Maximum is 250.|
+| minAccessRole | String  | Minimum access role for the user in the returned calendars. Default is no restriction. Acceptable values:|
+| | |- "freeBusyReader": User can read free/busy information.             |                                                                                                                                                                    
+| | |- "owner":  User can read, modify events, and control access. |
+| | |- "reader": User can read non-private events.  |
+| | |- "writer": User can read and modify events.                         |         
+| showDeleted | Boolean | Whether to include deleted calendar list entries in the result. Optional. The default is False.|
+| showHidden | Boolean | Whether to show hidden entries. Optional. The default is False.|
+
+#### Returned object
+
+The function returns a Collection of details about the user's calendar list in the following properties:
+
+| **Property**         | **Type**          | **Description**                                                                                                                                                             |
+|----------------------|-------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `calendars`          | Collection        | Collection of calendar objects present in the user's calendar list. Each calendar object contains details such as `id`, `summary`, and `accessRole`.                                                             |
+| `isLastPage`         | Boolean           | `True` if the last page of results has been reached.                                                                                                                       |
+| `page`               | Integer           | Current page number of results. Starts at `1`. By default, each page holds 100 results.                                                                                   |
+| `next()`             | Function          | Loads the next page of calendar entries and increments the `page` property by 1. Returns:                                                                                  |
+|                      |                   | - `True` if the next page is loaded successfully.                                                                                                                         |
+|                      |                   | - `False` if no additional pages are available (the collection is not updated).                                                                                           |
+| `previous()`         | Function          | Loads the previous page of calendar entries and decrements the `page` property by 1. Returns:                                                                              |
+|                      |                   | - `True` if the previous page is loaded successfully.                                                                                                                     |
+|                      |                   | - `False` if no previous pages are available (the collection is not updated).                                                                                             |
+| `statusText`         | Text              | Status message returned by the Google server or the last error message from the 4D error stack.                                                                            |
+| `success`            | Boolean           | `True` if the operation is successful, `False` otherwise.                                                                                                                 |
+| `errors`             | Collection        | Collection of 4D error items (if any):                                                                                                                                     |
+|                      |                   | - `.errcode`: 4D error code number.                                                                                                                                         |
+|                      |                   | - `.message`: Error description.                                                                                                                                           |
+|                      |                   | - `.componentSignature`: Signature of the component that returned the error.                                                                                              |
+
+
+#### Example 
+
+```4d
+
+var $google : cs.NetKit.Google
+var $oauth2 : cs.NetKit.OAuth2Provider
+var $param; $Calendars : Object
+
+$param:={}
+$param.name:="google"
+$param.permission:="signedIn"
+$param.clientId:="your-client-id" // Replace with your Google identity platform client ID
+$param.clientSecret:="xxxxxxxxx"
+$param.redirectURI:="http://127.0.0.1:50993/authorize/"
+$param.scope:=[]
+$param.scope.push("https://mail.google.com/")
+$param.scope.push("https://www.googleapis.com/auth/calendar")
+
+$oauth2:=New OAuth2 provider($param)
+
+$google:=cs.NetKit.Google.new($oauth2)
+
+// Retrieve the entire list of calendars
+
+$Calendars:=$google.calendar.getCalendarList()
+
+```
+
+### Google.Calendar.getCalendar()
+
+**Google.Calendar.getCalendar**( { *id* : Text } ) : Object
+
+#### Parameters
+
+|Parameter|Type||Description|
+|---------|--- |:---:|------|
+|id|Text|->|ID of the calender to retrieve. |
+|calendar|Object|<-| Object containing the details of the specified calendar. For more details, see the [Google Calendar API resource](https://developers.google.com/calendar/api/v3/reference/calendarList#resource).|
+
+> To retrieve calendar IDs call the getCalendarList() function. If id is null, empty or missing, returns the primary calendar of the currently logged in user.
+
+#### Description
+
+`Google.Calendar.getCalendar()` retrieves a specific calendar from the authenticated user's calendar list; using an `id` to identify the calendar and returns a `calendar` object containing details about the requested calendar.
+
+#### Example 
+
+```4d
+
+var $google : cs.NetKit.Google
+var $oauth2 : cs.NetKit.OAuth2Provider
+var $param; $Calendars; $myCalendar : Object
+
+$param:={}
+$param.name:="google"
+$param.permission:="signedIn"
+$param.clientId:="your-client-id" // Replace with your Google identity platform client ID
+$param.clientSecret:="xxxxxxxxx"
+$param.redirectURI:="http://127.0.0.1:50993/authorize/"
+$param.scope:=[]
+$param.scope.push("https://mail.google.com/")
+$param.scope.push("https://www.googleapis.com/auth/calendar")
+
+$oauth2:=New OAuth2 provider($param)
+
+$google:=cs.NetKit.Google.new($oauth2)
+
+// Retrieve the entire list of calendars
+$Calendars:=$google.calendar.getCalendarList()
+
+// Retrieve the first calendar in the list using its ID
+$myCalendar:=$google.calendar.getCalendar($Calendars.calendars[0].id)
+
+```
+
+### Google.Calendar.getEvent()
+
+**Google.Calendar.getEvent**( *param* : Object ) : Object
+
+#### Parameters
+
+|Parameter|Type||Description|
+|---------|--- |:---:|------|
+|param|Object|->|Set of options to filter or refine the calendar list request.|
+|Result|Object|<-|Object containing the calendar list with the related data.|
+
+#### Description
+
+`Google.Calendar.getEvent()` returns an event based on its Google Calendar ID.
+
+In *param*, you can pass the following optional properties:
+
+|Property|Type|Description|
+|---------|--- |------|
+| calendarId | string | Calendar identifier. To retrieve calendar IDs, call the calendarList.list method. If not provided, accesses the primary calendar of the logged-in user. |
+| eventId | string | (Mandatory) Event identifier. |
+| maxAttendees | integer | Maximum number of attendees to include in the response. If exceeded, only the participant is returned. Optional. |
+| timeZone | string | Time zone used in the response (formatted as an IANA Time Zone Database name, e.g., "Europe/Zurich"). Defaults to UTC. Optional. |
+
+#### Returned object 
+
+The function returns a Google [`event`](https://developers.google.com/calendar/api/v3/reference/events#resource) object.
+
+
+### Google.Calendar.getEvents()
+
+**Google.Calendar.getEvents**( { *param* : Object } ) : Object
+
+#### Parameters
+
+|Parameter|Type||Description|
+|---------|--- |:---:|------|
+|param|Object|->|Set of options to filter or refine the calendar list request.|
+|Result|Object|<-|Object containing the calendar list with the related data.|
+> To retrieve calendar IDs call the getCalendarList() function. If id is null, empty or missing, returns the primary calendar of the currently logged in user.
+
+#### Description
+
+`Google.Calendar.getEvents()` returns events on the specified calendar.
+
+In *param*, you can pass the following optional properties:
+
+|Property|Type|Description|
+|---------|--- |------|
+| calendarId | string | Calendar identifier. To retrieve calendar IDs call the Google.Calendar.getCalendarList function. If not present or null, access the primary calendar of the currently logged-in user. |
+| eventTypes | string | Event types to return. Optional. Can be repeated multiple times to return different event types. If unset, returns all event types. Acceptable values: "birthday" (special all-day events with an annual recurrence), "default" (regular events), "focusTime" (focus time events), "fromGmail" (events from Gmail), "outOfOffice" (out-of-office events), "workingLocation" (working location events). |
+| iCalUID | string | Specifies an event ID in the iCalendar format to be returned. Optional. Use this to search for an event by its iCalendar ID. Note: icalUID and id are not identical. In recurring events, all occurrences have different ids but share the same icalUID. |
+| maxAttendees | integer | Maximum number of attendees to include in the response. If exceeded, only the participant is returned. Optional. |
+| top | integer | Maximum number of events per page. Default is 250, maximum is 2500. Optional. |
+| orderBy | string | Order of returned events. Default is unspecified but stable. Acceptable values: "startTime" (ascending, only for single events when singleEvents=True), "updated" (ascending order of last modification time). |
+| privateExtendedProperty | collection | Matches only private properties. |
+| search | string | Free text search for matching terms in event fields (summary, description, location, attendee names/emails, organizer names/emails, working location properties). Also matches predefined keywords for out-of-office, focus-time, and working-location events. Optional. |
+| sharedExtendedProperty | collection | Matches only shared properties. The returned events match all given constraints. |
+| showDeleted | boolean | Whether to include deleted events (status="cancelled") in the result. Defaults to False. Behavior changes based on singleEvents setting. Optional. |
+| showHiddenInvitations | boolean | Whether to include hidden invitations in the result. Defaults to False. Optional. |
+| singleEvents | boolean | Whether to expand recurring events into instances and only return individual events and instances, excluding the underlying recurring event. Defaults to False. Optional. |
+| startDateTime | text/object | Filters by event start time. Optional. If set, endDateTime must also be provided. Text: Timestamp (ISO 8601 UTC). Object: Contains date (date type) and time (time type), formatted per system settings. |
+| endDateTime | text/object | Filters by event end time. Optional. If set, startDateTime must also be provided. Text: Timestamp (ISO 8601 UTC). Object: Contains date (date type) and time (time type), formatted per system settings. |
+| timeZone | string | Time zone for the response, formatted as an IANA Time Zone Database name (e.g., "Europe/Zurich"). Defaults to UTC. Optional. |
+| updatedMin | text | Lower bound for filtering events by last modification time (ISO 8601 UTC). When set, deleted events since this time are always included, regardless of showDeleted. Optional. |
+
+#### Returned object
+
+The method returns a status object containing the following properties:
+
+| Property ||  Type | Description |
+|---|---| ---|---|
+| [].errcode | Integer | 4D error code number. |
+| [].message | Text | Description of the 4D error. |
+| [].componentSignature | Text | Signature of the internal component that returned the error. |
+| isLastPage | Boolean | True if the last page is reached. |
+| page | Integer | Page number of the user information. Defaults to 1, with a page size of 100 (configurable via top). |
+| next() | Function | Fetches the next page of users, increments page by 1. Returns True if successful, False otherwise. |
+| previous() | Function | Fetches the previous page of users, decrements page by 1. Returns True if successful, False otherwise. |
+| statusText | Text | Status message from the Google server or the last error returned in the 4D error stack. |
+| success | Boolean | True if the operation is successful, False otherwise. |
+| kind | String | Type of collection ("calendar#events"). |
+| etag | String | ETag of the collection. |
+| summary | String | Title of the calendar (read-only). |
+| calendarId | String | Calendar identifier, same as the calendarId passed in the parameter if present. |
+| description | String | Description of the calendar (read-only). |
+| updated | Text | Last modification time of the calendar (ISO 8601 UTC). |
+| timeZone | String | Time zone of the calendar (formatted as an IANA Time Zone Database name, e.g., "Europe/Zurich"). |
+| accessRole | String | User’s access role for the calendar (read-only). Possible values: "none", "freeBusyReader", "reader", "writer", "owner". |
+| defaultReminders | Collection | Default reminders for the authenticated user. Applies to events that do not explicitly override them. |
+| defaultReminders[].method | String | Method used for the reminder ("email" or "popup"). |
+| defaultReminders[].minutes | Integer | Minutes before the event when the reminder triggers. |
+| events | Collection | List of events on the calendar. If some events have attachments, an "attachments" attribute is added, containing a collection of attachments. |
+
+#### Example
+
+```4d
+
+// Gets all the calendars 
+var $calendars:=$google.calendar.getCalendars()
+// For the rest of the example, we'll use the first calendar in the list
+var $myCaldendar:=$calendars.calendars[0]
+
+// Gets all the event of the selected calendars
+var $events:=$google.calendar.getEvents({calendarId: $myCalendar.id; top: 10})
+
+```
+
 ### Google.mail.append()
 
 **Google.mail.append**( *mail* : Text { ; *labelIds* : Collection } ) : Object <br/>
@@ -2195,132 +2526,6 @@ $oauth2:=New OAuth2 provider($param)
 $google:=cs.NetKit.Google.new($oauth2)
 
 var $userList:=$google.user.list({top:10})
-```
-
-### Google.Calendar.getCalendarList()
-
-**Google.Calendar.getCalendar**( { *param* : Object } ) : Object
-
-#### Parameters
-
-|Parameter|Type||Description|
-|---------|--- |:---:|------|
-|param|Object|->|Set of options to filter or refine the calendar list request.|
-|Result|Object|<-|Object containing the calendar list with the related data.|
-
-#### Description
-
-`Google.Calendar.getCalendarList()` retrieves a list of calendars that the authenticated user can access. The passed filtering and paging options in `param` are returned in the `result` object.
-
-In *param*, you can pass the following optional properties:
-
-|Property|Type|Description|
-|---------|--- |------|
-| maxResults | Integer | Maximum number of calendar entries returned per page. Default is 100. Maximum is 250.|
-| minAccessRole | String  | Minimum access role for the user in the returned calendars. Default is no restriction. Acceptable values:|
-| | |- "freeBusyReader": User can read free/busy information.             |                                                                                                                                                                    
-| | |- "owner":  User can read, modify events, and control access. |
-| | |- "reader": User can read non-private events.  |
-| | |- "writer": User can read and modify events.                         |         
-| showDeleted | Boolean | Whether to include deleted calendar list entries in the result. Optional. The default is False.|
-| showHidden | Boolean | Whether to show hidden entries. Optional. The default is False.|
-
-#### Returned object
-
-The function returns a Collection of details about the user's calendar list in the following properties:
-
-| **Property**         | **Type**          | **Description**                                                                                                                                                             |
-|----------------------|-------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `calendars`          | Collection        | Collection of calendar objects present in the user's calendar list. Each calendar object contains details such as `id`, `summary`, and `accessRole`.                                                             |
-| `isLastPage`         | Boolean           | `True` if the last page of results has been reached.                                                                                                                       |
-| `page`               | Integer           | Current page number of results. Starts at `1`. By default, each page holds 100 results.                                                                                   |
-| `next()`             | Function          | Loads the next page of calendar entries and increments the `page` property by 1. Returns:                                                                                  |
-|                      |                   | - `True` if the next page is loaded successfully.                                                                                                                         |
-|                      |                   | - `False` if no additional pages are available (the collection is not updated).                                                                                           |
-| `previous()`         | Function          | Loads the previous page of calendar entries and decrements the `page` property by 1. Returns:                                                                              |
-|                      |                   | - `True` if the previous page is loaded successfully.                                                                                                                     |
-|                      |                   | - `False` if no previous pages are available (the collection is not updated).                                                                                             |
-| `statusText`         | Text              | Status message returned by the Google server or the last error message from the 4D error stack.                                                                            |
-| `success`            | Boolean           | `True` if the operation is successful, `False` otherwise.                                                                                                                 |
-| `errors`             | Collection        | Collection of 4D error items (if any):                                                                                                                                     |
-|                      |                   | - `.errcode`: 4D error code number.                                                                                                                                         |
-|                      |                   | - `.message`: Error description.                                                                                                                                           |
-|                      |                   | - `.componentSignature`: Signature of the component that returned the error.                                                                                              |
-
-
-#### Example 
-
-```4d
-
-var $google : cs.NetKit.Google
-var $oauth2 : cs.NetKit.OAuth2Provider
-var $param; $Calendars : Object
-
-$param:={}
-$param.name:="google"
-$param.permission:="signedIn"
-$param.clientId:="your-client-id" // Replace with your Google identity platform client ID
-$param.clientSecret:="xxxxxxxxx"
-$param.redirectURI:="http://127.0.0.1:50993/authorize/"
-$param.scope:=[]
-$param.scope.push("https://mail.google.com/")
-$param.scope.push("https://www.googleapis.com/auth/calendar")
-
-$oauth2:=New OAuth2 provider($param)
-
-$google:=cs.NetKit.Google.new($oauth2)
-
-// Retrieve the entire list of calendars
-
-$Calendars:=$google.calendar.getCalendarList()
-
-```
-
-### Google.Calendar.getCalendar()
-
-**Google.Calendar.getCalendar**( { *id* : Text } ) : Object
-
-#### Parameters
-
-|Parameter|Type||Description|
-|---------|--- |:---:|------|
-|id|Text|->|ID of the calender to retrieve. |
-|calendar|Object|<-| Object containing the details of the specified calendar. For more details, see the [Google Calendar API resource](https://developers.google.com/calendar/api/v3/reference/calendarList#resource).|
-
-> To retrieve calendar IDs call the getCalendarList() function. If id is null, empty or missing, returns the primary calendar of the currently logged in user.
-
-#### Description
-
-`Google.Calendar.getCalendar()` retrieves a specific calendar from the authenticated user's calendar list; using an `id` to identify the calendar and returns a `calendar` object containing details about the requested calendar.
-
-#### Example 
-
-```4d
-
-var $google : cs.NetKit.Google
-var $oauth2 : cs.NetKit.OAuth2Provider
-var $param; $Calendars; $myCalendar : Object
-
-$param:={}
-$param.name:="google"
-$param.permission:="signedIn"
-$param.clientId:="your-client-id" // Replace with your Google identity platform client ID
-$param.clientSecret:="xxxxxxxxx"
-$param.redirectURI:="http://127.0.0.1:50993/authorize/"
-$param.scope:=[]
-$param.scope.push("https://mail.google.com/")
-$param.scope.push("https://www.googleapis.com/auth/calendar")
-
-$oauth2:=New OAuth2 provider($param)
-
-$google:=cs.NetKit.Google.new($oauth2)
-
-// Retrieve the entire list of calendars
-$Calendars:=$google.calendar.getCalendarList()
-
-// Retrieve the first calendar in the list using its ID
-$myCalendar:=$google.calendar.getCalendar($Calendars.calendars[0].id)
-
 ```
 
 
