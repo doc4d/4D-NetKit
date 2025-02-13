@@ -468,7 +468,7 @@ $calendarA:=$Office365.calendar.getCalendar($calendarList.calendars[0].id)
 |Parameter|Type||Description|
 |---------|--- |:---:|------|
 |param|Object|->|Set of filters like calendar ID, date range, and sorting options|
-|result|Object|<-| Object containing the retrieved  events, pagination, and status details|
+|result|Object|<-|Object containing the retrieved event|
 
 #### Description
 
@@ -496,7 +496,7 @@ The function returns a Microsoft [`event`](https://learn.microsoft.com/en-us/gra
 |Parameter|Type||Description|
 |---------|--- |:---:|------|
 |param|Object|->|Set of filters like calendar ID, date range, and sorting options|
-|result|Object|<-| Object containing the retrieved  events, pagination, and status details|
+|result|Object|<-| Object containing the retrieved events |
 
 #### Description
 
@@ -1726,8 +1726,8 @@ $myCalendar:=$google.calendar.getCalendar($Calendars.calendars[0].id)
 
 |Parameter|Type||Description|
 |---------|--- |:---:|------|
-|param|Object|->|Set of options to filter or refine the calendar list request.|
-|Result|Object|<-|Object containing the calendar list with the related data.|
+|param|Object|->|Set of filters like calendar ID, date range, and sorting options.|
+|Result|Object|<-|Object containing the retrieved event|
 
 #### Description
 
@@ -1755,9 +1755,8 @@ The function returns a Google [`event`](https://developers.google.com/calendar/a
 
 |Parameter|Type||Description|
 |---------|--- |:---:|------|
-|param|Object|->|Set of options to filter or refine the calendar list request.|
-|Result|Object|<-|Object containing the calendar list with the related data.|
-> To retrieve calendar IDs call the getCalendarList() function. If id is null, empty or missing, returns the primary calendar of the currently logged in user.
+|param|Object|->|Set of filters like calendar ID, date range, and sorting options|
+|Result|Object|<-|Object containing the retrieved events|
 
 #### Description
 
