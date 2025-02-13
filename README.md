@@ -478,9 +478,9 @@ In *param*, you can pass the following optional properties:
 
 | Property | Type | Description |
 |---|---|---|
-| calendarId | string | Calendar identifier. To retrieve calendar IDs call the calendarList.list method. If not present or null, access the primary calendar of the currently logged-in user. |
-| eventId | string | (mandatory) Event identifier. |
-| timeZone | string | Time zone used in the response. Optional. UTC by default. |
+| calendarId | String | Calendar identifier. To retrieve calendar IDs call the calendarList.list method. If not present or null, access the primary calendar of the currently logged-in user. |
+| eventId | String | (mandatory) Event identifier. |
+| timeZone | String | Time zone used in the response. Optional. UTC by default. |
 
 
 #### Returned object
@@ -506,14 +506,14 @@ In *param*, you can pass the following optional properties:
 
 | Property | Type | Description |
 |---|---|---|
-| calendarId | string | Calendar identifier. To retrieve calendar IDs call the Google.Calendar.getCalendarList function. If not present or null, access the primary calendar of the currently logged-in user. |
-| startDateTime | text/object | If startDateTime is set, endDateTime is mandatory and must be greater than startDateTime. Text: Timestamp (ISO 8601 UTC) Upper bound (exclusive) for an event's start time to filter by. Optional. The default is not to filter by start time. Object: The datetime object must be expressed according to the system settings and must have two attributes: date (date type) and time (time type). |
-| endDateTime | text/object | If endDateTime is set, startDateTime is mandatory and must be smaller than endDateTime. Text: Timestamp (ISO 8601 UTC) Lower bound (exclusive) for an event's end time to filter by. Optional. The default is not to filter by end time. Object: The datetime object must be expressed according to the system settings and must have two attributes: date (date type) and time (time type). |
-| timeZone | string | Time zone used in the response. Optional. Defaults to UTC. |
-| select | text | Filters properties (columns). |
-| orderby | text | Orders results. |
-| filter | text | Filters results. |
-| top | int | Defines the page size for a request. Maximum value is 999. If top is not defined, the default value is applied (10). When a result set spans multiple pages, you can use the .next() function to ask for the next page. See Microsoft’s documentation on paging for more information. |
+| calendarId | String | Calendar identifier. To retrieve calendar IDs call the Google.Calendar.getCalendarList function. If not present or null, access the primary calendar of the currently logged-in user. |
+| startDateTime | Text, Object | If startDateTime is set, endDateTime is mandatory and must be greater than startDateTime. Text: Timestamp (ISO 8601 UTC) Upper bound (exclusive) for an event's start time to filter by. Optional. The default is not to filter by start time. Object: The datetime object must be expressed according to the system settings and must have two attributes: date (date type) and time (time type). |
+| endDateTime | Text, Object | If endDateTime is set, startDateTime is mandatory and must be smaller than endDateTime. Text: Timestamp (ISO 8601 UTC) Lower bound (exclusive) for an event's end time to filter by. Optional. The default is not to filter by end time. Object: The datetime object must be expressed according to the system settings and must have two attributes: date (date type) and time (time type). |
+| timeZone | String | Time zone used in the response. Optional. Defaults to UTC. |
+| select | Text | Filters properties (columns). |
+| orderby | Text | Orders results. |
+| filter | Text | Filters results. |
+| top | Integer | Defines the page size for a request. Maximum value is 999. If top is not defined, the default value is applied (10). When a result set spans multiple pages, you can use the .next() function to ask for the next page. See Microsoft’s documentation on paging for more information. |
 
 
 #### Returned object
@@ -529,8 +529,8 @@ The method returns a status object containing the following properties:
 | page | Integer | User information page number. Starts at 1. Default page size is 100; can be adjusted with the top option. |
 | next() | Function | Updates the users collection with the next page and increments page by 1. Returns True if successful, False otherwise. |
 | previous() | Function | Updates the users collection with the previous page and decrements page by 1. Returns True if successful, False otherwise. |
-| calendarId | string | Calendar identifier, same as the calendarId in the parameters if present. |
-| events | collection | Collection of event objects. If some events have attachments, an attachments attribute is added, containing a collection of attachments. |
+| calendarId | String | Calendar identifier, same as the calendarId in the parameters if present. |
+| events | Collection | Collection of event objects. If some events have attachments, an attachments attribute is added, containing a collection of attachments. |
 
 #### Example
 
@@ -1737,10 +1737,10 @@ In *param*, you can pass the following optional properties:
 
 |Property|Type|Description|
 |---------|--- |------|
-| calendarId | string | Calendar identifier. To retrieve calendar IDs, call the calendarList.list method. If not provided, accesses the primary calendar of the logged-in user. |
-| eventId | string | (Mandatory) Event identifier. |
-| maxAttendees | integer | Maximum number of attendees to include in the response. If exceeded, only the participant is returned. Optional. |
-| timeZone | string | Time zone used in the response (formatted as an IANA Time Zone Database name, e.g., "Europe/Zurich"). Defaults to UTC. Optional. |
+| calendarId | String | Calendar identifier. To retrieve calendar IDs, call the calendarList.list method. If not provided, accesses the primary calendar of the logged-in user. |
+| eventId | String | (Mandatory) Event identifier. |
+| maxAttendees | Integer | Maximum number of attendees to include in the response. If exceeded, only the participant is returned. Optional. |
+| timeZone | String | Time zone used in the response (formatted as an IANA Time Zone Database name, e.g., "Europe/Zurich"). Defaults to UTC. Optional. |
 
 #### Returned object 
 
@@ -1767,22 +1767,22 @@ In *param*, you can pass the following optional properties:
 
 |Property|Type|Description|
 |---------|--- |------|
-| calendarId | string | Calendar identifier. To retrieve calendar IDs call the Google.Calendar.getCalendarList function. If not present or null, access the primary calendar of the currently logged-in user. |
-| eventTypes | string | Event types to return. Optional. Can be repeated multiple times to return different event types. If unset, returns all event types. Acceptable values: "birthday" (special all-day events with an annual recurrence), "default" (regular events), "focusTime" (focus time events), "fromGmail" (events from Gmail), "outOfOffice" (out-of-office events), "workingLocation" (working location events). |
-| iCalUID | string | Specifies an event ID in the iCalendar format to be returned. Optional. Use this to search for an event by its iCalendar ID. Note: icalUID and id are not identical. In recurring events, all occurrences have different ids but share the same icalUID. |
-| maxAttendees | integer | Maximum number of attendees to include in the response. If exceeded, only the participant is returned. Optional. |
-| top | integer | Maximum number of events per page. Default is 250, maximum is 2500. Optional. |
-| orderBy | string | Order of returned events. Default is unspecified but stable. Acceptable values: "startTime" (ascending, only for single events when singleEvents=True), "updated" (ascending order of last modification time). |
-| privateExtendedProperty | collection | Matches only private properties. |
-| search | string | Free text search for matching terms in event fields (summary, description, location, attendee names/emails, organizer names/emails, working location properties). Also matches predefined keywords for out-of-office, focus-time, and working-location events. Optional. |
-| sharedExtendedProperty | collection | Matches only shared properties. The returned events match all given constraints. |
-| showDeleted | boolean | Whether to include deleted events (status="cancelled") in the result. Defaults to False. Behavior changes based on singleEvents setting. Optional. |
-| showHiddenInvitations | boolean | Whether to include hidden invitations in the result. Defaults to False. Optional. |
-| singleEvents | boolean | Whether to expand recurring events into instances and only return individual events and instances, excluding the underlying recurring event. Defaults to False. Optional. |
-| startDateTime | text/object | Filters by event start time. Optional. If set, endDateTime must also be provided. Text: Timestamp (ISO 8601 UTC). Object: Contains date (date type) and time (time type), formatted per system settings. |
-| endDateTime | text/object | Filters by event end time. Optional. If set, startDateTime must also be provided. Text: Timestamp (ISO 8601 UTC). Object: Contains date (date type) and time (time type), formatted per system settings. |
-| timeZone | string | Time zone for the response, formatted as an IANA Time Zone Database name (e.g., "Europe/Zurich"). Defaults to UTC. Optional. |
-| updatedMin | text | Lower bound for filtering events by last modification time (ISO 8601 UTC). When set, deleted events since this time are always included, regardless of showDeleted. Optional. |
+| calendarId | String | Calendar identifier. To retrieve calendar IDs call the Google.Calendar.getCalendarList function. If not present or null, access the primary calendar of the currently logged-in user. |
+| eventTypes | String | Event types to return. Optional. Can be repeated multiple times to return different event types. If unset, returns all event types. Acceptable values: "birthday" (special all-day events with an annual recurrence), "default" (regular events), "focusTime" (focus time events), "fromGmail" (events from Gmail), "outOfOffice" (out-of-office events), "workingLocation" (working location events). |
+| iCalUID | String | Specifies an event ID in the iCalendar format to be returned. Optional. Use this to search for an event by its iCalendar ID. Note: icalUID and id are not identical. In recurring events, all occurrences have different ids but share the same icalUID. |
+| maxAttendees | Integer | Maximum number of attendees to include in the response. If exceeded, only the participant is returned. Optional. |
+| top | Integer | Maximum number of events per page. Default is 250, maximum is 2500. Optional. |
+| orderBy | String | Order of returned events. Default is unspecified but stable. Acceptable values: "startTime" (ascending, only for single events when singleEvents=True), "updated" (ascending order of last modification time). |
+| privateExtendedProperty | Collection | Matches only private properties. |
+| search | String | Free text search for matching terms in event fields (summary, description, location, attendee names/emails, organizer names/emails, working location properties). Also matches predefined keywords for out-of-office, focus-time, and working-location events. Optional. |
+| sharedExtendedProperty | Collection | Matches only shared properties. The returned events match all given constraints. |
+| showDeleted | Boolean | Whether to include deleted events (status="cancelled") in the result. Defaults to False. Behavior changes based on singleEvents setting. Optional. |
+| showHiddenInvitations | Boolean | Whether to include hidden invitations in the result. Defaults to False. Optional. |
+| singleEvents | Boolean | Whether to expand recurring events into instances and only return individual events and instances, excluding the underlying recurring event. Defaults to False. Optional. |
+| startDateTime | Text, Object | Filters by event start time. Optional. If set, endDateTime must also be provided. Text: Timestamp (ISO 8601 UTC). Object: Contains date (date type) and time (time type), formatted per system settings. |
+| endDateTime | Text, Object | Filters by event end time. Optional. If set, startDateTime must also be provided. Text: Timestamp (ISO 8601 UTC). Object: Contains date (date type) and time (time type), formatted per system settings. |
+| timeZone | String | Time zone for the response, formatted as an IANA Time Zone Database name (e.g., "Europe/Zurich"). Defaults to UTC. Optional. |
+| updatedMin | Text | Lower bound for filtering events by last modification time (ISO 8601 UTC). When set, deleted events since this time are always included, regardless of showDeleted. Optional. |
 
 #### Returned object
 
