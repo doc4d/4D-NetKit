@@ -12,7 +12,7 @@
 * [Office365 class](#office365)
 	- [New Office365 provider](#new-office365-provider)
 	- [Office365.calendar.getCalendar()](#office365calendargetcalendar)
-	- [Office365.calendar.getCalendarList()](#office365calendargetcalendarlist)
+	- [Office365.calendar.getCalendars()](#office365calendargetCalendars)
 	- [Office365.calendar.getEvent()](#office365calendargetevent)
 	- [Office365.calendar.getEvents()](#office365calendargetevents)
 	- [Office365.mail.append()](#office365mailappend)
@@ -38,7 +38,7 @@
 * [Google class](#google)
 	- [cs.NetKit.Google.new()](#csnetkitgooglenew)
 	- [Google.Calendar.getCalendar()](#googlecalendargetcalendar)
-	- [Google.Calendar.getCalendarList()](#googlecalendargetcalendarlist)
+	- [Google.Calendar.getCalendars()](#googlecalendargetCalendars)
 	- [Google.Calendar.getEvent()](#googlecalendargetevent)
 	- [Google.Calendar.getEvents()](#googlecalendargetevents)
 	- [Google.mail.append()](#googlemailappend)
@@ -349,9 +349,56 @@ $office365:=New Office365 provider($oAuth2;New object("mailType"; "Microsoft"))
 
 Refer to [this tutorial](#authenticate-to-the-microsoft-graph-api-in-service-mode) for an example of connection in Service mode.
 
-### Office365.calendar.getCalendarList()
+### Office365.calendar.getCalendar()
 
-**Office365.calendar.getCalendarList**({*param*: Object}) : Object
+**Office365.calendar.getCalendar**({*id*: Text}) : Object
+
+#### Parameters
+
+|Parameter|Type||Description|
+|---------|--- |:---:|------|
+|id|Text|->|ID of the calender to retrieve.|
+|calendar|Object|<-|[Object](https://learn.microsoft.com/en-us/graph/api/resources/calendar?view=graph-rest-1.0#properties) containing the properties and relationships of the specified calendar.  |
+
+> To retrieve calendar IDs call the getCalendars() function. If id is null, empty or missing, returns the primary calendar of the currently logged in user.
+
+#### Description
+
+`Office365.calendar.getCalendar()` retrieves the properties and relationships of a specific calendar associated with the passed `id` and returns a `calendar` object containing the requested calendar's details.
+
+#### Example
+
+```4d
+var $oAuth2 : cs.NetKit.OAuth2Provider
+var $Office365 : cs.NetKit.Office365
+var $params; $calendarList; $calendarA : Object
+
+// Set up parameters:
+$params:=New object
+$params.name:="Microsoft"
+$params.permission:="signedIn"
+$params.clientId:="your-client-id" // Replace with your Microsoft identity platform client ID
+$params.redirectURI:="http://127.0.0.1:50993/authorize/"
+$params.scope:="https://graph.microsoft.com/.default"
+
+// Create an OAuth2Provider Object
+$oAuth2:=New OAuth2 provider($params)
+
+// Create an Office365 object
+$Office365:=New Office365 provider($oAuth2)
+
+
+// Retrieve the entire list of calendars
+$calendarList:=$Office365.calendar.getCalendars()
+
+// Retrieve the first calendar in the list using its ID
+$calendarA:=$Office365.calendar.getCalendar($calendarList.calendars[0].id)
+
+```
+
+### Office365.calendar.getCalendars()
+
+**Office365.calendar.getCalendars**({*param*: Object}) : Object
 
 #### Parameters
 
@@ -362,7 +409,7 @@ Refer to [this tutorial](#authenticate-to-the-microsoft-graph-api-in-service-mod
 
 #### Description
 
-`Office365.calendar.getCalendarList()` retrieves a collection of the user's calendars. 
+`Office365.calendar.getCalendars()` retrieves a collection of the user's calendars. 
 
 In *param*, you can pass the following optional properties:
 
@@ -408,54 +455,7 @@ $oAuth2:=New OAuth2 provider($params)
 $Office365:=New Office365 provider($oAuth2)
 
 // Retrieve the entire list of calendars
-$calendarList:=$Office365.calendar.getCalendarList()
-
-```
-
-### Office365.calendar.getCalendar()
-
-**Office365.calendar.getCalendar**({*id*: Text}) : Object
-
-#### Parameters
-
-|Parameter|Type||Description|
-|---------|--- |:---:|------|
-|id|Text|->|ID of the calender to retrieve.|
-|calendar|Object|<-|[Object](https://learn.microsoft.com/en-us/graph/api/resources/calendar?view=graph-rest-1.0#properties) containing the properties and relationships of the specified calendar.  |
-
-> To retrieve calendar IDs call the getCalendarList() function. If id is null, empty or missing, returns the primary calendar of the currently logged in user.
-
-#### Description
-
-`Office365.calendar.getCalendar()` retrieves the properties and relationships of a specific calendar associated with the passed `id` and returns a `calendar` object containing the requested calendar's details.
-
-#### Example
-
-```4d
-var $oAuth2 : cs.NetKit.OAuth2Provider
-var $Office365 : cs.NetKit.Office365
-var $params; $calendarList; $calendarA : Object
-
-// Set up parameters:
-$params:=New object
-$params.name:="Microsoft"
-$params.permission:="signedIn"
-$params.clientId:="your-client-id" // Replace with your Microsoft identity platform client ID
-$params.redirectURI:="http://127.0.0.1:50993/authorize/"
-$params.scope:="https://graph.microsoft.com/.default"
-
-// Create an OAuth2Provider Object
-$oAuth2:=New OAuth2 provider($params)
-
-// Create an Office365 object
-$Office365:=New Office365 provider($oAuth2)
-
-
-// Retrieve the entire list of calendars
-$calendarList:=$Office365.calendar.getCalendarList()
-
-// Retrieve the first calendar in the list using its ID
-$calendarA:=$Office365.calendar.getCalendar($calendarList.calendars[0].id)
+$calendarList:=$Office365.calendar.getCalendars()
 
 ```
 
@@ -467,25 +467,25 @@ $calendarA:=$Office365.calendar.getCalendar($calendarList.calendars[0].id)
 
 |Parameter|Type||Description|
 |---------|--- |:---:|------|
-|param|Object|->|Set of filters like calendar ID, date range, and sorting options|
+|param|Object|->|Object containing the necessary details to retrieve a specific event|
 |result|Object|<-|Object containing the retrieved event|
 
 #### Description
 
-`Office365.calendar.getEvent()` gets the properties and relationships of the specified event object.
+`Office365.calendar.getEvent()` retrieves details of a specific event, including its properties and relationships. The event is identified by its unique `eventId` within the specified calendar.
 
-In *param*, you can pass the following optional properties:
+In *param*, you can pass the following properties:
 
 | Property | Type | Description |
 |---|---|---|
-| calendarId | String | Calendar identifier. To retrieve calendar IDs call the calendarList.list method. If not present or null, access the primary calendar of the currently logged-in user |
-| eventId | String | (mandatory) Event identifier |
-| timeZone | String | (Optional) Time zone used in the response. UTC by default |
+| eventId | String |(Required) The unique identifier of the event|
+| calendarId | String | Calendar identifier. To retrieve calendar IDs call the calendarList.list(). If not provided, the user's primary (currently logged-in) calendar is used |
+| timeZone | String | Time zone used in the response. UTC by default |
 
 
 #### Returned object
 
-The function returns a Microsoft [`event`](https://learn.microsoft.com/en-us/graph/api/resources/event?view=graph-rest-1.0) object. If the event has attachments, an [`attachments`](#attachment-object) attribute is included, which holds a collection of attachment objects.
+The function returns a Microsoft [`event`](https://learn.microsoft.com/en-us/graph/api/resources/event?view=graph-rest-1.0) object. If the event has attachments, an `attachments` attribute is included, which holds a collection of attachment objects.
 
 ### Office365.calendar.getEvents()
 
@@ -495,42 +495,43 @@ The function returns a Microsoft [`event`](https://learn.microsoft.com/en-us/gra
 
 |Parameter|Type||Description|
 |---------|--- |:---:|------|
-|param|Object|->|Set of filters like calendar ID, date range, and sorting options|
+|param|Object|->|Object containing filters and options for retrieving calendar events|
 |result|Object|<-| Object containing the retrieved events |
 
 #### Description
 
-`Office365.calendar.getEvents()` retrieves calendar events based on the specified parameters. If no `startDateTime` or `endDateTime` is provided, it returns single-instance meetings and series masters. When a `startDateTime` and `endDateTime` are specified, it retrieves occurrences, exceptions, and single-instance events within the defined time range from the user's default calendar or another specified calendar.
+`Office365.calendar.getEvents()` retrieves events from a specified calendar. By default, events are pulled from the user's primary calendar unless another calendar is specified.
 
 In *param*, you can pass the following optional properties:
 
 | Property | Type | Description |
 |---|---|---|
-| calendarId | String | Calendar identifier. To retrieve calendar IDs call the Google.Calendar.getCalendarList function. If not present or null, access the primary calendar of the currently logged-in user. |
-| startDateTime | Text, Object | If startDateTime is set, endDateTime is mandatory and must be greater than startDateTime. Text: Timestamp (ISO 8601 UTC) Upper bound (exclusive) for an event's start time to filter by. Optional. The default is not to filter by start time. Object: The datetime object must be expressed according to the system settings and must have two attributes: date (date type) and time (time type). |
-| endDateTime | Text, Object | If endDateTime is set, startDateTime is mandatory and must be smaller than endDateTime. Text: Timestamp (ISO 8601 UTC) Lower bound (exclusive) for an event's end time to filter by. Optional. The default is not to filter by end time. Object: The datetime object must be expressed according to the system settings and must have two attributes: date (date type) and time (time type). |
-| timeZone | String | Time zone used in the response. Optional. Defaults to UTC. |
-| select | Text | Filters properties (columns). |
-| orderby | Text | Orders results. |
-| filter | Text | Filters results. |
-| top | Integer | Defines the page size for a request. Maximum value is 999. If top is not defined, the default value is applied (10). When a result set spans multiple pages, you can use the .next() function to ask for the next page. See Microsoft’s documentation on paging for more information. |
+| calendarId | String | Calendar identifier. To retrieve calendar IDs, call Google.Calendar.getCalendars(). If not provided, the user's primary (currently logged-in) calendar is used |
+| startDateTime | Text, Object | Filters events by start time. If set, `endDateTime` must also be provided. **Text:** ISO 8601 UTC timestamp (exclusive upper bound). Defaults to no filtering. **Object:** Must contain `date` (date type) and `time` (time type), formatted according to system settings |
+| endDateTime | Text, Object | Filters events by end time. If set, `startDateTime` must also be provided. **Text:** ISO 8601 UTC timestamp (exclusive lower bound). Defaults to no filtering. **Object:** Must contain `date` (date type) and `time` (time type), formatted according to system settings |
+| timeZone | String | Time zone used in the response. UTC by default|
+| select | Text | Specifies which event properties to return (columns) |
+| orderby | Text | Defines sorting order for results |
+| filter | Text | Applies additional filters based on specific conditions, such as event status, organizer, or categories. Uses [Microsoft Graph OData query syntax](https://learn.microsoft.com/en-us/graph/query-parameters#filter-parameter). Example: "status eq 'confirmed' and organizer/emailAddress/address eq 'example@domain.com'"|
+| top | Integer | Limit number of events per page. Maximum value is 999. If top is not defined, the default value is applied (10). When a result set spans multiple pages. Use `.next()` to fetch additional pages. See [Microsoft’s documentation on paging](https://learn.microsoft.com/en-us/graph/paging) for more information |
 
+**Note**: If no time range is provided (`startDateTime` or `endDateTime`) it returns single-instance meetings and series masters. When both `startDateTime` and `endDateTime` are specified, it retrieves all occurrences, exceptions, and single-instance events within the defined time range.
 
 #### Returned object
 
-The method returns a status object containing the following properties:
+The method returns an object containing the following properties:
 
 | Property | Type | Description |
 |---|---|---|
-| errors | Collection | Collection of 4D error items (not returned if a Google server response is received): [].errcode (4D error code number), [].message (description of the error), [].componentSignature (signature of the component that returned the error). |
-| statusText | Text | Status message returned by the Google server, or last error returned in the 4D error stack. |
-| success | Boolean | True if the operation is successful, False otherwise. |
-| isLastPage | Boolean | True if the last page is reached. |
-| page | Integer | User information page number. Starts at 1. Default page size is 100; can be adjusted with the top option. |
-| next() | Function | Updates the users collection with the next page and increments page by 1. Returns True if successful, False otherwise. |
-| previous() | Function | Updates the users collection with the previous page and decrements page by 1. Returns True if successful, False otherwise. |
-| calendarId | String | Calendar identifier, same as the calendarId in the parameters if present. |
-| events | Collection | Collection of event objects. If some events have attachments, an attachments attribute is added, containing a collection of attachments. |
+| errors | Collection | Collection of 4D error items (not returned if an Office 365 server response is received). Each item includes: `[].errcode` (4D error code number), `[].message` (error description), and `[].componentSignature` (component that returned the error) | 
+| statusText | Text | Status message returned by the Office 365 server, or the last error message from the 4D error stack | 
+|success |Boolean| `True` if the operation is successful, `False` otherwise | 
+|isLastPage|Boolean | `True` if the last page of results has been reached |
+| page | Integer | Current page number in the result set. Starts at `1`. The default page size is `10`, but this can be adjusted using the `top` parameter | 
+| next() | Function | Retrieves the next page of results and increments `page` by `1`. Returns `True` if successful, `False` if there are no more pages. | 
+| previous() | Function | Retrieves the previous page of results and decrements `page` by `1`. Returns `True` if successful, `False` if there are no previous pages | 
+| calendarId | String | Calendar identifier, same as the `calendarId` provided in the passed parameters (if present) | 
+| events | Collection | Collection of event objects. If any events have attachments, an `attachments` attribute is included, containing a collection of attachment objects | 
 
 #### Example
 
@@ -1533,9 +1534,6 @@ When an error occurs during the execution of an Office365.mail function:
 - if the function does not return a **status object**, an error is thrown that you can intercept with a project method installed with `ON ERR CALL`.
 
 
-
-
-
 ## Google
 
 The `Google` class allows you to send emails through the [Google REST API](https://developers.google.com/gmail/api/reference/rest/v1/users.messages).
@@ -1592,7 +1590,55 @@ $oAuth2:=New OAuth2 provider($param)
 $google:=cs.NetKit.Google.new($oAuth2;New object("mailType"; "MIME"))
 ```
 
-### Google.Calendar.getCalendarList()
+### Google.Calendar.getCalendar()
+
+**Google.Calendar.getCalendar**( { *id* : Text } ) : Object
+
+#### Parameters
+
+|Parameter|Type||Description|
+|---------|--- |:---:|------|
+|id|Text|->|ID of the calender to retrieve. |
+|calendar|Object|<-| Object containing the details of the specified calendar. For more details, see the [Google Calendar API resource](https://developers.google.com/calendar/api/v3/reference/calendarList#resource).|
+
+> To retrieve calendar IDs call the getCalendars() function. If id is null, empty or missing, returns the primary calendar of the currently logged in user.
+
+#### Description
+
+`Google.Calendar.getCalendar()` retrieves a specific calendar from the authenticated user's calendar list; using an `id` to identify the calendar and returns a `calendar` object containing details about the requested calendar.
+
+#### Example 
+
+```4d
+
+var $google : cs.NetKit.Google
+var $oauth2 : cs.NetKit.OAuth2Provider
+var $param; $Calendars; $myCalendar : Object
+
+$param:={}
+$param.name:="google"
+$param.permission:="signedIn"
+$param.clientId:="your-client-id" // Replace with your Google identity platform client ID
+$param.clientSecret:="xxxxxxxxx"
+$param.redirectURI:="http://127.0.0.1:50993/authorize/"
+$param.scope:=[]
+$param.scope.push("https://mail.google.com/")
+$param.scope.push("https://www.googleapis.com/auth/calendar")
+
+$oauth2:=New OAuth2 provider($param)
+
+$google:=cs.NetKit.Google.new($oauth2)
+
+// Retrieve the entire list of calendars
+$Calendars:=$google.calendar.getCalendars()
+
+// Retrieve the first calendar in the list using its ID
+$myCalendar:=$google.calendar.getCalendar($Calendars.calendars[0].id)
+
+```
+
+
+### Google.Calendar.getCalendars()
 
 **Google.Calendar.getCalendar**( { *param* : Object } ) : Object
 
@@ -1605,7 +1651,7 @@ $google:=cs.NetKit.Google.new($oAuth2;New object("mailType"; "MIME"))
 
 #### Description
 
-`Google.Calendar.getCalendarList()` retrieves a list of calendars that the authenticated user can access. The passed filtering and paging options in `param` are returned in the `result` object.
+`Google.Calendar.getCalendars()` retrieves a list of calendars that the authenticated user can access. The passed filtering and paging options in `param` are returned in the `result` object.
 
 In *param*, you can pass the following optional properties:
 
@@ -1667,57 +1713,9 @@ $google:=cs.NetKit.Google.new($oauth2)
 
 // Retrieve the entire list of calendars
 
-$Calendars:=$google.calendar.getCalendarList()
+$Calendars:=$google.calendar.getCalendars()
 
 ```
-
-### Google.Calendar.getCalendar()
-
-**Google.Calendar.getCalendar**( { *id* : Text } ) : Object
-
-#### Parameters
-
-|Parameter|Type||Description|
-|---------|--- |:---:|------|
-|id|Text|->|ID of the calender to retrieve. |
-|calendar|Object|<-| Object containing the details of the specified calendar. For more details, see the [Google Calendar API resource](https://developers.google.com/calendar/api/v3/reference/calendarList#resource).|
-
-> To retrieve calendar IDs call the getCalendarList() function. If id is null, empty or missing, returns the primary calendar of the currently logged in user.
-
-#### Description
-
-`Google.Calendar.getCalendar()` retrieves a specific calendar from the authenticated user's calendar list; using an `id` to identify the calendar and returns a `calendar` object containing details about the requested calendar.
-
-#### Example 
-
-```4d
-
-var $google : cs.NetKit.Google
-var $oauth2 : cs.NetKit.OAuth2Provider
-var $param; $Calendars; $myCalendar : Object
-
-$param:={}
-$param.name:="google"
-$param.permission:="signedIn"
-$param.clientId:="your-client-id" // Replace with your Google identity platform client ID
-$param.clientSecret:="xxxxxxxxx"
-$param.redirectURI:="http://127.0.0.1:50993/authorize/"
-$param.scope:=[]
-$param.scope.push("https://mail.google.com/")
-$param.scope.push("https://www.googleapis.com/auth/calendar")
-
-$oauth2:=New OAuth2 provider($param)
-
-$google:=cs.NetKit.Google.new($oauth2)
-
-// Retrieve the entire list of calendars
-$Calendars:=$google.calendar.getCalendarList()
-
-// Retrieve the first calendar in the list using its ID
-$myCalendar:=$google.calendar.getCalendar($Calendars.calendars[0].id)
-
-```
-
 ### Google.Calendar.getEvent()
 
 **Google.Calendar.getEvent**( *param* : Object ) : Object
@@ -1726,26 +1724,25 @@ $myCalendar:=$google.calendar.getCalendar($Calendars.calendars[0].id)
 
 |Parameter|Type||Description|
 |---------|--- |:---:|------|
-|param|Object|->|Set of filters like calendar ID, date range, and sorting options.|
+|param|Object|->|Object containing the necessary details to retrieve a specific event|
 |Result|Object|<-|Object containing the retrieved event|
 
 #### Description
 
-`Google.Calendar.getEvent()` returns an event based on its Google Calendar ID.
+`Google.Calendar.getEvent()` retrieves a specific event from a Google Calendar using its unique `eventId`.
 
-In *param*, you can pass the following optional properties:
+In *param*, you can pass the following properties:
 
 |Property|Type|Description|
 |---------|--- |------|
-| calendarId | String | Calendar identifier. To retrieve calendar IDs, call the calendarList.list method. If not provided, accesses the primary calendar of the logged-in user |
-| eventId | String | (Mandatory) Event identifier |
-| maxAttendees | Integer | (Optional) Maximum number of attendees to include in the response. If exceeded, only the participant is returned |
-| timeZone | String | (Optional) Time zone used in the response (formatted as an IANA Time Zone Database name, e.g., "Europe/Zurich"). Defaults to UTC |
+| eventId | String | (Required) The unique identifier of the event to retrieve |
+| calendarId | String | Calendar identifier. To retrieve calendar IDs, call calendarList.list(). If not provided, the user's primary (currently logged-in) calendar is used |
+| maxAttendees | Integer | Max number of attendees to be returned for the event|
+| timeZone | String | Time zone used in the response (formatted as an IANA Time Zone Database name, e.g., "Europe/Zurich"). Defaults to UTC |
 
 #### Returned object 
 
-The function returns a Google [`event`](https://developers.google.com/calendar/api/v3/reference/events#resource) object.
-
+The function returns a Google [`event`](https://developers.google.com/calendar/api/v3/reference/events) object.
 
 ### Google.Calendar.getEvents()
 
@@ -1755,49 +1752,44 @@ The function returns a Google [`event`](https://developers.google.com/calendar/a
 
 |Parameter|Type||Description|
 |---------|--- |:---:|------|
-|param|Object|->|Set of filters like calendar ID, date range, and sorting options|
+|param|Object|->|Object containing filters and options for retrieving calendar events|
 |Result|Object|<-|Object containing the retrieved events|
 
 #### Description
 
-`Google.Calendar.getEvents()` returns events on the specified calendar.
+`Google.Calendar.getEvents()` retrieves events on the specified calendar. If *param* is not provided, it returns all events from the user's primary calendar.
 
 In *param*, you can pass the following optional properties:
 
 |Property|Type|Description|
 |---------|--- |------|
-| calendarId | String | Calendar identifier. To retrieve calendar IDs call the Google.Calendar.getCalendarList function. If not present or null, access the primary calendar of the currently logged-in user. |
-| eventTypes | String | Event types to return. Optional. Can be repeated multiple times to return different event types. If unset, returns all event types. Acceptable values: "birthday" (special all-day events with an annual recurrence), "default" (regular events), "focusTime" (focus time events), "fromGmail" (events from Gmail), "outOfOffice" (out-of-office events), "workingLocation" (working location events). |
-| iCalUID | String | Specifies an event ID in the iCalendar format to be returned. Optional. Use this to search for an event by its iCalendar ID. Note: icalUID and id are not identical. In recurring events, all occurrences have different ids but share the same icalUID. |
-| maxAttendees | Integer | Maximum number of attendees to include in the response. If exceeded, only the participant is returned. Optional. |
-| top | Integer | Maximum number of events per page. Default is 250, maximum is 2500. Optional. |
-| orderBy | String | Order of returned events. Default is unspecified but stable. Acceptable values: "startTime" (ascending, only for single events when singleEvents=True), "updated" (ascending order of last modification time). |
-| privateExtendedProperty | Collection | Matches only private properties. |
-| search | String | Free text search for matching terms in event fields (summary, description, location, attendee names/emails, organizer names/emails, working location properties). Also matches predefined keywords for out-of-office, focus-time, and working-location events. Optional. |
-| sharedExtendedProperty | Collection | Matches only shared properties. The returned events match all given constraints. |
-| showDeleted | Boolean | Whether to include deleted events (status="cancelled") in the result. Defaults to False. Behavior changes based on singleEvents setting. Optional. |
-| showHiddenInvitations | Boolean | Whether to include hidden invitations in the result. Defaults to False. Optional. |
-| singleEvents | Boolean | Whether to expand recurring events into instances and only return individual events and instances, excluding the underlying recurring event. Defaults to False. Optional. |
-| startDateTime | Text, Object | Filters by event start time. Optional. If set, endDateTime must also be provided. Text: Timestamp (ISO 8601 UTC). Object: Contains date (date type) and time (time type), formatted per system settings. |
-| endDateTime | Text, Object | Filters by event end time. Optional. If set, startDateTime must also be provided. Text: Timestamp (ISO 8601 UTC). Object: Contains date (date type) and time (time type), formatted per system settings. |
-| timeZone | String | Time zone for the response, formatted as an IANA Time Zone Database name (e.g., "Europe/Zurich"). Defaults to UTC. Optional. |
-| updatedMin | Text | Lower bound for filtering events by last modification time (ISO 8601 UTC). When set, deleted events since this time are always included, regardless of showDeleted. Optional. |
+| calendarId | String | Calendar identifier. To retrieve calendar IDs, call `Google.Calendar.getCalendars()`. If not provided, the user's primary calendar is used. |
+| eventTypes | String | Specifies the types of events to return. Can be repeated multiple times to retrieve multiple event types. If not set, all event types are returned. Acceptable values: "birthday" (special all-day events with annual recurrence), "default" (regular events), "focusTime" (focus time events), "fromGmail" (events from Gmail), "outOfOffice" (out-of-office events), "workingLocation" (working location events). |
+| iCalUID | String | Searches for an event by its iCalendar ID. **Note:** `icalUID` and `id` are not identical. In recurring events, all occurrences have unique `id`s but share the same `icalUID`. |
+| maxAttendees | Integer | Limits the number of attendees to be returned per event|
+| top | Integer | Mximum number of events per page. Default is `250`, maximum is `2500`. |
+| orderBy | String | Specifies how events should be ordered in the response. Default is an **unspecified but stable order**. Acceptable values: "startTime" (ascending, only when `singleEvents=True`), "updated" (ascending order of last modification time). |
+| privateExtendedProperty | Collection | Returns events that match these properties specified as propertyName=value |
+| search | String | Searches for events using free text in multiple fields, including summary, description, location, attendee names/emails, organizer names/emails, and working location properties. Also matches predefined keywords for out-of-office, focus-time, and working-location events. |
+| sharedExtendedProperty | Collection | Returns events that match these properties specified as propertyName=value. The returned events match **all** specified constraints |
+| showDeleted | Boolean | Whether to include deleted events (`status="cancelled"`) in the result. Defaults to `False`. Behavior depends on the `singleEvents` setting |
+| showHiddenInvitations | Boolean | Whether to include hidden invitations in the result. Defaults to `False` |
+| singleEvents | Boolean | Whether to expand recurring events into instances and return only individual events and instances, **excluding** the underlying recurring event. Defaults to `False` |
+| startDateTime | Text, Object | Filters events by start time. If set, `endDateTime` must also be provided. **Text:** ISO 8601 UTC timestamp. **Object:** Must contain `date` (date type) and `time` (time type), formatted according to system settings |
+| endDateTime | Text, Object | Filters events by end time. If set, `startDateTime` must also be provided. **Text:** ISO 8601 UTC timestamp. **Object:** Must contain `date` (date type) and `time` (time type), formatted according to system settings |
+| timeZone | String | Time zone for the response, formatted as an IANA Time Zone Database name (e.g., "Europe/Zurich"). Defaults to UTC |
+| updatedMin | Text | Filters events based on last modification time (`ISO 8601 UTC`). When set, deleted events since this time are always included, regardless of `showDeleted` |
 
 #### Returned object
 
-The method returns a status object containing the following properties:
+The method returns a [**status object**](#status-object-google-class) in addition to the following properties:
 
 | Property |  Type | Description |
 |---| ---|---|
-| [].errcode | Integer | 4D error code number. |
-| [].message | Text | Description of the 4D error. |
-| [].componentSignature | Text | Signature of the internal component that returned the error. |
 | isLastPage | Boolean | True if the last page is reached. |
 | page | Integer | Page number of the user information. Defaults to 1, with a page size of 100 (configurable via top). |
 | next() | Function | Fetches the next page of users, increments page by 1. Returns True if successful, False otherwise. |
 | previous() | Function | Fetches the previous page of users, decrements page by 1. Returns True if successful, False otherwise. |
-| statusText | Text | Status message from the Google server or the last error returned in the 4D error stack. |
-| success | Boolean | True if the operation is successful, False otherwise. |
 | kind | String | Type of collection ("calendar#events"). |
 | etag | String | ETag of the collection. |
 | summary | String | Title of the calendar (read-only). |
