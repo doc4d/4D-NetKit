@@ -1013,6 +1013,87 @@ $google:=cs.NetKit.Google.new($oauth2)
 var $userList:=$google.user.list({top:10})
 ```
 
+## "Google" mail object properties
+
+When you send an email with the "Google" mail type, you must pass an object to `Google.mail.send()`. For a comprehensive list of properties supported by Gmail message objects, refer to the [Gmail API documentation](https://developers.google.com/gmail/api/reference/rest/v1/users.messages). The most common properties are listed below:
+
+| Property | Type | Description |
+|----------|------|-------------|
+| attachments | attachment collection | The attachments for the email. |
+| bccRecipients | recipient collection | The Bcc: recipients for the message. |
+| ccRecipients | recipient collection | The Cc: recipients for the message. |
+| from | recipient object | The sender's email address. Must match the authenticated Gmail user. |
+| id | Text | Unique identifier for the message. |
+| important | Boolean | If true, marks the message as important (Gmail only). |
+| labelIds | Collection | List of label IDs to apply to the message. |
+| replyTo | recipient collection | Email addresses to use when replying. |
+| sender | recipient object | The account that generates the message. Same as `from` in most cases. |
+| subject | Text | The subject line of the message. |
+| toRecipients | recipient collection | The To: recipients for the message. |
+| threadId | Text | The ID of the thread to which the message belongs. |
+
+
+### Attachment object (Google)
+
+| Property | Type | Description |
+|----------|------|-------------|
+| filename | Text | The name of the attached file. |
+| mailType | Text | Indicates the Mail type to use to send and receive email's attechement. |
+| content | Text | The base64-encoded content of the file. |
+| size | Number | The size of the file in bytes. |
+| isInline | Boolean | Set to true if the attachment is inline (e.g., embedded image). |
+| contentId | Text | Content ID for referencing the attachment inline via CID. |
+
+
+### recipient object
+
+| Property | Type | Description |
+|----------|------|-------------|
+| emailAddress | Object | Contains the address and display name. |
+| emailAddress.address | Text | The email address of the recipient. |
+| emailAddress.name | Text | Display name of the recipient. |
+
+### Example: Send an email with a file attachment (Google)
+
+```4d
+var $oAuth2 : cs.NetKit.OAuth2Provider
+var $token; $param; $email; $status : Object
+
+// Set up authentication
+$param:=New object()
+$param.name:="Google"
+$param.permission:="signedIn"
+$param.clientId:="your-client-id" // Replace with your client ID
+$param.redirectURI:="http://127.0.0.1:50993/authorize/"
+$param.scope:="https://www.googleapis.com/auth/gmail.send"
+
+$oAuth2:=New OAuth2 provider($param)
+$token:=$oAuth2.getToken()
+
+// Create the email, specify the sender and the recipient
+$email:=New object()
+$email.from:=New object("emailAddress"; New object("address"; "sender@gmail.com"))
+$email.toRecipients:=New collection(New object("emailAddress"; New object("address"; "recipient@gmail.com")))
+$email.subject:="Hello from NetKit"
+$email.body:=New object("content"; "Hello, World!"; "contentType"; "html")
+
+// Create an attachment
+var $attachment : Object
+var $text : Text
+$text:="Simple text file"
+BASE64 ENCODE($text)
+$attachment:=New object
+$attachment.filename:="note.txt"
+$attachment.mimeType:="text/plain"
+$attachment.content:=$text
+$email.attachments:=New collection($attachment)
+
+// Send the email
+var $Google : Object
+$Google:=New Google($token)
+$status:=$Google.mail.send($email)
+```
+
 
 ## labelInfo object
 
