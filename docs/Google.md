@@ -382,7 +382,7 @@ var $event; $result : Object
 
 $event:={}
 $event.summary:="Team Meeting"
-$event.start:={]
+$event.start:={}
 $event.start.date:=Current date
 $event.start.time:=Current time
 $event.end:={}
@@ -428,8 +428,6 @@ And in *option*, you can pass the following additional optional properties:
 | sendUpdates | String  | Defines who should receive email notifications about the update. Acceptable values:<br>• `"all"` – Notify all attendees.<br>• `"externalOnly"` – Notify only non-Google users.<br>• `"none"` – No notifications sent. |
 | supportsAttachments | Boolean | Indicates whether the API client supports attachments. Must be `true` to modify the [`attachments`](#attachment-object-google) property. Defaults to `false`. |
 | fullUpdate | Boolean | If `true`, the full event is replaced. If `false` (default), only specified fields are updated. | 
- 
-> **Note:** This method replaces the entire event with the data you send. To avoid losing information, always include required fields like `start` and `end`.
 
 #### Returned Object
 
