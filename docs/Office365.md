@@ -137,7 +137,7 @@ Refer to [this tutorial](#authenticate-to-the-microsoft-graph-api-in-service-mod
 #### Example
 
 ```4d
-var $oAuth2 : cs.NetKit.OAuth2Provider
+var $oAuth2 : cs.NetKit.OAuth2Provid 
 var $Office365 : cs.NetKit.Office365
 var $params; $calendarList; $calendarA : Object
 
@@ -354,17 +354,19 @@ One of the following permissions is required to create an event:
 Create a calendar event:
 
 ```4d
-var $Office365 : cs.NetKit.Microsoft
+var $oAuth2 : cs.NetKit.OAuth2Provid 
+var $Office365 : cs.NetKit.Office365
 var $event; $result : Object
 
-$event:=New object
+$event:={}
 $event.subject:="Team Sync"
-$event.start:=New object
-$event.start.dateTime:="2025-06-15T09:00:00"
-$event.start.timeZone:="Europe/Paris"
-$event.end:=New object
-$event.end.dateTime:="2025-06-15T10:00:00"
-$event.end.timeZone:="Europe/Paris"
+$event.start:={}
+$event.start.date:=Current date
+$event.start.time:=Current time
+$event.end:={}
+$event.end.date:=Current date
+$event.end.time:=Current time+3600
+$event.attendees:=[{email: "first.lastname@gmail.com"}]
 
 $result:=$Office365.calendar.createEvent($event)
 If (Not($result.success))
@@ -440,17 +442,19 @@ One of the following permissions is required to update an event:
 Update an already existing event calendar:
 
 ```4d
-#DECLARE ($event : Object)
-
+#DECLARE($eventId:Text)
+var $oAuth2 : cs.NetKit.OAuth2Provid 
 var $Office365 : cs.NetKit.Office365
 var $result : Object
 
+$event.id:=$eventId
 $event.subject:="Updated Meeting Title"
-$event.start:=New object
-$event.start.dateTime:="2025-06-15T11:00:00"
-$event.start.timeZone:="UTC"
-$event.end:=New object
-$event.end.dateTime:="2025-06-15T12:00:00"
+$event.start:={}
+$event.start.date:=Current date
+$event.start.time:=Current time
+$event.end:={}
+$event.end.date:=Current date
+$event.end.time:=Current time+3600
 $event.end.timeZone:="UTC"
 
 $result:=$Office365.calendar.updateEvent($event)
@@ -501,6 +505,9 @@ One of the following permissions is required to delete an event:
 Delete a calendar event:
 
 ```4d
+var $oAuth2 : cs.NetKit.OAuth2Provid 
+var $Office365 : cs.NetKit.Office365
+
 $status:=$office365.calendar.deleteEvent({eventId: $event.event.id})
 ```
 
@@ -548,8 +555,8 @@ One of the following permissions is required:
 #### Example
 
 ```4d
-
-var $o365 : cs.NetKit.Office365
+var $oAuth2 : cs.NetKit.OAuth2Provid 
+var $Office365 : cs.NetKit.Office365
 var $result : Object
 ARRAY TEXT($toDisplay; 0)
 
