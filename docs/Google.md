@@ -17,7 +17,7 @@ The `Google` class is instantiated by calling the `cs.NetKit.Google.new()` funct
 
 * [cs.NetKit.Google.new()](#csnetkitgooglenew)
 
-### [Calendar](#calendar1)
+### [Calendar](#calendar-1)
 
 * [Google.Calendar.getCalendar()](#googlecalendargetcalendar)
 * [Google.Calendar.getCalendars()](#googlecalendargetcalendars)
@@ -28,7 +28,7 @@ The `Google` class is instantiated by calling the `cs.NetKit.Google.new()` funct
 * [Google.Calendar.deleteEvent()](#googlecalendardeleteevent)
 * [Event object](#event-object)
 
-### [Mail](#mail)
+### [Mail](#mail-1)
 
 * [Google.mail.send()](#googlemailsend)
 * [Google.mail.append()](#googlemailappend)
@@ -45,7 +45,7 @@ The `Google` class is instantiated by calling the `cs.NetKit.Google.new()` funct
 * [Google.mail.untrash()](#googlemailuntrash)
 * [labelInfo object](#labelinfo-object)
 
-### [User](#user)
+### [User](#user-1)
 
 * [Google.user.get()](#googleuserget)
 * [Google.user.getCurrent()](#googleusergetcurrent)
