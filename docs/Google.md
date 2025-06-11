@@ -380,12 +380,12 @@ Create an event in the Google calendar:
 var $Google:=cs.NetKit.Google.new($Oauth)
 var $event; $result : Object
 
-$event:={}New object
+$event:={}
 $event.summary:="Team Meeting"
-$event.start:={]New object
+$event.start:={]
 $event.start.date:=Current date
 $event.start.time:=Current time
-$event.end:={}New object
+$event.end:={}
 $event.end.date:=Current date
 $event.end.time:=Current time+3600
 $event.attendees:=[{email: "first.lastname@gmail.com"}]
@@ -454,10 +454,10 @@ var $result : Object
 $event.id:=$eventId
 $event.summary:="Updated Event Title"
 $event.description:="Updated Event description"
-$event.start:={]New object
+$event.start:={}
 $event.start.date:=Current date
 $event.start.time:=Current time
-$event.end:={}New object
+$event.end:={}
 $event.end.date:=Current date
 $event.end.time:=Current time+3600
 
