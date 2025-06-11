@@ -51,9 +51,9 @@ The `Google` class is instantiated by calling the `cs.NetKit.Google.new()` funct
 * [Google.user.getCurrent()](#googleusergetcurrent)
 * [Google.user.list()](#googleuserlist)
 
-### [Status](#status-object-google-class)
+### [Status](#status-object)
 
-* [Status object](#status-object-google-class)
+* [Status object](#status-object)
 
 ## **cs.NetKit.Google.new()**
 
