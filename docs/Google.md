@@ -377,17 +377,19 @@ The method returns a [**status object**](status-object-google-class) with an add
 Create an event in the Google calendar:
 
 ```4d
-var $Google : cs.NetKit.Google
+var $Google:=cs.NetKit.Google.new($Oauth)
 var $event; $result : Object
 
-$event:=New object
+$event:={}New object
 $event.summary:="Team Meeting"
-$event.start:=New object
-$event.start.dateTime:="2025-06-15T09:00:00"
-$event.start.timeZone:="Europe/Paris"
-$event.end:=New object
-$event.end.dateTime:="2025-06-15T10:00:00"
-$event.end.timeZone:="Europe/Paris"
+$event.start:={]New object
+$event.start.date:=Current date
+$event.start.time:=Current time
+$event.end:={}New object
+$event.end.date:=Current date
+$event.end.time:=Current time+3600
+$event.attendees:=[{email: "first.lastname@gmail.com"}]
+$event.description:="description of the event"
 
 $result:=$Google.calendar.createEvent($event)
 If (Not($result.success))
@@ -445,17 +447,19 @@ The method returns a [**status object**](status-object-google-class) with an add
 Update an already existing event:
 
 ```4d
-#DECLARE(event:object)  
-var $Google : cs.NetKit.Google
+#DECLARE($eventId:Text)  
+var $Google:=cs.NetKit.Google.new($Oauth)
 var $result : Object
 
+$event.id:=$eventId
 $event.summary:="Updated Event Title"
-$event.start:=New object
-$event.start.dateTime:="2025-06-15T11:00:00"
-$event.start.timeZone:="Europe/Paris"
-$event.end:=New object
-$event.end.dateTime:="2025-06-15T12:00:00"
-$event.end.timeZone:="Europe/Paris"
+$event.description:="Updated Event description"
+$event.start:={]New object
+$event.start.date:=Current date
+$event.start.time:=Current time
+$event.end:={}New object
+$event.end.date:=Current date
+$event.end.time:=Current time+3600
 
 $result:=$Google.calendar.updateEvent($event)
 If (Not($result.success))
