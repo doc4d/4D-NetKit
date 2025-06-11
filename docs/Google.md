@@ -17,7 +17,7 @@ The `Google` class is instantiated by calling the `cs.NetKit.Google.new()` funct
 
 * [cs.NetKit.Google.new()](#csnetkitgooglenew)
 
-### [Calendar](#calendar)
+### [Calendar](#calendar1)
 
 * [Google.Calendar.getCalendar()](#googlecalendargetcalendar)
 * [Google.Calendar.getCalendars()](#googlecalendargetcalendars)
