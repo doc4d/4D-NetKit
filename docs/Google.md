@@ -333,7 +333,7 @@ var $events:=$google.calendar.getEvents({calendarId: $myCalendar.id; top: 10})
 
 ### Google.calendar.createEvent()
 
-**Google.calendar.createEvent**(*event*: Object{; *option*: Object}) : Object
+**Google.calendar.createEvent**(*event*: Object{; *options*: Object}) : Object
 
 #### Parameters
 
@@ -399,7 +399,7 @@ End if
 
 ### Google.calendar.updateEvent()
 
-**Google.calendar.updateEvent**(*event*: Object{; *option*: Object}) : Object
+**Google.calendar.updateEvent**(*event*: Object{; *options*: Object}) : Object
 
 #### Parameters
 
