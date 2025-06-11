@@ -500,7 +500,9 @@ The method returns a standard [**status object**](#status-object-google-class).
 Delete a calendar event:
 
 ```4d
-$status:=$google.calendar.deleteEvent({eventId: $event.event.id})
+var $Google:=cs.NetKit.Google.new($Oauth)
+
+$status:=$google.calendar.deleteEvent({eventId: $event.id})
 ```
 
 ### Event object
