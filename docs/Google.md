@@ -509,7 +509,7 @@ The `event` object used with Google Calendar methods includes the following prop
 
 | Property | | Type | Description|                                                                                                                                                           
 | ------ |---| -------- | ------------------- |
-|id 	|	Text 	| ID for the event.|
+|id 	||	Text 	| ID for the event.|
 | calendarId | | Text | Calendar ID. If not provided, the user's primary calendar is used. Use `Google.calendar.getCalendars()` to retrieve IDs.|                                       
 | attachments | | Collection | File [attachments](#attachment-object-google) (max 25). To use this, `supportsAttachments` must be set to `true` in the request.| 
 | attendees| | Collection | List of attendees.  |
