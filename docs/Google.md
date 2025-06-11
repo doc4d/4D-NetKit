@@ -340,7 +340,7 @@ var $events:=$google.calendar.getEvents({calendarId: $myCalendar.id; top: 10})
 | Parameter | Type   |  | Description|                                                                                                                                                                 
 | -------- | ------ | --- |--------------------------- |
 |event | Object | ->|Object containing details of the calendar [event](#event-object) to create |
-|option | Object | -> | Object containing additional creation options | 
+|options | Object | -> | Object containing additional creation options | 
 |Result|Object|<-|[Status object](#status-object-google-class)|
 
 #### Description
@@ -406,7 +406,7 @@ End if
 | Parameter | Type   | | Description|                                                                          
 | -------- | ----- | -------- | --------------- |
 |event |Object|->| Object containing details of the calendar [event](#event-object) to update. |
-|option |Object|->| Object containing additional update options. | 
+|options |Object|->| Object containing additional update options. | 
 |Result | Object | <-| [Status object](#status-object-google-class) |
 
 #### Description
@@ -421,7 +421,7 @@ In *event*, you must include the following required properties:
 | start | Object | Start time of the event. |
 | end | Object | End time of the event. |
 
-And in *option*, you can pass the following additional optional properties:
+And in *options*, you can pass the following additional optional properties:
 
 | Property | Type    | Description |
 |------------|---------|-------------|
