@@ -568,12 +568,12 @@ The `event` object used with Microsoft Calendar methods includes the following p
 | calendarId |    | Text  | Calendar ID. If not provided, the user's primary calendar is used.   |
 | attachments| | Collection | Event file [attachments](#attachment-object).|                                                                                     
 | attendees |   | Collection | List of attendees.|                                                                                          
-|  | emailAddress | Text       |  Required in `param` parameter. Attendee’s email address.|                                                                     
+|  | emailAddress | Text       |  Required. Attendee’s email address.|                                                                     
 | | type         | Text       | Attendee role: `"required"`, `"optional"`, or `"resource"`.|                                                 
 | body | | Object |Body of the message associated with the event.|                                                                  
 | | content      | Text       | Content of the body|                                                                                     
-| | contentType  | Text       | Type of the content. <br> Possible values:`"text"` or `"html"`.|                                                                                       
-| categories | | Collection | List of categories associated with the event. Must match the `displayName` of categories returned by `Office365.category.list()`. |
+| | contentType  | Text       | Type of the content. <br> Possible values: `"text"` or `"html"`.|                                                                                       
+| categories | | Collection | List of categories associated with the event. Must match the `displayName` of categories returned by [`Office365.category.list()`](#office365categorylist). |
 | start   |  | Object  | Start time of the event.|                                                                                    
 |  | date  | Date  | Start time of the event. If provided as text, use the format `"yyyy-mm-dd"`.|                                                     
 | | time  | Time| Start time (not used for all-day events).|                                                                   

@@ -507,7 +507,7 @@ The `event` object used with Google Calendar methods includes the following prop
 | calendarId | | Text | Calendar ID. If not provided, the user's primary calendar is used. Use `Google.calendar.getCalendars()` to retrieve IDs.|                                       
 | attachments | | Collection | File [attachments](#attachment-object-google) (max 25). To use this, `supportsAttachments` must be set to `true` in the request.| 
 | attendees| | Collection | List of attendees.  |
-| | email | String | Required in `param` parameter. Email address of the attendee. |
+| | email | String | Required. Email address of the attendee. |
 | | displayName | String | Name of the attendee. |
 | | comment| String | The attendee’s response comment. |
 | | optional| Boolean  | (Default: false) Whether the attendee is optional.|
