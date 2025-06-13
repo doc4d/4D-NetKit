@@ -328,9 +328,11 @@ var $events:=$office365.calendar.getEvents({calendarId: $myCalendar.id; top: 10}
 
 `Office365.calendar.createEvent()` creates a new calendar event.
 
+In *event*, pass the properties you want to set for the event.
+
 #### Returned Object
 
-The method returns a [**status object**](#status-object-microsoft-class) with an additional `event` property:
+The function returns a [**status object**](#status-object-microsoft-class) with an additional `event` property:
 
 | Property   | Type   | Description|                                         
 | -------- | ---------- | ----------------------------------- |
@@ -388,32 +390,12 @@ End if
 
 `Office365.calendar.updateEvent()` updates an existing calendar event.
 
+In *event*, pass the event id (mandatory) and the properties you want to update. 
+
+To check the updatable properties, please refer to the [event object](#event-object) table below.
+
 > **Note**: 
  When using `Office365.calendar.updateEvent()`, you only need to include the fields you want to update. Any property you leave out will keep its current value, unless it needs to be recalculated due to changes in related fields (e.g., updating recurrence may affect dates).
-
-You can update the following properties:
-
-| Property                     | Description|                                   
-| ---------------------------- | --------------------------- |
-|attendees| List of people invited to the event           |
-|body | Event description or message content          |
-|categories| Tags or labels assigned to the event          |
-|end| End date and time of the event                |
-|hideAttendees| If `true`, attendees can't see each other     |
-|importance | Level of importance (`low`, `normal`, `high`) |
-|isAllDay| Whether the event lasts the entire day        |
-|isOnlineMeeting| Enables online meeting support |
-|isReminderOn| Turns reminders on or off                     |
-|location| Main location of the event                    |
-|locations| List of additional locations                  |
-|onlineMeetingProvider| Provider used (e.g., Teams, Skype)|            
-|recurrence| Recurrence pattern (e.g., daily, weekly)      |
-|reminderMinutesBeforeStart| Time before start to trigger reminder|
-|responseRequested| Whether responses are expected from attendees| 
-|sensitivity | Event sensitivity (`normal`, `private`, etc.) |
-|showAs| Availability status (`busy`, `free`, etc.)    |
-|start | Start date and time of the event              |
-|subject| Event title                                   |
 
 #### Returned Object
 
@@ -509,7 +491,7 @@ var $Office365 : cs.NetKit.Office365
 
 $status:=$office365.calendar.deleteEvent({eventId: $event.event.id})
 If ($result.success)
-  ALERT("Event correctly deleted")
+  ALERT("Calendar event correctly deleted")
 Else
   ALERT($result.statusText)
 End if

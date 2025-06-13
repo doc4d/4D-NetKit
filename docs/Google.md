@@ -491,7 +491,7 @@ var $Google:=cs.NetKit.Google.new($Oauth)
 
 $status:=$google.calendar.deleteEvent({eventId: $event.id})
 If ($result.success)
-  ALERT("Event correctly deleted")
+  ALERT("Calendar event correctly deleted")
 Else
   ALERT($result.statusText)
 End if
