@@ -57,14 +57,14 @@ The `Google` class is instantiated by calling the `cs.NetKit.Google.new()` funct
 
 ## **cs.NetKit.Google.new()**
 
-**cs.NetKit.Google.new**( *oAuth2* : cs.NetKit.OAuth2Provider { ; *options* : Object } ) : cs.NetKit.Google
+**cs.NetKit.Google.new**( *oAuth2* : cs.NetKit.OAuth2Provider { ; *param* : Object } ) : cs.NetKit.Google
 
 ### Parameters
 
 |Parameter|Type||Description|
 |---------|--- |:---:|------|
 |oAuth2|cs.NetKit.OAuth2Provider|->| Object of the OAuth2Provider class  |
-|options|Object|->| Additional options |
+|param|Object|->| Additional options |
 |Result|cs.NetKit.Google|<-| Object of the Google class|
 
 ### Description
@@ -73,7 +73,7 @@ The `Google` class is instantiated by calling the `cs.NetKit.Google.new()` funct
 
 In `oAuth2`, pass an [OAuth2Provider object](#oauth2provider).
 
-In `options`, you can pass an object that specifies the following options:
+In `param`, you can pass an object that specifies the following options:
 
 |Property|Type|Description|
 |---------|---|------|
@@ -333,33 +333,28 @@ var $events:=$google.calendar.getEvents({calendarId: $myCalendar.id; top: 10})
 
 ### Google.calendar.createEvent()
 
-**Google.calendar.createEvent**(*event*: Object{; *options*: Object}) : Object
+**Google.calendar.createEvent**(*event*: Object{; *param*: Object}) : Object
 
 #### Parameters
 
 | Parameter | Type   |  | Description|                                                                                                                                                                 
 | -------- | ------ | --- |--------------------------- |
 |event | Object | ->|Object containing details of the calendar [event](#event-object) to create |
-|options | Object | -> | Object containing additional creation options | 
+|param | Object | -> | Object containing additional creation options | 
 |Result|Object|<-|[Status object](#status-object-google-class)|
 
 #### Description
 
 `Google.calendar.createEvent()` creates a new calendar event.
 
-In *event*, you must include the following required properties:
+In *event*, pass an [event](#event-object) object to create. Only `start` and `end` properties are required.
 
-| Property     | Type   | Description |
-|--------------|--------|-------------|
-| start | Object | Start time of the event. |
-| end | Object | End time of the event. |
-
-And in *options*, you can pass the following additional optional properties:
+In *param*, you can pass the following additional optional properties:
 
 |Property|Type|Description|
 |---------|--- |------|
 |sendUpdates|String|Defines who should receive email notifications about the event. Acceptable values:<br>• `"all"` – Notify all attendees.<br>• `"externalOnly"` – Notify only non-Google users.<br>• `"none"` – No notifications sent.| 
-|supportsAttachments|Boolean| Indicates whether the API client supports attachments. Must be `true` to create or modify the `attachments` property. Defaults to `false`  |
+|supportsAttachments|Boolean| Indicates whether the API client supports attachments. Must be `true` to create or modify the [`attachments`](#attachment-object-google) property. Defaults to `false`  |
 
 #### Returned Object
 
@@ -367,7 +362,7 @@ The method returns a [**status object**](status-object-google-class) with an add
 
 |Property|Type|Description|
 |---------|--- |------|
-|event|Object|Event object returned by the server|
+|event|Object|[Event object](#event-object) returned by the server|
 |success|Boolean| [see Status object](#status-object-google-class)|
 |statusText|Text| [see Status object](#status-object-google-class)|
 |errors|Collection| [see Status object](#status-object-google-class)|
@@ -399,29 +394,23 @@ End if
 
 ### Google.calendar.updateEvent()
 
-**Google.calendar.updateEvent**(*event*: Object{; *options*: Object}) : Object
+**Google.calendar.updateEvent**(*event*: Object{; *param*: Object}) : Object
 
 #### Parameters
 
 | Parameter | Type   | | Description|                                                                          
 | -------- | ----- | -------- | --------------- |
 |event |Object|->| Object containing details of the calendar [event](#event-object) to update. |
-|options |Object|->| Object containing additional update options. | 
+|param |Object|->| Object containing additional update options. | 
 |Result | Object | <-| [Status object](#status-object-google-class) |
 
 #### Description
 
 `Google.calendar.updateEvent()` updates an existing event.
- 
-In *event*, you must include the following required properties:
 
-| Property | Type   | Description |
-|----------|--------|-------------|
-| id | Text   | ID of the event to update. |
-| start | Object | Start time of the event. |
-| end | Object | End time of the event. |
+In *event*, pass an [event](#event-object) object to create. `start`, `end` and `id` properties are required.
 
-And in *options*, you can pass the following additional optional properties:
+And in *param*, you can pass the following additional optional properties:
 
 | Property | Type    | Description |
 |------------|---------|-------------|
@@ -435,7 +424,7 @@ The method returns a [**status object**](status-object-google-class) with an add
 
 |Property|Type|Description|
 |---------|--- |------|
-|event|Object|Updated event object returned by the server|
+|event|Object|Updated [event object](#event-object) returned by the server|
 |success|Boolean| [see Status object](#status-object-google-class)|
 |statusText|Text| [see Status object](#status-object-google-class)|
 |errors|Collection| [see Status object](#status-object-google-class)|
@@ -501,6 +490,11 @@ Delete a calendar event:
 var $Google:=cs.NetKit.Google.new($Oauth)
 
 $status:=$google.calendar.deleteEvent({eventId: $event.id})
+If ($result.success)
+  ALERT("Event correctly deleted")
+Else
+  ALERT($result.statusText)
+End if
 ```
 
 ### Event object
@@ -513,7 +507,7 @@ The `event` object used with Google Calendar methods includes the following prop
 | calendarId | | Text | Calendar ID. If not provided, the user's primary calendar is used. Use `Google.calendar.getCalendars()` to retrieve IDs.|                                       
 | attachments | | Collection | File [attachments](#attachment-object-google) (max 25). To use this, `supportsAttachments` must be set to `true` in the request.| 
 | attendees| | Collection | List of attendees.  |
-| | email | String | **Required.** Email address of the attendee. |
+| | email | String | Required in `param` parameter. Email address of the attendee. |
 | | displayName | String | Name of the attendee. |
 | | comment| String | The attendee’s response comment. |
 | | optional| Boolean  | (Default: false) Whether the attendee is optional.|
@@ -531,15 +525,16 @@ The `event` object used with Google Calendar methods includes the following prop
 | | dateTime | Text |Combined date and time in RFC3339 format. A time zone offset is required unless `timeZone` is specified. Overrides `date` and `time`.(not used for all-day events). |
 | | timeZone | String | Time zone for the `dateTime`, using IANA format (e.g., `"Europe/Zurich"`). Defaults to UTC if not provided. |
 | eventType | | Text       | Specific type of the event (Cannot be changed after creation). <br> Possible values: `"default"`, `"birthday"`, `"focusTime"`, `"outOfOffice"`, etc.|
-| extendedProperties.private | | Object     | [Custom key-value pairs](https://developers.google.com/calendar/api/v3/reference/events#extendedProperties)  only visible to the event owner to store additional information (e.g; `"internalNote": "Discuss Q3 targets"`)|                                                                                                               | extendedProperties.shared | | Object     | [Custom key-value pairs](https://developers.google.com/calendar/api/v3/reference/events#extendedProperties) shared with all attendees to share additional notes or tags (e.g., `"projectCode": "XYZ123"`).|                                                                                                                         
+| extendedProperties.private | | Object     | [Custom key-value pairs](https://developers.google.com/calendar/api/v3/reference/events#extendedProperties)  only visible to the event owner to store additional information (e.g; `"internalNote": "Discuss Q3 targets"`)|
+| extendedProperties.shared | | Object     | [Custom key-value pairs](https://developers.google.com/calendar/api/v3/reference/events#extendedProperties) shared with all attendees to share additional notes or tags (e.g., `"projectCode": "XYZ123"`).|                                                                                                                         
 | focusTimeProperties| | Object     | [Focus Time event-specific settings](https://developers.google.com/calendar/api/v3/reference/events#focustimeproperties). Used when `eventType` is `"focusTime"`.|
 | guestsCanInviteOthers | | Boolean    | (Default: true) If attendees can invite guests. |
 | guestsCanModify  | | Boolean    | (Default: false) If attendees can edit the event. |  
 | guestsCanSeeOtherGuests| | Boolean    | (Default: true) If attendees can see each other.| 
 | location | | Text       | Event location.|                                                                                                                                              
-| recurrence\[] | | List       | List of ***RRULE**( the main rule (e.g., FREQ=WEEKLY;BYDAY=MO))/**EXRULE**(exceptions to the rule)/**RDATE**(specific additional dates to include)/**EXDATE**(specific dates to exclude)* rules for repeating events using [RFC5545](https://www.rfc-editor.org/rfc/rfc5545) format. Does not include start/end times, use the `start` and `end` for that. Omit this field for one-time events. |                                                                       
+| recurrence\[] | | Collection       | List of rules for repeating events using [RFC5545](https://www.rfc-editor.org/rfc/rfc5545) format (RRULE/EXRULE/RDATE/EXDATE (e.g., FREQ=WEEKLY;BYDAY=MO)). Does not include start/end times, use the `start` and `end` for that. Omit this field for one-time events. |                                                                       
 | reminders.useDefault | | Boolean    | Whether to use the calendar’s default reminders.| 
-| reminders.overrides\[] | | List       | Custom reminders.|
+| reminders.overrides\[] | | Collection       | Custom reminders.|
 | | method | String  | **Required**. Method of the reminder: "email" or "popup"|
 | | minutes | Integer  | **Required**. Time before event (in minutes) when reminder should trigger. Between 0 and 40320.|
 | 	reminders.useDefault | | Boolean  | Whether the default reminders of the calendar apply to the event.|  
@@ -781,14 +776,14 @@ A `mailLabel` object contains the following properties (note that additional inf
 
 ### Google.mail.getMail()
 
-**Google.mail.getMail**( *mailID* : Text { ; *options* : Object } ) : Object<br/>**Google.mail.getMail**( *mailID* : Text { ; *options* : Object } ) : Blob<br/>
+**Google.mail.getMail**( *mailID* : Text { ; *param* : Object } ) : Object<br/>**Google.mail.getMail**( *mailID* : Text { ; *param* : Object } ) : Blob<br/>
 
 #### Parameters
 
 |Parameter|Type||Description|
 |---------|--- |:---:|------|
 |mailID|Text|->|ID of the message to retrieve |
-|options|Object|->|Options |
+|param|Object|->|Options for the message to retrieve|
 |Result|Object &#124; Blob|<-| Downloaded mail|
 
 
@@ -796,7 +791,7 @@ A `mailLabel` object contains the following properties (note that additional inf
 
 `Google.mail.getMail()` gets the specified message from the user's mailbox.
 
-In *options*, you can pass several properties:
+In *param*, you can pass several properties:
 
 |Property|Type|Description|
 |---------|--- |------|
@@ -819,20 +814,20 @@ The method returns a mail in one of the following formats, depending on the `mai
 
 ### Google.mail.getMailIds()
 
-**Google.mail.getMailIds**( { *options* : Object } ) : Object
+**Google.mail.getMailIds**( { *param* : Object } ) : Object
 
 #### Parameters
 
 |Parameter|Type||Description|
 |---------|--- |:---:|------|
-|options|Object|->|Options for messages to get |
+|param|Object|->|Options for messages to get |
 |Result|Object|<-| Status object |
 
 #### Description
 
 `Google.mail.getMailIds()` returns an object containing a collection of message ids in the user's mailbox.
 
-In *options*, you can pass several properties:
+In *param*, you can pass several properties:
 
 |Property|Type|Description|
 |---------|--- |------|
@@ -871,14 +866,14 @@ https://www.googleapis.com/auth/gmail.metadata
 
 ### Google.mail.getMails()
 
-**Google.mail.getMails**( *mailIDs* : Collection { ; *options* : Object } ) : Collection
+**Google.mail.getMails**( *mailIDs* : Collection { ; *param* : Object } ) : Collection
 
 #### Parameters
 
 |Parameter|Type||Description|
 |---------|--- |:---:|------|
 |mailIDs|Collection|->|Collection of strings (mail IDs), or a collection of objects (each object contains an ID property)|
-|options|Object|->|Options|
+|param|Object|->|Options|
 |Result|Collection|<-|Collection of mails in format depending on *mailType*: JMAP (collection of objects) or MIME (collection of blobs)</br>If no mail is returned, the collection is empty|
 
 
@@ -888,7 +883,7 @@ https://www.googleapis.com/auth/gmail.metadata
 
 > The maximum number of IDs supported is 100. In order to get more than 100 mails, it's necessary to call the function multiple times; otherwise, the `Google.mail.getMails()` function returns null and throws an error.
 
-In *options*, you can pass several properties:
+In *param*, you can pass several properties:
 
 |Property|Type|Description|
 |---------|--- |------|
@@ -973,14 +968,14 @@ https://www.googleapis.com/auth/gmail.modify
 
 ### Google.mail.update()
 
-**Google.mail.update**( *mailIDs* : Collection ; *options* : Object) : Object
+**Google.mail.update**( *mailIDs* : Collection ; *param* : Object) : Object
 
 #### Parameters
 
 |Parameter|Type||Description|
 |---------|--- |:---:|------|
 |mailIDs|Collection|->|Collection of strings (mail IDs), or collection of objects (each object contains an ID property)|
-|options|Object|->|Options|
+|param|Object|->|Options|
 |Result|Object|<-| [Status object](#status-object-google-class) |
 
 > There is a limit of 1000 IDs per request.
@@ -991,7 +986,7 @@ https://www.googleapis.com/auth/gmail.modify
 
 For more information check out the [label management documentation](https://developers.google.com/gmail/api/guides/labels).
 
-In *options*, you can pass the following two properties:
+In *param*, you can pass the following two properties:
 
 |Property|Type|Description|
 |---------|--- |------|
@@ -1268,13 +1263,13 @@ var $currentUser2:=$google.user.getCurrent("phoneNumbers")
 
 ### Google.user.list()
 
-**Google.user.list**( { *options* : Object } ) : Object
+**Google.user.list**( { *param* : Object } ) : Object
 
 #### Parameters
 
 |Parameter|Type||Description|
 |---------|--- |:---:|------|
-|options|Object|->|A set of options defining how to retrieve and filter user data|
+|param|Object|->|A set of options defining how to retrieve and filter user data|
 |Result|Object|<-|An object containing a structured collection of [user](https://developers.google.com/people/api/rest/v1/people#Person) data organized into pages|
 
 #### Description
@@ -1283,7 +1278,7 @@ var $currentUser2:=$google.user.getCurrent("phoneNumbers")
 
 > If the contact sharing or the External Directory sharing is not allowed in the Google admin, the returned `users` collection is empty.
 
-In *options*, you can pass the following properties:
+In *param*, you can pass the following properties:
 
 |Property|Type|Description|
 |---------|--- |------|

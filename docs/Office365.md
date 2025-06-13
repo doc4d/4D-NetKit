@@ -21,7 +21,7 @@ The `Office365` class can be instantiated in two ways:
 
 * [New Office365 provider](#new-office365-provider)
 
-###  [Calendar](#calendar) 
+###  [Calendar](#calendar-1) 
 
 * [Office365.calendar.getCalendar()](#office365calendargetcalendar)
 * [Office365.calendar.getCalendars()](#office365calendargetcalendars)
@@ -33,7 +33,7 @@ The `Office365` class can be instantiated in two ways:
 * [Office365.category.list()](#office365categorylist)
 * [Event object](#event-object)
 
-###  [Mail](#mail) 
+###  [Mail](#mail-1) 
 
 * [Office365.mail.send()](#office365mailsend)
 * [Office365.mail.append()](#office365mailappend)
@@ -52,7 +52,7 @@ The `Office365` class can be instantiated in two ways:
 * [Well-known folder names](#well-known-folder-names)
 * ["Microsoft" mail object properties](#microsoft-mail-object-properties)
 
-### [User](#user) 
+### [User](#user-1) 
 
 * [Office365.user.get()](#office365userget)
 * [Office365.user.getCurrent()](#office365usergetcurrent)
@@ -65,14 +65,14 @@ The `Office365` class can be instantiated in two ways:
 
 ## **New Office365 provider**
 
-**New Office365 provider**( *paramObj* : Object { ; *options* : Object } ) : cs.NetKit.Office365
+**New Office365 provider**( *paramObj* : Object { ; *param* : Object } ) : cs.NetKit.Office365
 
 ### Parameters
 
 |Parameter|Type||Description|
 |---------|--- |:---:|------|
 |paramObj|cs.NetKit.OAuth2Provider|->| Object of the OAuth2Provider class  |
-|options|Object|->| Additional options |
+|param|Object|->| Additional options |
 |Result|cs.NetKit.Office365|<-| Object of the Office365 class|
 
 ### Description
@@ -81,7 +81,7 @@ The `Office365` class can be instantiated in two ways:
 
 In `paramObj`, pass an [OAuth2Provider object](#new-auth2-provider).
 
-In `options`, you can pass an object that specifies the following options:
+In `param`, you can pass an object that specifies the following options:
 
 |Property|Type|Description|
 |---------|---|------|
@@ -334,7 +334,7 @@ The method returns a [**status object**](#status-object-microsoft-class) with an
 
 | Property   | Type   | Description|                                         
 | -------- | ---------- | ----------------------------------- |
-| event| Object | Event object returned by the server                 |
+| event| Object | [Event object](#event-object) returned by the server                 |
 | success | Boolean| See [Status object](#status-object-microsoft-class) |
 | statusText | Text| See [Status object](#status-object-microsoft-class) |
 | errors  | Collection | See [Status object](#status-object-microsoft-class) |
@@ -388,9 +388,8 @@ End if
 
 `Office365.calendar.updateEvent()` updates an existing calendar event.
 
-> **Notes**: 
-> When using `Office365.calendar.updateEvent()`, you only need to include the fields you want to update.
-> Any property you leave out will keep its current value, unless it needs to be recalculated due to changes in related fields (e.g., updating recurrence may affect dates).
+> **Note**: 
+ When using `Office365.calendar.updateEvent()`, you only need to include the fields you want to update. Any property you leave out will keep its current value, unless it needs to be recalculated due to changes in related fields (e.g., updating recurrence may affect dates).
 
 You can update the following properties:
 
@@ -422,7 +421,7 @@ The method returns a [**status object**](#status-object-office365-class) with an
 
 | Property   | Type       | Description                                         |
 | ---------- | ---------- | --------------------------------------------------- |
-| event      | Object     | Updated event object returned by the server         |
+| event      | Object     | Updated [event object](#event-object) returned by the server         |
 | success    | Boolean    | [see Status object](#status-object-office365-class) |
 | statusText | Text       | [see Status object](#status-object-office365-class) |
 | errors     | Collection | [see Status object](#status-object-office365-class) |
@@ -509,6 +508,12 @@ var $oAuth2 : cs.NetKit.OAuth2Provid
 var $Office365 : cs.NetKit.Office365
 
 $status:=$office365.calendar.deleteEvent({eventId: $event.event.id})
+If ($result.success)
+  ALERT("Event correctly deleted")
+Else
+  ALERT($result.statusText)
+End if
+
 ```
 
 ### Office365.category.list()
@@ -581,7 +586,7 @@ The `event` object used with Microsoft Calendar methods includes the following p
 | calendarId |    | Text  | Calendar ID. If not provided, the user's primary calendar is used.   |
 | attachments| | Collection | Event file attachments.|                                                                                     
 | attendees |   | Collection | List of attendees.|                                                                                          
-|  | emailAddress | Text       | **Required.** Attendee’s email address.|                                                                     
+|  | emailAddress | Text       |  Required in `param` parameter. Attendee’s email address.|                                                                     
 | | type         | Text       | Attendee role: `"required"`, `"optional"`, or `"resource"`.|                                                 
 | body | | Object |Body of the message associated with the event.|                                                                  
 | | content      | Text       | Content of the body|                                                                                     
@@ -868,18 +873,18 @@ The method returns a **mailFolder** object containing the following properties (
 
 ### Office365.mail.getFolderList()
 
-**Office365.mail.getFolderList**( *options* : Object ) : Object
+**Office365.mail.getFolderList**( *param* : Object ) : Object
 
 #### Parameters
 
 |Parameter|Type||Description|
 |---------|--- |:---:|------|
-|options|Object|->| Description of folders to get|
+|param|Object|->| Description of folders to get|
 |Result|Object|<-| Status object that contains folder list and other information|
 
 `Office365.mail.getFolderList()` allows you to get a mail folder collection of the signed-in user.
 
-In *options*, pass an object to define the folders to get. The available properties for that object are (all properties are optional):
+In *param*, pass an object to define the folders to get. The available properties for that object are (all properties are optional):
 
 | Property | Type | Description |
 |---|---|---|
@@ -950,23 +955,23 @@ $subfolders:=$office365.mail.getFolderList($result.folders[8].id)
 
 ### Office365.mail.getMail()
 
-**Office365.mail.getMail**( *mailId* : Text { ; *options* : Object } ) : Object<br/>**Office365.mail.getMail**( *mailId* : Text { ; *options* : Object } ) : Blob
+**Office365.mail.getMail**( *mailId* : Text { ; *param* : Object } ) : Object<br/>**Office365.mail.getMail**( *mailId* : Text { ; *param* : Object } ) : Blob
 
 #### Parameters
 
 |Parameter||Type||Description|
 |-----|----|--- |:---:|------|
 |mailId||Text|->| Id of the mail to get|
-|options||Object|->|Format options for the returned mail object|
+|param||Object|->|Format options for the returned mail object|
 ||mailType|Text|| Type of the mail object to return. Available values: <br/>- "MIME"<br/>- "JMAP"<br/>- "Microsoft" (default)<br/>By default if omitted, the same format as the [`mail.type` property](#new-office365-provider) is used|
 ||contentType|Text|| Format of the `body` and `uniqueBody` properties to be returned. Available values: <br/>- "text"<br/>- "html" (default)|
 |Result||Blob &#124; Object|<-| Downloaded mail|
 
 `Office365.mail.getMail()` allows you to get a single mail from its *mailId*.
 
-By default, the mail is returned with its original format, as defined in the [`mail.type` property of the provider](#new-office365-provider). However, you can convert it to any type using the `mailType` property of the *options* parameter.   
+By default, the mail is returned with its original format, as defined in the [`mail.type` property of the provider](#new-office365-provider). However, you can convert it to any type using the `mailType` property of the *param* parameter.   
 
-You can also select the preferred format of the `body` and `uniqueBody` properties of the returned mail using the `contentType` property of the *options* parameter.
+You can also select the preferred format of the `body` and `uniqueBody` properties of the returned mail using the `contentType` property of the *param* parameter.
 
 The data type of the function result depends on the mail type:
 
@@ -1002,20 +1007,20 @@ $mail:=$office.mail.getMail($mailId)
 
 ### Office365.mail.getMails()
 
-**Office365.mail.getMails**( *options* : Object ) : Object
+**Office365.mail.getMails**( *param* : Object ) : Object
 
 #### Parameters
 
 |Parameter|Type||Description|
 |---------|--- |:---:|------|
-|options|Object|->| Description of mails to get|
+|param|Object|->| Description of mails to get|
 |Result|Object|<-| Status object that contains mail list and other information|
 
 `Office365.mail.getMails()` allows you to get messages in the signed-in user's mailbox (for detailed information, please refer to the [Microsoft's documentation website](https://learn.microsoft.com/en-us/graph/api/user-list-messages?view=graph-rest-1.0&tabs=http)).  
 
 This method returns mail bodies in HTML format only.
 
-In *options*, pass an object to define the mails to get. The available properties for that object are (all properties are optional):
+In *param*, pass an object to define the mails to get. The available properties for that object are (all properties are optional):
 
 | Property | Type | Description |
 |---|---|---|
@@ -1527,20 +1532,20 @@ principalName,displayName,givenName,mail")
 
 ### Office365.user.list()
 
-**Office365.user.list**({*options*: Object}) : Object
+**Office365.user.list**({*param*: Object}) : Object
 
 #### Parameters
 
 |Parameter|Type||Description|
 |---------|--- |:---:|------|
-|options|Object|->| Additional options for the search|
+|param|Object|->| Additional options for the search|
 |result|Object|<-| Object holding a collection of users and additional info on the request|
 
 #### Description
 
 `Office365.user.list()` returns a list of Office365 users.
 
-In *options*, you can pass an object to specify additional search options. The following table groups the available search options:
+In *param*, you can pass an object to specify additional search options. The following table groups the available search options:
 
 | Property | Type | Description |
 |---|---|---|
