@@ -533,11 +533,10 @@ The `event` object used with Google Calendar methods includes the following prop
 | guestsCanSeeOtherGuests| | Boolean    | (Default: true) If attendees can see each other.| 
 | location | | Text       | Event location.|                                                                                                                                              
 | recurrence\[] | | Collection       | List of rules for repeating events using [RFC5545](https://www.rfc-editor.org/rfc/rfc5545) format (RRULE/EXRULE/RDATE/EXDATE (e.g., FREQ=WEEKLY;BYDAY=MO)). Does not include start/end times, use the `start` and `end` for that. Omit this field for one-time events. |                                                                       
-| reminders.useDefault | | Boolean    | Whether to use the calendar’s default reminders.| 
 | reminders.overrides\[] | | Collection       | Custom reminders.|
 | | method | String  | **Required**. Method of the reminder: "email" or "popup"|
 | | minutes | Integer  | **Required**. Time before event (in minutes) when reminder should trigger. Between 0 and 40320.|
-| 	reminders.useDefault | | Boolean  | Whether the default reminders of the calendar apply to the event.|  
+| reminders.useDefault | | Boolean    | Whether to use the calendar’s default reminders for the event.| 
 | source.title | | Text       | Title of the source linked to the event, such as a web page or email subject.|  
 | source.url | | Text       | URL of the source linked to the event (must use `http` or `https`).| 
 | status | | Text       |Describes the event's current state. <br> Possible values: `"confirmed"` (default) `"tentative"`, or `"cancelled"`.| 
