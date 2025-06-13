@@ -584,7 +584,7 @@ The `event` object used with Microsoft Calendar methods includes the following p
 | -------- | -- | ----- | ----------------------- |
 | id             |   | Text    | ID for the event. Case-sensitive and read-only. May change if the event is moved to another calendar or folder. Use [`Prefer: IdType="ImmutableId"`](https://learn.microsoft.com/en-us/graph/outlook-immutable-id) to preserve it. |
 | calendarId |    | Text  | Calendar ID. If not provided, the user's primary calendar is used.   |
-| attachments| | Collection | Event file attachments.|                                                                                     
+| attachments| | Collection | Event file [attachments](#attachment-object).|                                                                                     
 | attendees |   | Collection | List of attendees.|                                                                                          
 |  | emailAddress | Text       |  Required in `param` parameter. Attendee’s email address.|                                                                     
 | | type         | Text       | Attendee role: `"required"`, `"optional"`, or `"resource"`.|                                                 
