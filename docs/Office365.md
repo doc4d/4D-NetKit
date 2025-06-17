@@ -561,11 +561,11 @@ End if
 ```  
 ### Event object
 
-The `event` object used with Microsoft Calendar methods includes the following properties:
+The `event` object used with Microsoft Calendar methods includes the following properties. For the full list, refer to the [official Microsoft documentation](https://learn.microsoft.com/en-us/graph/api/resources/event?view=graph-rest-1.0)
 
 | Property  |   | Type  | Description| Updatable |                                                                                                 
 | -------- | -- | ----- | ----------------------- |-----------|
-| id             |   | Text    | ID for the event. Case-sensitive and read-only. May change if the event is moved to another calendar or folder. Use [`Prefer: IdType="ImmutableId"`](https://learn.microsoft.com/en-us/graph/outlook-immutable-id) to preserve it. |         |
+| id             |   | Text    | ID for the event. Case-sensitive and read-only. |         |
 | calendarId |    | Text  | Calendar ID. If not provided, the user's primary calendar is used.   |         |
 | attachments| | Collection | Event file [attachments](#attachment-object).|          |                                                                                    
 | attendees |   | Collection | List of attendees.|Yes|                                                                                          
