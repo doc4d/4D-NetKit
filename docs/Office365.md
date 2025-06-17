@@ -561,7 +561,7 @@ End if
 ```  
 ### Event object
 
-The `event` object used with Microsoft Calendar methods includes the following properties. For the full list, refer to the [official Microsoft documentation](https://learn.microsoft.com/en-us/graph/api/resources/event?view=graph-rest-1.0)
+The `event` object used with Microsoft Calendar methods includes the following properties:
 
 | Property  |   | Type  | Description| Updatable |                                                                                                 
 | -------- | -- | ----- | ----------------------- |-----------|
@@ -602,6 +602,8 @@ The `event` object used with Microsoft Calendar methods includes the following p
 | subject | | Text | Event title or subject line.| Yes |                                                                                     
 | allowNewTimeProposals | | Boolean    | (Default: true) Whether attendees can propose a new time.|         |                                                
 | hideAttendees  | | Boolean    | (Default: false) If `true`, attendees will only see themselves.|Yes|                                                             
+
+For the full list, refer to the [official Microsoft documentation](https://learn.microsoft.com/en-us/graph/api/resources/event?view=graph-rest-1.0).
 
 ## Mail 
  

@@ -543,6 +543,7 @@ The `event` object used with Google Calendar methods includes the following prop
 | summary | | Text  | Title of the event.| 
 | transparency | | Text       | Whether the event blocks time on the calendar. Values: `"opaque"` (busy) or `"transparent"` (available).|
 | visibility | | Text       | Visibility level: `"default"`, `"public"`, `"private"`, or `"confidential"`.|                                                                                           
+For the full list, refer to the [official Google Calendar API documentation](https://developers.google.com/calendar/api/v3/reference/events#resource).
 
 ## Mail
 
