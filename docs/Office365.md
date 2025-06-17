@@ -542,65 +542,66 @@ One of the following permissions is required:
 #### Example
 
 ```4d
-var $oAuth2 : cs.NetKit.OAuth2Provid 
+var $oAuth2 : cs.NetKit.OAuth2Provid
 var $Office365 : cs.NetKit.Office365
 var $result : Object
-ARRAY TEXT($toDisplay; 0)
-
+var $toDisplay : Collection
+ 
 $result:=$o365.category.list()
+$toDisplay:=[]
+ 
 If (Not($result.success))
-  ALERT($result.statusText)
-Else
-  // Process the category list
-  For each ($category; $result.categories)
-    APPEND TO ARRAY($toDisplay; $category.displayName)
-  End for each
+	ALERT($result.statusText)
+Else 
+	// Process the category list
+	For each ($category; $result.categories)
+		$toDisplay.push($category.displayName)
+	End for each 
 End if
 ```  
-
 ### Event object
 
 The `event` object used with Microsoft Calendar methods includes the following properties:
 
-| Property  |   | Type  | Description|                                                                                                 
-| -------- | -- | ----- | ----------------------- |
-| id             |   | Text    | ID for the event. Case-sensitive and read-only. May change if the event is moved to another calendar or folder. Use [`Prefer: IdType="ImmutableId"`](https://learn.microsoft.com/en-us/graph/outlook-immutable-id) to preserve it. |
-| calendarId |    | Text  | Calendar ID. If not provided, the user's primary calendar is used.   |
-| attachments| | Collection | Event file [attachments](#attachment-object).|                                                                                     
-| attendees |   | Collection | List of attendees.|                                                                                          
-|  | emailAddress | Text       |  Required. Attendee’s email address.|                                                                     
-| | type         | Text       | Attendee role: `"required"`, `"optional"`, or `"resource"`.|                                                 
-| body | | Object |Body of the message associated with the event.|                                                                  
-| | content      | Text       | Content of the body|                                                                                     
-| | contentType  | Text       | Type of the content. <br> Possible values: `"text"` or `"html"`.|                                                                                       
-| categories | | Collection | List of categories associated with the event. Must match the `displayName` of categories returned by [`Office365.category.list()`](#office365categorylist). |
-| start   |  | Object  | Start time of the event.|                                                                                    
-|  | date  | Date  | Start time of the event. If provided as text, use the format `"yyyy-mm-dd"`.|                                                     
-| | time  | Time| Start time (not used for all-day events).|                                                                   
-|  | dateTime  | Text   | Combined start date and time (`"yyyy-mm-ddThh:mm:ss"` format). Overrides `date` and `time`.                 |
-|  | timeZone     | Text | Time zone for the `dateTime`, using IANA format (e.g., `"Europe/Zurich"`). Defaults to UTC if not provided.|                                                               
-| end   | | Object     | End time of the event.|                                                                                      
-| | date         | Date       | End date of the event. If provided as text, use the format `"yyyy-mm-dd"`.|                                                       
-| | time         | Time       | End time (not used for all-day events).|                                                                     
-| | dateTime     | Text       | Combined end date and time (`"yyyy-mm-ddThh:mm:ss"` format). Overrides `date` and `time`.|                   
-| | timeZone     | Text | Time zone for the `dateTime`, using IANA format (e.g., `"Europe/Zurich"`). Defaults to UTC if not provided.| 
-| isAllDay   | | Boolean    | (Default: false) Set to `true` if it's an all-day event.|
-| isDraft        |   | Boolean |(Default: false) Set to `true` if changes have been made to the meeting but not yet sent to attendees.|                                                                         
-| isCancelled | | Boolean    | (Default: false) Whether the event is canceled.|                                                                              
-| isReminderOn| | Boolean    | (Default: false) Whether a reminder is set for the event.|                                                                    
-| isOnlineMeeting | | Boolean    | (Default: false) Set to `true` to create an online meeting. Once set, the event stays online and further changes to this setting are ignored.|                                                               
-| onlineMeetingProvider | | Text | Provider used: `"teamsForBusiness"`, `"skypeForBusiness"`, `"skypeForConsumer"`, etc.|                                                                                              
-| location  | | Object       | Event [location object](https://learn.microsoft.com/en-us/graph/api/resources/location?view=graph-rest-1.0).|                                                                                                                                                                    
-| reminderMinutesBeforeStart | | Integer    | Time in minutes before start to trigger reminder.|                                                                   
-| responseRequested  | | Boolean    | Whether a response is requested from attendees. Default is `true`.|
-| recurrence  |  | Object     | Recurrence pattern (e.g., daily, weekly) .|  
-| seriesMasterId |   | Text    | ID of the recurring series master event, if this event is part of a recurring series.                                                                                             |
-| importance | | Text | Event importance: `"low"`, `"normal"`, or `"high"`.|                                                                                                   
-| sensitivity | | Text       | Event sensitivity: `"normal"`, `"personal"`, `"private"`, `"confidential"`.|                                        
-| showAs|  | Text | Availability status: `busy`, `free`, etc.|             
-| subject | | Text | Event title or subject line.|                                                                                     
-| allowNewTimeProposals | | Boolean    | (Default: true) Whether attendees can propose a new time.|                                                
-| hideAttendees  | | Boolean    | (Default: false) If `true`, attendees will only see themselves.|                                                             
+| Property  |   | Type  | Description| Updatable |                                                                                                 
+| -------- | -- | ----- | ----------------------- |-----------|
+| id             |   | Text    | ID for the event. Case-sensitive and read-only. May change if the event is moved to another calendar or folder. Use [`Prefer: IdType="ImmutableId"`](https://learn.microsoft.com/en-us/graph/outlook-immutable-id) to preserve it. |         |
+| calendarId |    | Text  | Calendar ID. If not provided, the user's primary calendar is used.   |         |
+| attachments| | Collection | Event file [attachments](#attachment-object).|          |                                                                                    
+| attendees |   | Collection | List of attendees.|Yes|                                                                                          
+|  | emailAddress | Text       |  Required. Attendee’s email address.|         |                                                                     
+| | type         | Text       | Attendee role: `"required"`, `"optional"`, or `"resource"`.|         |                                                 
+| body | | Object |Body of the message associated with the event.| Yes |                                                                  
+| | content      | Text       | Content of the body|         |                                                                                     
+| | contentType  | Text       | Type of the content. <br> Possible values: `"text"` or `"html"`.|         |                                                                                       
+| categories | | Collection | List of categories associated with the event. Must match the `displayName` of categories returned by [`Office365.category.list()`](#office365categorylist). |Yes|
+| start   |  | Object  | Start time of the event.|Yes|                                                                                    
+|  | date  | Date  | Start time of the event. If provided as text, use the format `"yyyy-mm-dd"`.|         |                                                     
+| | time  | Time| Start time (not used for all-day events).|         |                                                                   
+|  | dateTime  | Text   | Combined start date and time (`"yyyy-mm-ddThh:mm:ss"` format). Overrides `date` and `time`.                 |         |
+|  | timeZone     | Text | Time zone for the `dateTime`, using IANA format (e.g., `"Europe/Zurich"`). Defaults to UTC if not provided.|          |                                                              
+| end   | | Object     | End time of the event.|Yes|                                                                                      
+| | date         | Date       | End date of the event. If provided as text, use the format `"yyyy-mm-dd"`.|         |                                                       
+| | time         | Time       | End time (not used for all-day events).|         |                                                                     
+| | dateTime     | Text       | Combined end date and time (`"yyyy-mm-ddThh:mm:ss"` format). Overrides `date` and `time`.|         |                   
+| | timeZone     | Text | Time zone for the `dateTime`, using IANA format (e.g., `"Europe/Zurich"`). Defaults to UTC if not provided.|         | 
+| isAllDay   | | Boolean    | (Default: false) Set to `true` if it's an all-day event.|Yes|
+| isDraft        |   | Boolean |(Default: false) Set to `true` if changes have been made to the meeting but not yet sent to attendees.|         |                                                                         
+| isCancelled | | Boolean    | (Default: false) Whether the event is canceled.|         |                                                                              
+| isReminderOn| | Boolean    | (Default: false) Whether a reminder is set for the event.| Yes |                                                                    
+| isOnlineMeeting | | Boolean    | (Default: false) Set to `true` to create an online meeting. Once set, the event stays online and further changes to this setting are ignored.|Yes|                                                               
+| onlineMeetingProvider | | Text | Provider used: `"teamsForBusiness"`, `"skypeForBusiness"`, `"skypeForConsumer"`, etc.|Yes |                                                                                           
+|location| | Object| Event [location object](https://learn.microsoft.com/en-us/graph/api/resources/location?view=graph-rest-1.0).|Yes |                                                                                                                                                                    
+| reminderMinutesBeforeStart | | Integer    | Time in minutes before start to trigger reminder.|Yes |                                                                   
+| responseRequested  | | Boolean    | Whether a response is requested from attendees. Default is `true`.|Yes |
+| recurrence  |  | Object     | [Recurrence pattern](https://learn.microsoft.com/en-us/graph/api/resources/recurrencepattern?view=graph-rest-1.0) (e.g., daily, weekly) .| Yes | 
+| seriesMasterId |   | Text    | ID of the recurring series master event, if this event is part of a recurring series. |         |
+| importance | | Text | Event importance: `"low"`, `"normal"`, or `"high"`.|Yes |                                                                                                   
+| sensitivity | | Text       | Event sensitivity: `"normal"`, `"personal"`, `"private"`, `"confidential"`.| Yes |                                        
+| showAs|  | Text | Availability status: `busy`, `free`, etc.| Yes |             
+| subject | | Text | Event title or subject line.| Yes |                                                                                     
+| allowNewTimeProposals | | Boolean    | (Default: true) Whether attendees can propose a new time.|         |                                                
+| hideAttendees  | | Boolean    | (Default: false) If `true`, attendees will only see themselves.|Yes|                                                             
 
 ## Mail 
  
