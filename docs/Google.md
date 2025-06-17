@@ -354,7 +354,7 @@ In *param*, you can pass the following additional optional properties:
 |Property|Type|Description|
 |---------|--- |------|
 |sendUpdates|String|Defines who should receive email notifications about the event. Acceptable values:<br>• `"all"` – Notify all attendees.<br>• `"externalOnly"` – Notify only non-Google users.<br>• `"none"` – No notifications sent.| 
-|supportsAttachments|Boolean| Indicates whether the API client supports attachments. Must be `true` to create or modify the [`attachments`](#attachment-object-google) property. Defaults to `false`  |
+|supportsAttachments|Boolean| `true` to allow creation or modification of the [`attachments`](#attachment-object-google) property. Defaults to `false`  |
 
 #### Returned Object
 
@@ -415,7 +415,7 @@ And in *param*, you can pass the following additional optional properties:
 | Property | Type    | Description |
 |------------|---------|-------------|
 | sendUpdates | String  | Defines who should receive email notifications about the update. Acceptable values:<br>• `"all"` – Notify all attendees.<br>• `"externalOnly"` – Notify only non-Google users.<br>• `"none"` – No notifications sent. |
-| supportsAttachments | Boolean | Indicates whether the API client supports attachments. Must be `true` to modify the [`attachments`](#attachment-object-google) property. Defaults to `false`. |
+| supportsAttachments | Boolean | `true` to allow creation or modification of the [`attachments`](#attachment-object-google) property. Defaults to `false`. |
 | fullUpdate | Boolean | If `true`, the full event is replaced. If `false` (default), only specified fields are updated. | 
 
 #### Returned Object
