@@ -362,12 +362,8 @@ var $event; $result : Object
 
 $event:={}
 $event.subject:="Team Sync"
-$event.start:={}
-$event.start.date:=Current date
-$event.start.time:=Current time
-$event.end:={}
-$event.end.date:=Current date
-$event.end.time:=Current time+3600
+$event.start:={date: Current date; time: Current time}
+$event.end:={date: Current date; time: Current time+3600}
 $event.attendees:=[{email: "first.lastname@gmail.com"}]
 
 $result:=$Office365.calendar.createEvent($event)
@@ -430,13 +426,8 @@ var $result : Object
 
 $event.id:=$eventId
 $event.subject:="Updated Meeting Title"
-$event.start:={}
-$event.start.date:=Current date
-$event.start.time:=Current time
-$event.end:={}
-$event.end.date:=Current date
-$event.end.time:=Current time+3600
-$event.end.timeZone:="UTC"
+$event.start:={date: Current date; time: Current time}
+$event.end:={date: Current date; time: Current time+3600}
 
 $result:=$Office365.calendar.updateEvent($event)
 If (Not($result.success))

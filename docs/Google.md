@@ -377,12 +377,8 @@ var $event; $result : Object
 
 $event:={}
 $event.summary:="Team Meeting"
-$event.start:={}
-$event.start.date:=Current date
-$event.start.time:=Current time
-$event.end:={}
-$event.end.date:=Current date
-$event.end.time:=Current time+3600
+$event.start:={date: Current date; time: Current time}
+$event.end:={date: Current date; time: Current time+3600}
 $event.attendees:=[{email: "first.lastname@gmail.com"}]
 $event.description:="description of the event"
 
@@ -441,12 +437,8 @@ var $result : Object
 $event.id:=$eventId
 $event.summary:="Updated Event Title"
 $event.description:="Updated Event description"
-$event.start:={}
-$event.start.date:=Current date
-$event.start.time:=Current time
-$event.end:={}
-$event.end.date:=Current date
-$event.end.time:=Current time+3600
+$event.start:={date: Current date; time: Current time}
+$event.end:={date: Current date; time: Current time+3600}
 
 $result:=$Google.calendar.updateEvent($event)
 If (Not($result.success))
