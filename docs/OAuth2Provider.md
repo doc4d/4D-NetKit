@@ -66,8 +66,8 @@ The available properties of `paramObj` are:
 |  loginHint  | text | (Optional) This option can be used to inform the Google Authentication Server which user is attempting to authenticate if your application is aware of this information. By prefilling the email field in the sign-in form or by selecting the appropriate multi-login session, the server uses the hint to simplify the login flow either.<br/> Set the parameter value to a sub-identifier or email address that corresponds to the user's Google ID.                                                                                       |Yes|
 |  accessType | text | (Recommended) Indicates whether your application can refresh access tokens when the user is not present at the browser.<br/> Valid parameter values are online (default) and offline.<br/> Set the value to offline if your application needs to update access tokens when the user is not present at the browser. This is how access tokens are refreshed. This value instructs the Google authorization server to return a refresh token and an access token the first time that your application exchanges an authorization code for tokens. |Yes|
 | clientEmail | text | (mandatory, Google / service mode only)  email address of the service account used |No|
-| authenticationPage|text or file object|  A local file object (e.g., an HTML file) or a direct URL (e.g., `https://myapp.qodly.io/auth-success`) of the page to display in the web browser after successful authentication in signedIn mode. Can be a Qodly URL. If not provided, the default page is used.|Yes
-| authenticationErrorPage	|text or file object| A local file object or direct URL of the page to display in the web browser when authentication fails in signedIn mode. Can be a Qodly URL. If not provided, the default page is used.|Yes
+| authenticationPage|text or file object|  A local file object, local path or a direct URL of the page to display in the web browser after successful authentication in signedIn mode. Can be a Qodly URL. If not provided, the default page is used.|Yes
+| authenticationErrorPage	|text or file object| A local file object, local path or direct URL of the page to display in the web browser when authentication fails in signedIn mode. Can be a Qodly URL. If not provided, the default page is used.|Yes
 | PKCEEnabled |boolean| false by default. If true, PKCE is used for OAuth 2.0 authentication and token requests and is only usable for permission=”SignIn”. |Yes
 | PKCEMethod |text | "S256" by default. The only supported values for this parameter are "S256" or "plain". |Yes
 | thumbprint |text | Certificate thumbprint. Only usable with permission="Service" | Yes (No for certificate based authentication)
@@ -77,7 +77,7 @@ The available properties of `paramObj` are:
 
 If you want the .getToken() function to use the Assertion Framework described in the RFC 7521 to connect to the server, make sure to pass the `thumbprint` and `privateKey` properties. If `clientSecret`,  `thumbprint` and `privateKey` are present, the `thumbprint` is used by default and the RFC 7521 is used to connect. For more information, please refer to the [OAuth2.0 authentication using a certificate](#https://blog.4d.com/) blog post.
 
-**Note:**  If you use a local file object for `authenticationPage` or `authenticationErrorPage`, it and all its associated resources must be placed in the same folder.
+**Note:**  The `authenticationPage` or `authenticationErrorPage` and all the resources associated must be in the same folder.
 
 ### Web server for redirect URI
 
