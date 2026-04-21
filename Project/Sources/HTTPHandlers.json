@@ -1,0 +1,20 @@
+[
+	{
+		"class": "OAuth2Authorization",
+		"method": "getResponse",
+		"regexPattern": "/authorize",
+		"verbs": "get"
+	},
+	{
+		"class": "GraphNotificationHandler",
+		"method": "getResponse",
+		"regexPattern": "/\\$4dnk-graph-notification",
+		"verbs": "post"
+	},
+	{
+		"class": "GoogleNotificationHandler",
+		"method": "getResponse",
+		"regexPattern": "/\\$4dnk-google-notification",
+		"verbs": "post"
+	}
+]

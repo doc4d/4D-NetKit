@@ -6,7 +6,7 @@ The `Office365` class allows you to call the [Microsoft Graph API](https://docs.
 * get information from Office365 applications, such as user information
 * create, move or send emails
 
-This can be done after a valid token request, (see [OAuth2Provider object](#oauth2provider)).
+This can be done after a valid token request, (see [OAuth2Provider object](./OAuth2Provider.md#oauth2provider-class)).
 
 The `Office365` class can be instantiated in two ways:
 * by calling the `New Office365 provider` method
@@ -79,7 +79,7 @@ The `Office365` class can be instantiated in two ways:
 
 `New Office365 provider` instantiates an object of the `Office365` class.
 
-In `paramObj`, pass an [OAuth2Provider object](#new-auth2-provider).
+In `paramObj`, pass an [OAuth2Provider object](./OAuth2Provider.md#oauth2provider-class).
 
 In `param`, you can pass an object that specifies the following options:
 
@@ -113,7 +113,7 @@ $office365:=New Office365 provider($oAuth2;New object("mailType"; "Microsoft"))
 
 ### Example 2
 
-Refer to [this tutorial](#authenticate-to-the-microsoft-graph-api-in-service-mode) for an example of connection in Service mode.
+Refer to [this tutorial](../Tutorial.md#authenticate-to-the-microsoft-graph-api-in-service-mode) for an example of connection in Service mode.
 
 ## Calendar
 
@@ -322,7 +322,7 @@ var $events:=$office365.calendar.getEvents({calendarId: $myCalendar.id; top: 10}
 | Parameter | Type   |  | Description                                               |
 | --------- | ---- |---|------------------------- |
 | event | Object | -> | Object containing details of the calendar [event](#event-object) to create |
-| result| Object | <- | [Status object](#status-object-microsoft-class)|
+| result| Object | <- | [Status object](#status-object)|
 
 #### Description
 
@@ -332,14 +332,14 @@ In *event*, pass the properties you want to set for the event.
 
 #### Returned Object
 
-The function returns a [**status object**](#status-object-microsoft-class) with an additional `event` property:
+The function returns a [**status object**](#status-object) with an additional `event` property:
 
 | Property   | Type   | Description|                                         
 | -------- | ---------- | ----------------------------------- |
 | event| Object | [Event object](#event-object) returned by the server                 |
-| success | Boolean| See [Status object](#status-object-microsoft-class) |
-| statusText | Text| See [Status object](#status-object-microsoft-class) |
-| errors  | Collection | See [Status object](#status-object-microsoft-class) |
+| success | Boolean| See [Status object](#status-object) |
+| statusText | Text| See [Status object](#status-object) |
+| errors  | Collection | See [Status object](#status-object) |
 
 #### Permissions 
  
@@ -380,7 +380,7 @@ End if
 | Parameter | Type | | Description|                                                                                                             
 | --------- | ------ | ---- | ----------------------------- |
 | event     | Object | ->| Object containing the complete updated [event](#event-object). |
-| Result| Object | <-| [Status object](#status-object-office365-class)|                                                                         
+| Result| Object | <-| [Status object](#status-object)|                                                                         
 
 #### Description
 
@@ -395,14 +395,14 @@ To check the updatable properties, please refer to the [event object](#event-obj
 
 #### Returned Object
 
-The method returns a [**status object**](#status-object-office365-class) with an additional `event` property:
+The method returns a [**status object**](#status-object) with an additional `event` property:
 
 | Property   | Type       | Description                                         |
 | ---------- | ---------- | --------------------------------------------------- |
 | event      | Object     | Updated [event object](#event-object) returned by the server         |
-| success    | Boolean    | [see Status object](#status-object-office365-class) |
-| statusText | Text       | [see Status object](#status-object-office365-class) |
-| errors     | Collection | [see Status object](#status-object-office365-class) |
+| success    | Boolean    | [see Status object](#status-object) |
+| statusText | Text       | [see Status object](#status-object) |
+| errors     | Collection | [see Status object](#status-object) |
 
 #### Permissions 
  
@@ -444,7 +444,7 @@ End if
 | Parameter | Type   | Direction | Description                                                                                                         |
 | --------- | ------ | --------- | ------------------------------------------------------------------------------------------------------------------- |
 | param     | Object | ->  | Object containing details for the calendar [event](#event-object) to delete|
-| Result    | Object | <-  | [Status object](#status-object-office365-class)                                                                     |
+| Result    | Object | <-  | [Status object](#status-object)                                                                     |
 
 #### Description
 
@@ -460,7 +460,7 @@ In *param*, you can pass the following properties:
 
 #### Returned Object
 
-The method returns a [**status object**](#status-object-office365-class).
+The method returns a [**status object**](#status-object).
 
 #### Permissions
 
@@ -605,7 +605,7 @@ The `event` object used with Microsoft Calendar methods includes the following m
 |Parameter|Type||Description|
 |---------|--- |:---:|------|
 |email|Object|->| Microsoft message object to append|
-|folderId|Text|->| Id of the destination folder. Can be a folder id or a [Well-known folder name](#well-known-folder-name).|
+|folderId|Text|->| Id of the destination folder. Can be a folder id or a [Well-known folder name](#well-known-folder-names).|
 |Result|Object|<-| [Status object](#status-object)  |
 
 #### Description
@@ -646,7 +646,7 @@ $status:=$office365.mail.append($draft; $folder.id)
 |Parameter|Type||Description|
 |---------|--- |:---:|------|
 |mailId|Text|->| Id of the mail to copy|
-|folderId|Text|->| Id of the destination folder. Can be a folder id or a [Well-known folder name](#well-known-folder-name).|
+|folderId|Text|->| Id of the destination folder. Can be a folder id or a [Well-known folder name](#well-known-folder-names).|
 |Result|Object|<-| [Status object](#status-object)  |
 
 #### Description
@@ -686,7 +686,7 @@ $status:=$office365.mail.copy($mailId; $folderId)
 |---------|--- |:---:|------|
 |name|Text|->|Display name of the new folder|
 |isHidden|Boolean|->|True to create a hidden folder (Default is False)|
-|parentFolderId|Text|->|ID of the parent folder to get. Can be a folder id or a [Well-known folder name](#well-known-folder-name).|
+|parentFolderId|Text|->|ID of the parent folder to get. Can be a folder id or a [Well-known folder name](#well-known-folder-names).|
 |Result|Object|<-| [Status object](#status-object)  |
 
 `Office365.mail.getFolder()` creates a new folder named *name* and returns its ID in the [status object](#status-object).
@@ -778,7 +778,7 @@ End for each
 
 |Parameter|Type||Description|
 |---------|--- |:---:|------|
-|folderId|Text|->| ID of the folder to delete. Can be a folder id or a [Well-known folder name](#well-known-folder-name) if one exists.|
+|folderId|Text|->| ID of the folder to delete. Can be a folder id or a [Well-known folder name](#well-known-folder-names) if one exists.|
 |Result|Object|<-| [Status object](#status-object)  |
 
 #### Description
@@ -814,7 +814,7 @@ $status:=$office365.mail.deleteFolder($folderId)
 
 |Parameter|Type||Description|
 |---------|--- |:---:|------|
-|folderId|Text|->|ID of the folder to get. Can be a folder ID or a [Well-known folder name](#well-known-folder-name).|
+|folderId|Text|->|ID of the folder to get. Can be a folder ID or a [Well-known folder name](#well-known-folder-names).|
 |Result|Object|<-|mailFolder object|
 
 `Office365.mail.getFolder()` allows you to get a **mailFolder** object from its *folderId*.
@@ -862,7 +862,7 @@ In *param*, pass an object to define the folders to get. The available propertie
 
 | Property | Type | Description |
 |---|---|---|
-|folderId|text|Can be a folder id or a [Well-known folder name](#well-known-folder-name). <br/>- If it is a parent folder id, get the folder collection under the specified folder (children folders<br/>- If the property is omitted or its value is "", get the mail folder collection directly under the root folder.|
+|folderId|text|Can be a folder id or a [Well-known folder name](#well-known-folder-names). <br/>- If it is a parent folder id, get the folder collection under the specified folder (children folders)<br/>- If the property is omitted or its value is "", get the mail folder collection directly under the root folder.|
 |search|text|Restricts the results of a request to match a search criterion. The search syntax rules are available on [Microsoft's documentation website](https://docs.microsoft.com/en-us/graph/search-query-parameter#using-search-on-directory-object-collections).|
 |filter|text|Allows retrieving just a subset of folders. See [Microsoft's documentation on filter parameter](https://docs.microsoft.com/en-us/graph/query-parameters#filter-parameter).|
 |select|text|Set of properties to retrieve. Each property must be separated by a comma (,). |
@@ -998,7 +998,7 @@ In *param*, pass an object to define the mails to get. The available properties 
 
 | Property | Type | Description |
 |---|---|---|
-|folderId|text|To get messages in a specific folder. Can be a folder id or a [Well-known folder name](#well-known-folder-name). If the destination folder is not present or empty, get all the messages in a user's mailbox.|
+|folderId|text|To get messages in a specific folder. Can be a folder id or a [Well-known folder name](#well-known-folder-names). If the destination folder is not present or empty, get all the messages in a user's mailbox.|
 |search|text|Restricts the results of a request to match a search criterion. The search syntax rules are available on [Microsoft's documentation website](https://learn.microsoft.com/en-us/graph/search-query-parameter?tabs=http#using-search-on-message-collections).|
 |filter|text|Allows retrieving just a subset of mails. See [Microsoft's documentation on filter parameter](https://docs.microsoft.com/en-us/graph/query-parameters#filter-parameter).|
 |select|text|Set of [properties of the Microsoft Mail object](#microsoft-mail-object-properties) to retrieve. Each property must be separated by a comma (,). |
@@ -1036,7 +1036,7 @@ One of the following permissions is required to call this API. For more informat
 
 #### Example
 
-You want to retrieve *sender* and *subject* properties of all the mails present in the Inbox folder, using its [well-known folder name](#well-known-folder-name):
+You want to retrieve *sender* and *subject* properties of all the mails present in the Inbox folder, using its [well-known folder name](#well-known-folder-names):
 
 ```4d
 $param:=New object
@@ -1055,7 +1055,7 @@ $mails:=$office365.mail.getMails($param)
 |Parameter|Type||Description|
 |---------|--- |:---:|------|
 |mailId|Text|->| Id of the mail to move|
-|folderId|Text|->| Id of the destination folder. Can be a folder id or a [Well-known folder name](#well-known-folder-name).|
+|folderId|Text|->| Id of the destination folder. Can be a folder id or a [Well-known folder name](#well-known-folder-names).|
 |Result|Object|<-| [Status object](#status-object)  |
 
 #### Description
@@ -1141,7 +1141,7 @@ $status:=$office365.mail.renameFolder($folderId; "Backup_old")
 ||comment|Text|->| (only available with Microsoft message object or no message) Message used as body to reply to the email when present. You must specify either a *comment* or the [body property](#microsoft-mail-object-properties) of the message parameter; specifying both will return an HTTP 400 Bad Request error.|
 |mailId||Text|->| Id of the mail to which you reply|
 |replyAll||Boolean|->| True to reply to all recipients of the message. Default=False|
-|Result|Object|<-| [Status object](#status-object)  |
+|Result||Object|<-| [Status object](#status-object)  |
 
 #### Description
 
@@ -1402,7 +1402,7 @@ Several Office365.mail functions return a standard `**status object**`, containi
 |success|Boolean| True if the operation was successful|
 |statusText|Text| Status message returned by the server or last error returned by the 4D error stack|
 |errors|Collection| Collection of errors. Not returned if the server returns a `statusText`|
-|id|Text|<br/>- [`copy()`](#office365-mail-copy) and [`move()`](#office365-mail-move): returned id of the mail.<br/>- [`createFolder()`](#office365-mail-createFolder) and [`renameFolder()`](#office365-mail-renameFolder): returned id of the folder|
+|id|Text|<br/>- [`copy()`](#office365mailcopy) and [`move()`](#office365mailmove): returned id of the mail.<br/>- [`createFolder()`](#office365mailcreatefolder) and [`renameFolder()`](#office365mailrenamefolder): returned id of the folder|
 
 
 Basically, you can test the `success` and `statusText` properties of this object to know if the function was correctly executed.
@@ -1411,8 +1411,8 @@ Basically, you can test the `success` and `statusText` properties of this object
 
 When an error occurs during the execution of an Office365.mail function:
 
-- if the function returns a [`**status object**`](#status-object), the error is handled by the status object and no error is thrown,
-- if the function does not return a **status object**, an error is thrown that you can intercept with a project method installed with `ON ERR CALL`.
+- if the function returns a [`status object`](#status-object), the error is handled by the status object and no error is thrown,
+- if the function does not return a [`status object`](#status-object), an error is thrown that you can intercept with a project method installed with `ON ERR CALL`.
 
 ## User
  

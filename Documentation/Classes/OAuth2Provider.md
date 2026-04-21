@@ -50,7 +50,7 @@ The available properties of `paramObj` are:
 
 |Parameter|Type|Description|Optional|
 |---------|--- |------|------|
-| accessType | text | (Recommended) Indicates whether your application can refresh access tokens when the user is not present at the browser.<br/> Valid parameter values are online (default) and offline.<br/> Set the value to offline if your application needs to update access tokens when the user is not present at the browser. This is how access tokens are refreshed. This value instructs the Google authorization server to return a refresh token and an access token the first time that your application exchanges an authorization code for tokens. |Yes|
+| accessType | text | (Recommended) Indicates whether your application can refresh access tokens when the user is not present at the browser.<br/> Valid parameter values are online (default) and offline.<br/> Set the value to offline if your application needs to update access tokens when the user is not present at the browser. This is how access tokens are refreshed. This value instructs the server to return a refresh token and an access token the first time that your application exchanges an authorization code for tokens. |Yes|
 | authenticateURI | text | Uri used to do the Authorization request.<br/> Default for Microsoft: "https://login.microsoftonline.com/{tenant}/oauth2/v2.0/authorize".<br/> Default for Google: "https://accounts.google.com/o/oauth2/auth". |Yes|
 | authenticationErrorPage |text or file object|A local file object, local path or direct URL of the page to display in the web browser when authentication fails in signedIn mode. Can be a Qodly URL. If not provided, the default page is used.|Yes|
 | authenticationPage|text or file object|A local file object, local path or a direct URL of the page to display in the web browser after successful authentication in signedIn mode. Can be a Qodly URL. If not provided, the default page is used.|Yes|
@@ -196,50 +196,55 @@ end if
 
 ```4d
 
-// Initial authentication with Microsoft OAuth2 and retrieval of token with refresh token
-
-// Define OAuth2 provider details for Microsoft
-$provider:=New object()
+// Method: Microsoft OAuth2 authentication with automatic refresh token management
+#DECLARE($userID : Integer)
+ 
+// --- Configure the Microsoft OAuth2 provider ---
+var $provider:={}
 $provider.name:="Microsoft"
 $provider.permission:="signedIn"
+// Client ID from Azure App Registration
 $provider.clientId:="xxx-xxx-xxx-xxx-c460fc"
+// Redirect URI configured in Microsoft/Azure
 $provider.redirectURI:="http://127.0.0.1:50993/authorize/"
+// Requested scope → access to Microsoft Graph using predefined permissions
 $provider.scope:="https://graph.microsoft.com/.default"
-
-// Use the "offline" parameter to request a refresh token in addition to the regular access token
+// Request offline access to obtain a refresh token
+// essential to avoid prompting the user to log in again
 $provider.accessType:="offline"
-
-// Create new OAuth2 object for Microsoft
-$OAuth:= cs.NetKit.OAuth2Provider.new ($provider)
-
-// Request the token, which includes the refresh token
-var $myCurrentToken : Object := $OAuth.getToken()
-
-// After receiving the token and refresh token, save it for future token requests
-```
-
-
-```4d
-#DECLARE($myCurrentToken : object)
-var $provider:=New object()
-$provider.name:="Microsoft"
-$provider.permission:="signedIn"
-$provider.clientId:="xxx-xxx-xxx-xxx-c460fc"
-$provider.redirectURI:="http://127.0.0.1:50993/authorize/"
-$provider.scope:="https://graph.microsoft.com/.default"
-
-// Include the token from the previous request
-$provider.token:=$myCurrentToken
-
-// Re-create OAuth2 object with the stored token
-$OAuth:= cs.NetKit.OAuth2Provider.new ($provider)
-
-// getToken() checks if the token has expired
-// If the token is still valid, it returns the current token
-// If the token has expired, it automatically requests a new one
-// If a refresh token is present, the token is automatically renewed without user sign-in
-// If no refresh token is available, the user will need to sign in again
-$myCurrentToken:=$OAuth.getToken()
+ 
+ 
+// --- Retrieve the user from the datastore ---
+var $user:=ds.User.get($userID)
+// Reuse existing token if available
+// avoids triggering a new authentication flow
+If ($user.token#Null)
+  $provider.token:=$user.token
+End if
+ 
+// --- Create the OAuth2 provider object ---
+$OAuth:=cs.NetKit.OAuth2Provider.new($provider)
+ 
+// --- Check whether the current token is still valid ---
+If (Not($OAuth.isTokenValid()))
+ 
+  // If the token is missing or expired:
+  // 4D NetKit will automatically attempt:
+  //    1. a refresh using the refresh_token
+  //    2. or a full authentication flow if needed
+ 
+  var $myCurrentToken := $OAuth.getToken()
+ 
+    // If a new token is successfully retrieved
+  If ($myCurrentToken#Null)
+ 
+      // Persist the token (including refresh_token)
+      // required for future API calls without user interaction
+    $user.token:=$myCurrentToken
+    $user.save()
+ 
+  End if
+End if
 
 ```
 
